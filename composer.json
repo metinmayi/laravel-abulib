@@ -57,6 +57,10 @@
         ],
         "phpstan": [
             "./vendor/bin/phpstan analyse"
+        ],
+        "test" : [
+            "./vendor/bin/phpunit",
+            "./vendor/bin/phpstan analyse"
         ]
     },
     "extra": {
