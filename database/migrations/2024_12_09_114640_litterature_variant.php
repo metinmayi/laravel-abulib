@@ -19,6 +19,8 @@ return new class () extends Migration {
             $table->string('title');
             $table->string('description');
             $table->string('url');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

@@ -13,6 +13,8 @@ return new class () extends Migration {
         Schema::create('litteratures', function (Blueprint $table) {
             $table->id();
             $table->enum('category', ['poetry', 'research', 'book', 'article']);
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
