@@ -60,7 +60,8 @@
         ],
         "test" : [
             "./vendor/bin/phpunit",
-            "./vendor/bin/phpstan analyse"
+            "./vendor/bin/phpstan analyse",
+            "php artisan test --coverage"
         ]
     },
     "extra": {
