@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Litterature extends Model
 {
+    /** @use HasFactory<\Database\Factories\LitteratureFactory> */
     use HasFactory;
 
     protected $fillable = ['category'];
