@@ -62,6 +62,9 @@
             "./vendor/bin/phpunit",
             "./vendor/bin/phpstan analyse --memory-limit=1G",
             "php artisan test --coverage --min=100"
+        ],
+        "phpunit": [
+            "./vendor/bin/phpunit"
         ]
     },
     "extra": {
