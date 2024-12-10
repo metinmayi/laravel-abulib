@@ -11,5 +11,4 @@ class LitteratureVariant extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'description', 'language', 'url', 'litterature_id'];
-    //
 }
