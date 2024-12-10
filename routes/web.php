@@ -6,3 +6,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/litterature', [Litterature::class, 'uploadLitterature']);
 Route::get('/litteratureVariant/{id}', [LitteratureVariant::class, 'getLitteratureBinary']);
+Route::post('/litteratureVariant', [LitteratureVariant::class, 'uploadLitteratureVariant']);

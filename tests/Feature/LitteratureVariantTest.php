@@ -2,14 +2,23 @@
 
 namespace Tests\Feature;
 
+use App\Models\Litterature;
 use App\Models\LitteratureVariant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 
 class LitteratureVariantTest extends TestCase
-{
+{    
     use RefreshDatabase;
+
+    protected const DISK_STORE = 'litteratures';
+
+    protected string $variantTitle = 'Test Title';
+    protected string $variantDescription = 'Test Description';
+    protected string $variantLanguage = 'Test Language';
 
     public function test_get_litterature_binary_404_if_not_found(): void
     {
@@ -24,5 +33,58 @@ class LitteratureVariantTest extends TestCase
         $response = $this->get('/litteratureVariant/' . $litteratureVariant->id);
         $response->assertStatus(200);
         $this->assertInstanceOf(BinaryFileResponse::class, $response->baseResponse);
+    }
+
+    public function test_upload_litterature_variant_validation_errors(): void
+    {
+        $this->followingRedirects()
+            ->post('/litteratureVariant')
+            ->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
+    }
+
+    public function test_upload_litterature_variant_without_existing_litterature(): void
+    {
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+        $response = $this->post('/litteratureVariant', [
+            'title' => $this->variantTitle,
+            'description' => $this->variantDescription,
+            'file' => $file,
+            'litterature_id' => 0,
+            'language' => $this->variantLanguage
+        ]);
+
+        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+        $response->assertStatus(302);
+    }
+
+    public function test_upload_litterature_adds_litterature_variant(): void
+    {
+        Storage::fake(self::DISK_STORE);
+        $litterature = Litterature::factory()->create();
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+        $response = $this->post('/litteratureVariant', [
+            'title' => $this->variantTitle,
+            'description' => $this->variantDescription,
+            'file' => $file,
+            'litterature_id' => $litterature->id,
+            'language' => $this->variantLanguage
+        ]);
+
+        $response->assertStatus(201);
+        $variants = LitteratureVariant::all();
+        $this->assertCount(1, $variants);
+        $variant = $variants->first();
+        $this->assertNotNull($variant);
+        $this->assertEquals($this->variantTitle, $variant->title);
+        $this->assertEquals($this->variantDescription, $variant->description);
+        $this->assertEquals($this->variantLanguage, $variant->language);
+        $this->assertEquals($this->getExpectedFileName(), $variant->url);
+        $this->assertEquals($litterature->id, $variant->litterature_id);
+        $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->getExpectedFileName()));
+    }
+
+    protected function getExpectedFileName(): string
+    {
+        return "{$this->variantTitle}-{$this->variantLanguage}.pdf";
     }
 }
