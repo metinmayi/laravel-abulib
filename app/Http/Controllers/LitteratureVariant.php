@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LitteratureVariant extends Controller
 {
+    /**
+     * Get litterature binary. Used for PDF source.
+     */
     public function getLitteratureBinary(int $id): BinaryFileResponse | ResponseFactory | Response
     {
         $variant = ModelsLitteratureVariant::find($id);
@@ -24,9 +27,12 @@ class LitteratureVariant extends Controller
         return response()->file($pdf);
     }
 
+    /**
+     * Upload a litterature variant
+     */
     public function uploadLitteratureVariant(LitteratureVariantUploadRequest $request): RedirectResponse
     {
-        $data = $request->only('title', 'description', 'language','litterature_id');
+        $data = $request->only('title', 'description', 'language', 'litterature_id');
 
         $litterature = Litterature::find($data['litterature_id']);
         if (!$litterature) {

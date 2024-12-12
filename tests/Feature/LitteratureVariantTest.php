@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 
 class LitteratureVariantTest extends TestCase
-{    
+{
     use RefreshDatabase;
 
     protected const DISK_STORE = 'litteratures';
@@ -20,6 +20,9 @@ class LitteratureVariantTest extends TestCase
     protected string $variantDescription = 'Test Description';
     protected string $variantLanguage = 'Test Language';
 
+    /**
+     * Test that a 404 is returned if the litterature variant is not found
+     */
     public function test_get_litterature_binary_404_if_not_found(): void
     {
         $this->assertCount(0, LitteratureVariant::all());
@@ -27,6 +30,9 @@ class LitteratureVariantTest extends TestCase
         $response->assertStatus(404);
     }
 
+    /**
+     * Get litterature binary
+     */
     public function test_get_litterature_binary(): void
     {
         $litteratureVariant = LitteratureVariant::factory()->create();
@@ -35,6 +41,9 @@ class LitteratureVariantTest extends TestCase
         $this->assertInstanceOf(BinaryFileResponse::class, $response->baseResponse);
     }
 
+    /**
+     * Test validation for uploading a variant
+     */
     public function test_upload_litterature_variant_validation_errors(): void
     {
         $this->followingRedirects()
@@ -42,6 +51,9 @@ class LitteratureVariantTest extends TestCase
             ->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
     }
 
+    /**
+     * Test uploading a litterature variant without an existing litterature yields error
+     */
     public function test_upload_litterature_variant_without_existing_litterature(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
@@ -57,7 +69,10 @@ class LitteratureVariantTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_upload_litterature_adds_litterature_variant(): void
+    /**
+     * Test uploading a litterature variant
+     */
+    public function test_upload_litterature_variant(): void
     {
         Storage::fake(self::DISK_STORE);
         $litterature = Litterature::factory()->create();
@@ -83,6 +98,9 @@ class LitteratureVariantTest extends TestCase
         $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->getExpectedFileName()));
     }
 
+    /**
+     * Helper method to get the expected file name
+     */
     protected function getExpectedFileName(): string
     {
         return "{$this->variantTitle}-{$this->variantLanguage}.pdf";
