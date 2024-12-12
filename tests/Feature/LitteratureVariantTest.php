@@ -16,10 +16,6 @@ class LitteratureVariantTest extends TestCase
 
     protected const DISK_STORE = 'litteratures';
 
-    protected string $variantTitle = 'Test Title';
-    protected string $variantDescription = 'Test Description';
-    protected string $variantLanguage = 'Test Language';
-
     /**
      * Test that a 404 is returned if the litterature variant is not found
      */
@@ -57,12 +53,16 @@ class LitteratureVariantTest extends TestCase
     public function test_upload_litterature_variant_without_existing_litterature(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
+        $title = fake()->title();
+        $description = fake()->sentence();
+        $language = fake()->languageCode();
+
         $response = $this->post('/litteratureVariant', [
-            'title' => $this->variantTitle,
-            'description' => $this->variantDescription,
+            'title' => $title,
+            'description' => $description,
             'file' => $file,
-            'litterature_id' => 0,
-            'language' => $this->variantLanguage
+            'litterature_id' => -1,
+            'language' => $language
         ]);
 
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -77,12 +77,16 @@ class LitteratureVariantTest extends TestCase
         Storage::fake(self::DISK_STORE);
         $litterature = Litterature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
+
+        $title = fake()->title();
+        $description = fake()->sentence();
+        $language = fake()->languageCode();
         $response = $this->post('/litteratureVariant', [
-            'title' => $this->variantTitle,
-            'description' => $this->variantDescription,
+            'title' => $title,
+            'description' => $description,
             'file' => $file,
             'litterature_id' => $litterature->id,
-            'language' => $this->variantLanguage
+            'language' => $language
         ]);
 
         $response->assertStatus(201);
@@ -90,19 +94,11 @@ class LitteratureVariantTest extends TestCase
         $this->assertCount(1, $variants);
         $variant = $variants->first();
         $this->assertNotNull($variant);
-        $this->assertEquals($this->variantTitle, $variant->title);
-        $this->assertEquals($this->variantDescription, $variant->description);
-        $this->assertEquals($this->variantLanguage, $variant->language);
+        $this->assertEquals($title, $variant->title);
+        $this->assertEquals($description, $variant->description);
+        $this->assertEquals($language, $variant->language);
         $this->assertEquals($file->hashName(), $variant->url);
         $this->assertEquals($litterature->id, $variant->litterature_id);
         $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($file->hashName()));
-    }
-
-    /**
-     * Helper method to get the expected file name
-     */
-    protected function getExpectedFileName(): string
-    {
-        return "{$this->variantTitle}-{$this->variantLanguage}.pdf";
     }
 }
