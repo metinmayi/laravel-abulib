@@ -2,12 +2,17 @@
 
 namespace Tests\Feature;
 
+use App\Actions\GetLitteratureList;
+use App\Actions\GetLitteratureListAction;
 use App\Models\Litterature;
 use App\Models\LitteratureVariant;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+
+use function Laravel\Prompts\clear;
 
 /**
  * Tests for Litterature
@@ -23,7 +28,7 @@ class LitteratureTest extends TestCase
     protected string $variantDescription = 'Test Description';
     protected string $variantLanguage = 'Test Language';
     protected string $fileName;
-    
+
 
     /**
      * Test upload litterature
@@ -51,6 +56,50 @@ class LitteratureTest extends TestCase
         $this->assertEquals($this->fileName, $variant->url);
         $this->assertEquals($litterature->id, $variant->litterature_id);
         $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->fileName));
+    }
+
+    public function test_get_litterature_list_returns_expected_variants(): void
+    {
+        $language = 'ku';
+        $expectedResult = [
+            $this->uploadAndGetExpectedVariant($language),
+            $this->uploadAndGetExpectedVariant($language),
+        ];
+
+        $action = new GetLitteratureListAction($language);
+        $litteratureList = $action->handle();
+        $this->assertCount(20, LitteratureVariant::all());
+        $this->assertCount(2, $litteratureList);
+        $this->assertEqualsCanonicalizing($expectedResult, $litteratureList);
+    }
+
+
+
+    protected function uploadAndGetExpectedVariant(string $lang): object
+    {
+        $litterature = Litterature::factory()->create();
+        $variants = LitteratureVariant::factory()
+            ->set('litterature_id', $litterature->id)
+            ->count(9)
+            ->create();
+        $availableLanguages = $variants->pluck('language')->toArray();
+
+        $variant = LitteratureVariant::factory()
+        ->set('litterature_id', $litterature->id)
+        ->set('language', $lang)
+        ->createOne();
+        $availableLanguages[] = $lang;
+
+
+        return (object) [
+            'id' => $variant->id,
+            'litterature_id' => $litterature->id,
+            'language' => $variant->language,
+            'availableLanguages' => $availableLanguages,
+            'title' => $variant->title,
+            'description' => $variant->description,
+            'category' => $litterature->category
+        ];
     }
 
     /**
