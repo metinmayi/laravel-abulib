@@ -101,4 +101,34 @@ class LitteratureVariantTest extends TestCase
         $this->assertEquals($litterature->id, $variant->litterature_id);
         $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($file->hashName()));
     }
+
+    /**
+     * Test uploading a litterature variant with an existing language yields error
+     */
+    public function test_upload_variant_with_existing_language_yields_error(): void
+    {
+        Storage::fake(self::DISK_STORE);
+        $litterature = Litterature::factory()->create();
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+
+        $language = fake()->languageCode();
+        $this->post('/litteratureVariant', [
+            'title' => fake()->title(),
+            'description' => fake()->sentence(),
+            'file' => $file,
+            'litterature_id' => $litterature->id,
+            'language' => $language
+        ]);
+
+        $response = $this->post('/litteratureVariant', [
+            'title' => fake()->title(),
+            'description' => fake()->sentence(),
+            'file' => $file,
+            'litterature_id' => $litterature->id,
+            'language' => $language
+        ]);
+
+        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+        $response->assertStatus(302);
+    }
 }

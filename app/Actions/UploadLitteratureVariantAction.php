@@ -30,6 +30,14 @@ class UploadLitteratureVariantAction
             return false;
         }
 
+        $alreadyExists = LitteratureVariant::where('litterature_id', $litteratureId)
+            ->where('language', $this->data['language'])
+            ->exists();
+        if ($alreadyExists) {
+            Log::error('Tried to upload a litterature variant with an existing language', ['litterature_id' => $litteratureId, 'data' => $this->data]);
+            return false;
+        }
+
         $fileName = Storage::disk('litteratures')->putFile('', $this->data['file']);
 
         $this->data['url'] = $fileName;
