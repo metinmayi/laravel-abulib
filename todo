@@ -1,0 +1,14 @@
+* Write tests for deleting variants
+* Write tests for deleting litterature
+* Write tests for updating variants
+  - Replace entire variant
+  - Update properties
+    - Description
+    - Title
+    - File (PDF)
+* Address all PHPStan errors (Probably need to look into DTOs).
+* Provide support for multiple categories
+
+* Laravel debugger tool, check amount of queries performed etc...
+* Caching DB queries or other things?
+  - Will do as improvement when project is usable.
