@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UploadLitteratureVariantAction;
 use App\Http\Requests\LitteratureVariantUploadRequest;
 use App\Models\Litterature;
 use App\Models\LitteratureVariant as ModelsLitteratureVariant;
@@ -32,19 +33,12 @@ class LitteratureVariant extends Controller
      */
     public function uploadLitteratureVariant(LitteratureVariantUploadRequest $request): RedirectResponse
     {
-        $data = $request->only('title', 'description', 'language', 'litterature_id');
-
-        $litterature = Litterature::find($data['litterature_id']);
-        if (!$litterature) {
+        $action = new UploadLitteratureVariantAction($request->all());
+        $success = $action->handle($request->get('litterature_id'));
+        if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
 
-        $fileName = "{$data['title']}-{$data['language']}.pdf";
-        Storage::disk('litteratures')->putFile("{$fileName}", $request->file('file'));
-        $data['url'] = $fileName;
-
-        $variant = new ModelsLitteratureVariant($data);
-        $variant->save();
         return redirect()->back(201);
     }
 }

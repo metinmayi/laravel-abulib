@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use App\Models\Litterature;
 use App\Models\LitteratureVariant;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -21,14 +23,19 @@ class UploadLitteratureVariantAction
   /**
    * Main method
    */
-    public function handle(int $litteratureId): void
+    public function handle(int $litteratureId): bool
     {
+        if (! Litterature::find($litteratureId)) {
+            Log::error('Tried to upload a litterature variant without an existing litterature', ['litterature_id' => $litteratureId, 'data' => $this->data]);
+            return false;
+        }
+
         $fileName = Storage::disk('litteratures')->putFile('', $this->data['file']);
 
         $this->data['url'] = $fileName;
         $this->data['litterature_id'] = $litteratureId;
 
         $variant = new LitteratureVariant($this->data);
-        $variant->save();
+        return $variant->save();
     }
 }

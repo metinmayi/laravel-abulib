@@ -93,9 +93,9 @@ class LitteratureVariantTest extends TestCase
         $this->assertEquals($this->variantTitle, $variant->title);
         $this->assertEquals($this->variantDescription, $variant->description);
         $this->assertEquals($this->variantLanguage, $variant->language);
-        $this->assertEquals($this->getExpectedFileName(), $variant->url);
+        $this->assertEquals($file->hashName(), $variant->url);
         $this->assertEquals($litterature->id, $variant->litterature_id);
-        $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->getExpectedFileName()));
+        $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($file->hashName()));
     }
 
     /**

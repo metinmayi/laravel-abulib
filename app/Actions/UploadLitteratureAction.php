@@ -12,7 +12,7 @@ class UploadLitteratureAction
 {
   /**
    * Constructor.
-   * @param array<mixed> $data Data passed in
+   * @param array<mixed> $data Data passed in.
    */
     public function __construct(protected array $data, protected UploadLitteratureVariantAction $uploadLitteratureVariantAction)
     {
