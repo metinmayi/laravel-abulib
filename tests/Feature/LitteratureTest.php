@@ -2,17 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Actions\GetLitteratureList;
 use App\Actions\GetLitteratureListAction;
 use App\Models\Litterature;
 use App\Models\LitteratureVariant;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-
-use function Laravel\Prompts\clear;
 
 /**
  * Tests for Litterature
@@ -58,6 +54,9 @@ class LitteratureTest extends TestCase
         $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->fileName));
     }
 
+    /**
+     * Test get litterature list
+     */
     public function test_get_litterature_list_returns_expected_variants(): void
     {
         $language = 'ku';
@@ -68,19 +67,20 @@ class LitteratureTest extends TestCase
 
         $action = new GetLitteratureListAction($language);
         $litteratureList = $action->handle();
-        $this->assertCount(20, LitteratureVariant::all());
+        $this-> assertCount(20, LitteratureVariant::all());
         $this->assertCount(2, $litteratureList);
         $this->assertEqualsCanonicalizing($expectedResult, $litteratureList);
     }
 
-
-
+    /**
+     * Upload several variants and return the expected variant
+     */
     protected function uploadAndGetExpectedVariant(string $lang): object
     {
         $litterature = Litterature::factory()->create();
         $variants = LitteratureVariant::factory()
-            ->set('litterature_id', $litterature->id)
-            ->count(9)
+            -> set('litterature_id', $litterature->id)
+            -> count(9)
             ->create();
         $availableLanguages = $variants->pluck('language')->toArray();
 

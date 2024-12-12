@@ -10,22 +10,24 @@ use Illuminate\Support\Facades\DB;
  */
 class UploadLitteratureAction
 {
-
   /**
    * Constructor.
+   * @param array<mixed> $data Data passed in
    */
-  public function __construct(protected array $data, protected UploadLitteratureVariantAction $uploadLitteratureVariantAction) {}
+    public function __construct(protected array $data, protected UploadLitteratureVariantAction $uploadLitteratureVariantAction)
+    {
+    }
 
   /**
    * Main method
    */
-  public function handle(): void
-  {
-    DB::transaction(function () {
-      $litterature = new Litterature(['category' => $this->data['category']]);
-      $litterature->save();
+    public function handle(): void
+    {
+        DB::transaction(function () {
+            $litterature = new Litterature(['category' => $this->data['category']]);
+            $litterature->save();
 
-      $this->uploadLitteratureVariantAction->handle($litterature->id);
-    });
-  }
+            $this->uploadLitteratureVariantAction->handle($litterature->id);
+        });
+    }
 }
