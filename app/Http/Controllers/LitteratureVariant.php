@@ -33,8 +33,11 @@ class LitteratureVariant extends Controller
      */
     public function uploadLitteratureVariant(LitteratureVariantUploadRequest $request): RedirectResponse
     {
-        $action = new UploadLitteratureVariantAction($request->all());
-        $success = $action->handle($request->get('litterature_id'));
+        $action = new UploadLitteratureVariantAction($request->safe()->all());
+
+        /** @var int */
+        $litteratureId = $request->get('litterature_id');
+        $success = $action->handle($litteratureId);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

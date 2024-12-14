@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
+
 final class Admin extends Controller
 {
   /**
    * Index page
    */
-    public function index()
+    public function index(): View
     {
         return view('admin.index');
     }
@@ -15,7 +17,7 @@ final class Admin extends Controller
     /**
      * New literature page
      */
-    public function newliterature()
+    public function newliterature(): View
     {
         return view('admin.newliterature');
     }

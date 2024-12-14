@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Litterature;
 use App\Models\LitteratureVariant;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,7 +39,9 @@ class UploadLitteratureVariantAction
             return false;
         }
 
-        $fileName = Storage::disk('local')->putFile('', $this->data['file']);
+        /** @var UploadedFile */
+        $file = $this->data['file'];
+        $fileName = Storage::disk('local')->putFile('', $file);
 
         $this->data['url'] = $fileName;
         $this->data['litterature_id'] = $litteratureId;
