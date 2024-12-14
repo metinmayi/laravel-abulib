@@ -74,7 +74,7 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_upload_litterature_variant(): void
     {
-        Storage::fake(self::DISK_STORE);
+        Storage::fake('local');
         $litterature = Litterature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
 
@@ -99,7 +99,7 @@ class LitteratureVariantTest extends TestCase
         $this->assertEquals($language, $variant->language);
         $this->assertEquals($file->hashName(), $variant->url);
         $this->assertEquals($litterature->id, $variant->litterature_id);
-        $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($file->hashName()));
+        $this->assertTrue(Storage::disk('local')->exists($file->hashName()));
     }
 
     /**
@@ -107,7 +107,7 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_upload_variant_with_existing_language_yields_error(): void
     {
-        Storage::fake(self::DISK_STORE);
+        Storage::fake('local');
         $litterature = Litterature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
 

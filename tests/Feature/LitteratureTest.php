@@ -51,7 +51,7 @@ class LitteratureTest extends TestCase
         $this->assertEquals($this->variantLanguage, $variant->language);
         $this->assertEquals($this->fileName, $variant->url);
         $this->assertEquals($litterature->id, $variant->litterature_id);
-        $this->assertTrue(Storage::disk(self::DISK_STORE)->exists($this->fileName));
+        $this->assertTrue(Storage::disk('local')->exists($this->fileName));
     }
 
     /**
@@ -109,7 +109,7 @@ class LitteratureTest extends TestCase
     {
         $this->assertCount(0, Litterature::all());
 
-        Storage::fake(self::DISK_STORE);
+        Storage::fake('local');
         $file = UploadedFile::fake()->create('test.pdf', 100);
         $this->fileName = $file->hashName();
         $postData = [

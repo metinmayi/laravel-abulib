@@ -10,6 +10,9 @@ use Illuminate\Http\Response;
 
 class Litterature extends Controller
 {
+    /**
+     * Upload litterature
+     */
     public function uploadLitterature(LitteratureUploadRequest $request): Response | ResponseFactory
     {
         $data = $request->all();
