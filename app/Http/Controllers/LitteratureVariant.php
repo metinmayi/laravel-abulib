@@ -37,7 +37,7 @@ class LitteratureVariant extends Controller
 
         /** @var int */
         $litteratureId = $request->get('litterature_id');
-        $success = $action->handle($litteratureId);
+        [$success, $id] = $action->handle($litteratureId);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

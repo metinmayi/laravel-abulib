@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class UploadLitteratureVariantAction
 {
+    protected int $uploadedId;
+
   /**
    * Constructor
    * @param array<mixed> $data Data passed in.
@@ -23,12 +25,13 @@ class UploadLitteratureVariantAction
 
   /**
    * Main method
+   * @return array{bool, int}
    */
-    public function handle(int $litteratureId): bool
+    public function handle(int $litteratureId): array
     {
         if (! Litterature::find($litteratureId)) {
             Log::error('Tried to upload a litterature variant without an existing litterature', ['litterature_id' => $litteratureId, 'data' => $this->data]);
-            return false;
+            return [false, -1];
         }
 
         $alreadyExists = LitteratureVariant::where('litterature_id', $litteratureId)
@@ -36,7 +39,7 @@ class UploadLitteratureVariantAction
             ->exists();
         if ($alreadyExists) {
             Log::error('Tried to upload a litterature variant with an existing language', ['litterature_id' => $litteratureId, 'data' => $this->data]);
-            return false;
+            return [false, -1];
         }
 
         /** @var UploadedFile */
@@ -47,6 +50,6 @@ class UploadLitteratureVariantAction
         $this->data['litterature_id'] = $litteratureId;
 
         $variant = new LitteratureVariant($this->data);
-        return $variant->save();
+        return [$variant->save(), $variant->id];
     }
 }
