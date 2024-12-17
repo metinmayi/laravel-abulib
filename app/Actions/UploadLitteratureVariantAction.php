@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Storage;
  */
 class UploadLitteratureVariantAction
 {
-    protected int $uploadedId;
-
   /**
    * Constructor
    * @param array<mixed> $data Data passed in.
