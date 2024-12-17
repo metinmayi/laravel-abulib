@@ -24,7 +24,7 @@ class LitteratureVariant extends Controller
             return response(null, 404);
         }
 
-        $pdf = Storage::disk('local')->path('smallPdf.pdf');
+        $pdf = Storage::disk('local')->path($variant->url);
         return response()->file($pdf);
     }
 

@@ -34,8 +34,16 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_get_litterature_binary(): void
     {
-        $litteratureVariant = LitteratureVariant::factory()->create();
-        $response = $this->get('/litteratureVariant/' . $litteratureVariant->id);
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+        $litterature = Litterature::factory()->createOne();
+        $response = $this->uploadLitteratureVariant($litterature->id, $file);
+        $response->assertStatus(201);
+
+        $variants = LitteratureVariant::all();
+        $variant = $variants->first();
+        $this->assertNotNull($variant);
+
+        $response = $this->get('/litteratureVariant/' . $variant->id);
         $response->assertStatus(200);
         $this->assertInstanceOf(BinaryFileResponse::class, $response->baseResponse);
     }
