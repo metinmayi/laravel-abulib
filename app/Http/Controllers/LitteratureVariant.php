@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\DeleteVariantAction;
 use App\Actions\UploadLitteratureVariantAction;
 use App\Http\Requests\LitteratureVariantUploadRequest;
-use App\Models\Litterature;
 use App\Models\LitteratureVariant as ModelsLitteratureVariant;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -37,7 +38,25 @@ class LitteratureVariant extends Controller
 
         /** @var int */
         $litteratureId = $request->get('litterature_id');
-        [$success, $id] = $action->handle($litteratureId);
+        [$success] = $action->handle($litteratureId);
+        if (!$success) {
+            return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
+        }
+
+        return redirect()->back(201);
+    }
+
+    /**
+     * Delete a variant.
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        $id = $request->query('id');
+        if (! is_numeric($id)) {
+            return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
+        }
+        $action = new DeleteVariantAction();
+        $success = $action->handle((int) $id);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

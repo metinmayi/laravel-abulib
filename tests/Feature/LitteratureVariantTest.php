@@ -124,6 +124,63 @@ class LitteratureVariantTest extends TestCase
     }
 
     /**
+     * Test deleting a variant
+     */
+    public function test_delete_variant_removes_file_and_entry(): void
+    {
+        $litterature = Litterature::factory()->create();
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+        $response = $this->uploadLitteratureVariant($litterature->id, $file);
+        $response->assertStatus(201);
+        $this->assertTrue(Storage::disk()->exists($file->hashName()));
+        $this->assertCount(1, LitteratureVariant::all());
+
+        $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
+        $response->assertStatus(201);
+        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertCount(0, LitteratureVariant::all());
+    }
+
+    /**
+     * Test deleting a variant validation
+     */
+    public function test_delete_variant_validation(): void
+    {
+        $response = $this->post(route('variant.delete', ['id' => 'notNumeric']));
+        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+        $response->assertStatus(302);
+    }
+
+    /**
+     * Test deleting a variant validation
+     */
+    public function test_delete_variant_that_doesnt_exist(): void
+    {
+        $response = $this->post(route('variant.delete', ['id' => 55]));
+        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+        $response->assertStatus(302);
+    }
+
+    /**
+     * Test deleting a variant validation error message if cannot delete related file
+     */
+    public function test_deleted_variant_cannot_delete_file(): void
+    {
+        $this->markTestSkipped('Gotta figure out how to prepare that file cannot be deleted');
+        $litterature = Litterature::factory()->create();
+        $file = UploadedFile::fake()->create('test.pdf', 100);
+        $response = $this->uploadLitteratureVariant($litterature->id, $file);
+        $response->assertStatus(201);
+        $this->assertTrue(Storage::disk()->exists($file->hashName()));
+        $this->assertCount(1, LitteratureVariant::all());
+
+        $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
+        $response->assertStatus(201);
+        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertCount(0, LitteratureVariant::all());
+    }
+
+    /**
      * Helper for uploading a litterature variant.
      * @return TestResponse<Response>
      */
