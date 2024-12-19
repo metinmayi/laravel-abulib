@@ -31,19 +31,14 @@ class DeleteVariantAction
         }
 
         $filePath = $variant->url;
-        $didDelete = Storage::delete($filePath);
-        if (! $didDelete) {
+        if (! Storage::delete($filePath)) {
             Log::error('Failed to delete file related to variant', ['id' => $id, 'filePath' => $filePath]);
             return false;
         }
 
-        $litteratureVariants = count(LitteratureVariant::query()->where('litterature_id', '=', $variant->litterature_id)->get());
-        if ($litteratureVariants === 1) {
-            $litterature = Litterature::find($variant->litterature_id);
-            if (! $litterature) {
-                Log::error('Failed to delete literature when deleting last variant', ['litterature_id' => $variant->litterature_id, 'variantId' => $id, 'filePath' => $filePath]);
-                return false;
-            }
+        $remainingVariants = LitteratureVariant::where('litterature_id', $variant->litterature_id)->count();
+        if ($remainingVariants === 1) {
+            $litterature = Litterature::findOrFail($variant->litterature_id);
             return $litterature->delete();
         }
 

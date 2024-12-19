@@ -129,8 +129,8 @@ class LitteratureVariantTest extends TestCase
         $file = UploadedFile::fake()->create('test.pdf', 100);
         $this->uploadVariantWithoutErrors($litterature->id, $file);
 
-        Storage::partialMock()
-            ->shouldReceive('delete')
+        Storage::shouldReceive('delete')
+            ->once()
             ->andReturn(false);
         $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
         $response->assertStatus(302);
