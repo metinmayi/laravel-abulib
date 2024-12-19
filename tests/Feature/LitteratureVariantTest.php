@@ -46,9 +46,9 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_upload_litterature_variant_validation_errors(): void
     {
-        $this->followingRedirects()
-            ->post('/litteratureVariant')
-            ->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
+            $res = $this->post('/litteratureVariant');
+            $res->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
+            $res->assertStatus(302);
     }
 
     /**

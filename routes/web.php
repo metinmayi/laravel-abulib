@@ -6,6 +6,7 @@ use App\Http\Controllers\Litterature;
 use App\Http\Controllers\LitteratureVariant;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', fn() => view('landing.index'));
 Route::get('/admin', [Admin::class, 'index']);
 Route::get('/admin/newliterature', [Admin::class, 'newLiterature']);
 
