@@ -21,6 +21,6 @@ class LibraryControllerTest extends TestCase
         $response->assertStatus(200);
 
         // Assert the correct view is returned
-        $response->assertViewIs('library');
+        $response->assertViewIs('library.index');
     }
 }

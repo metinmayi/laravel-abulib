@@ -13,6 +13,6 @@ class Library extends Controller
     public function index(): View
     {
         $litteratureList = (new GetLitteratureListAction('kurdish'))->handle();
-        return view('library', ['litteratureList' => $litteratureList]);
+        return view('library.index', ['litteratureList' => $litteratureList]);
     }
 }
