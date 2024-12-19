@@ -44,7 +44,6 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_upload_litterature_variant_validation_errors(): void
     {
-        $this->markTestSkipped();
         $this->followingRedirects()
             ->post('/litteratureVariant')
             ->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
@@ -122,22 +121,21 @@ class LitteratureVariantTest extends TestCase
     }
 
     /**
-     * Test deleting a variant validation error message if cannot delete related file
+     * Test deleting a variant gives error message if cannot delete related file
      */
     public function test_provide_error_if_cannot_delete_file_when_deleting_variant(): void
     {
-        $this->markTestSkipped('Gotta figure out how to prepare that file cannot be deleted');
         $litterature = Litterature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $response = $this->uploadLitteratureVariant($litterature->id, $file);
-        $response->assertStatus(201);
-        $this->assertTrue(Storage::disk()->exists($file->hashName()));
-        $this->assertCount(1, LitteratureVariant::all());
+        $this->uploadVariantWithoutErrors($litterature->id, $file);
 
+        Storage::partialMock()
+            ->shouldReceive('delete')
+            ->andReturn(false);
         $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
-        $response->assertStatus(201);
-        $this->assertFalse(Storage::disk()->exists($file->hashName()));
-        $this->assertCount(0, LitteratureVariant::all());
+        $response->assertStatus(302);
+        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+        $this->assertCount(1, LitteratureVariant::all());
     }
 
     /**
