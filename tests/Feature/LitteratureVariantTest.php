@@ -8,10 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
+use TypeError;
 
 class LitteratureVariantTest extends TestCase
 {
@@ -94,7 +96,7 @@ class LitteratureVariantTest extends TestCase
         $file = UploadedFile::fake()->create('test.pdf', 100);
         [$response] = $this->uploadVariantWithoutErrors($litterature->id, $file);
 
-        $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $litterature->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LitteratureVariant::all());
@@ -105,9 +107,9 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_validation_errors_when_deleting_variant(): void
     {
-        $response = $this->post(route('variant.delete', ['id' => 'notNumeric']));
-        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
-        $response->assertStatus(302);
+        Exceptions::fake();
+        $this->delete(route('variant.delete', ['id' => 'notNumeric']));
+        Exceptions::assertReported(TypeError::class);
     }
 
     /**
@@ -115,7 +117,7 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_provide_error_if_deleting_non_existing_variant(): void
     {
-        $response = $this->post(route('variant.delete', ['id' => 55]));
+        $response = $this->delete(route('variant.delete', ['id' => 55]));
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
     }
@@ -132,7 +134,7 @@ class LitteratureVariantTest extends TestCase
         Storage::shouldReceive('delete')
             ->once()
             ->andReturn(false);
-        $response = $this->post(route('variant.delete', ['id' => $litterature->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $litterature->id]));
         $response->assertStatus(302);
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $this->assertCount(1, LitteratureVariant::all());
@@ -150,7 +152,7 @@ class LitteratureVariantTest extends TestCase
         [$rez, $variant] = $this->uploadVariantWithoutErrors(litteratureId:$litterature->id, file: $file, lang: 'kurdish');
         $this->assertCount(1, Litterature::all());
 
-        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(1, LitteratureVariant::all());
@@ -165,7 +167,7 @@ class LitteratureVariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
         $this->assertCount(1, Litterature::all());
 
-        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LitteratureVariant::all());

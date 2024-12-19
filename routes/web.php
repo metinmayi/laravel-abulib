@@ -13,6 +13,6 @@ Route::post('/litterature', [Litterature::class, 'uploadLitterature']);
 
 Route::get('/litteratureVariant/{id}', [LitteratureVariant::class, 'getLitteratureBinary']);
 Route::post('/litteratureVariant', [LitteratureVariant::class, 'uploadLitteratureVariant']);
-Route::post('/litteratureVariant/delete', [LitteratureVariant::class, 'delete'])->name('variant.delete');
+Route::delete('/litteratureVariant/delete/{id}', [LitteratureVariant::class, 'delete'])->name('variant.delete');
 
 Route::get('library', [Library::class, 'index']);

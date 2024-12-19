@@ -49,14 +49,10 @@ class LitteratureVariant extends Controller
     /**
      * Delete a variant.
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
-        $id = $request->query('id');
-        if (! is_numeric($id)) {
-            return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
-        }
         $action = new DeleteVariantAction();
-        $success = $action->handle((int) $id);
+        $success = $action->handle($id);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
