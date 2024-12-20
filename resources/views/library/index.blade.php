@@ -29,15 +29,13 @@
             <!-- Literature Card -->
             <div class="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
                 <div class="p-6">
-                    <h2 class="text-2xl font-bold mb-2 text-gray-900">The Great Adventure</h2>
-                    <p class="text-gray-600 text-sm mb-4">
-                        A thrilling tale of courage and discovery that takes you across uncharted lands.
-                    </p>
+                    <h2 class="text-2xl font-bold mb-2 text-gray-900">{{$litterature->title}}</h2>
+                    <p class="text-gray-600 text-sm mb-4">{{$litterature->description}}</p>
                     <div class="text-xs text-gray-500 mb-4 space-y-1">
-                        <div><strong>Languages:</strong> English, Spanish, French</div>
-                        <div><strong>Category:</strong> Fiction</div>
+                        <div><strong>Languages:</strong>{{implode(',', $litterature->availableLanguages)}}</div>
+                        <div><strong>Category:</strong> {{$litterature->category}}</div>
                     </div>
-                    <button class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
+                    <button class="w-full bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 transition">
                         Read
                     </button>
                 </div>
