@@ -16,10 +16,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/litterature', [Litterature::class, 'uploadLitterature']);
+Route::post('/literature', [Litterature::class, 'upload'])->name('literature.upload');
+Route::post('/literature/delete/{id}', [Litterature::class, 'delete'])->name('literature.delete');
 
 Route::get('/litteratureVariant/{id}', [LitteratureVariant::class, 'getLitteratureBinary']);
 Route::post('/litteratureVariant', [LitteratureVariant::class, 'uploadLitteratureVariant']);
 Route::delete('/litteratureVariant/delete/{id}', [LitteratureVariant::class, 'delete'])->name('variant.delete');
 
-Route::get('/library', [Library::class, 'index'])->name('library');
+Route::get('/library', [Library::class, 'index'])->name('library.index');

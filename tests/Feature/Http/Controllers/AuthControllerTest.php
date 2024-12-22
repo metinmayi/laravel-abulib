@@ -35,7 +35,7 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post('/register', $credentials);
         $response->assertStatus(302);
-        $response->assertRedirect(route('library'));
+        $response->assertRedirect(route('library.index'));
 
         $user = User::query()->where('email', $credentials['email'])->first();
         $this->assertNotNull($user);
@@ -82,7 +82,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('library'));
+        $response->assertRedirect(route('library.index'));
         $this->assertTrue(Auth::check());
     }
 

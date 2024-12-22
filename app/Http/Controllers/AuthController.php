@@ -32,7 +32,7 @@ class AuthController extends Controller
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('library'));
+        return redirect(route('library.index'));
     }
 
     /**
@@ -44,6 +44,6 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['Error' => 'Invalid credentials.']);
         }
 
-        return redirect(route('library'));
+        return redirect(route('library.index'));
     }
 }
