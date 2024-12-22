@@ -25,7 +25,7 @@
     <!-- Forms -->
     <div id="upload" class="form-container hidden bg-white p-6 rounded shadow-md">
       <h2 class="text-2xl font-semibold mb-4">Upload New Literature</h2>
-      <form action="/litterature" method="POST" enctype="multipart/form-data">
+      <form action="/literature" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="file" class="block text-sm font-medium mb-2">Upload PDF:</label>
         <input type="file" id="pdf" name="file" accept="application/pdf" required class="block w-full p-2 border rounded mb-4">

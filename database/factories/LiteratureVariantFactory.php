@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\Litterature;
+use App\Models\Literature;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LitteratureVariant>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LiteratureVariant>
  */
-class LitteratureVariantFactory extends Factory
+class LiteratureVariantFactory extends Factory
 {
 
-    protected $model = \App\Models\LitteratureVariant::class;
+    protected $model = \App\Models\LiteratureVariant::class;
 
     /**
      * Define the model's default state.
@@ -25,7 +25,7 @@ class LitteratureVariantFactory extends Factory
             'description' => fake()->paragraph(1),
             'language' => fake()->languageCode(),
             'url' => fake()->url(),
-            'litterature_id' => Litterature::factory(),
+            'literature_id' => Literature::factory(),
         ];
     }
 }

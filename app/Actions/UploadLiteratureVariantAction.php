@@ -2,16 +2,16 @@
 
 namespace App\Actions;
 
-use App\Models\Litterature;
-use App\Models\LitteratureVariant;
+use App\Models\Literature;
+use App\Models\LiteratureVariant;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Action for uploading litterature variant
+ * Action for uploading literature variant
  */
-class UploadLitteratureVariantAction
+class UploadLiteratureVariantAction
 {
   /**
    * Constructor
@@ -25,18 +25,18 @@ class UploadLitteratureVariantAction
    * Main method
    * @return array{bool, int}
    */
-    public function handle(int $litteratureId): array
+    public function handle(int $literatureId): array
     {
-        if (! Litterature::find($litteratureId)) {
-            Log::error('Tried to upload a litterature variant without an existing litterature', ['litterature_id' => $litteratureId, 'data' => $this->data]);
+        if (! Literature::find($literatureId)) {
+            Log::error('Tried to upload a literature variant without an existing literature', ['literature_id' => $literatureId, 'data' => $this->data]);
             return [false, -1];
         }
 
-        $alreadyExists = LitteratureVariant::where('litterature_id', $litteratureId)
+        $alreadyExists = LiteratureVariant::where('literature_id', $literatureId)
             ->where('language', $this->data['language'])
             ->exists();
         if ($alreadyExists) {
-            Log::error('Tried to upload a litterature variant with an existing language', ['litterature_id' => $litteratureId, 'data' => $this->data]);
+            Log::error('Tried to upload a literature variant with an existing language', ['literature_id' => $literatureId, 'data' => $this->data]);
             return [false, -1];
         }
 
@@ -45,9 +45,9 @@ class UploadLitteratureVariantAction
         $fileName = Storage::disk('local')->putFile('', $file);
 
         $this->data['url'] = $fileName;
-        $this->data['litterature_id'] = $litteratureId;
+        $this->data['literature_id'] = $literatureId;
 
-        $variant = new LitteratureVariant($this->data);
+        $variant = new LiteratureVariant($this->data);
         return [$variant->save(), $variant->id];
     }
 }

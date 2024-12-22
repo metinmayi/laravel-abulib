@@ -5,11 +5,11 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Litterature>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Literature>
  */
-class LitteratureFactory extends Factory
+class LiteratureFactory extends Factory
 {
-    protected $model = \App\Models\Litterature::class;
+    protected $model = \App\Models\Literature::class;
     /**
      * Define the model's default state.
      *

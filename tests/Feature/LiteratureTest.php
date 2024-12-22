@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Actions\GetLitteratureListAction;
-use App\Models\Litterature;
-use App\Models\LitteratureVariant;
+use App\Actions\GetLiteratureListAction;
+use App\Models\Literature;
+use App\Models\LiteratureVariant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
@@ -12,14 +12,13 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /**
- * Tests for Litterature
+ * Tests for Literature
  */
-class LitteratureTest extends TestCase
+class LiteratureTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected const DISK_STORE = 'litteratures';
-    protected string $litteratureCategory = 'research';
+    protected string $literatureCategory = 'research';
 
     protected string $variantTitle = 'Test Title';
     protected string $variantDescription = 'Test Description';
@@ -28,21 +27,21 @@ class LitteratureTest extends TestCase
 
 
     /**
-     * Test upload litterature
+     * Test upload literature
      */
-    public function test_upload_litterature_creates_litterature(): void
+    public function test_upload_literature_creates_literature(): void
     {
         $this->uploadLiterature();
     }
 
     /**
-     * Tests that a variant is created when uploading a litterature.
+     * Tests that a variant is created when uploading a literature.
      */
-    public function test_upload_litterature_creates_litterature_variant(): void
+    public function test_upload_literature_creates_literature_variant(): void
     {
-        $litterature = $this->uploadLiterature();
+        $literature = $this->uploadLiterature();
 
-        $variants = LitteratureVariant::all();
+        $variants = LiteratureVariant::all();
         $this->assertCount(1, $variants);
 
         $variant = $variants->first();
@@ -51,14 +50,14 @@ class LitteratureTest extends TestCase
         $this->assertEquals($this->variantDescription, $variant->description);
         $this->assertEquals($this->variantLanguage, $variant->language);
         $this->assertEquals($this->fileName, $variant->url);
-        $this->assertEquals($litterature->id, $variant->litterature_id);
+        $this->assertEquals($literature->id, $variant->literature_id);
         $this->assertTrue(Storage::disk()->exists($this->fileName));
     }
 
     /**
-     * Test get litterature list
+     * Test get literature list
      */
-    public function test_get_litterature_list_returns_expected_variants(): void
+    public function test_get_literature_list_returns_expected_variants(): void
     {
         $language = 'ku';
         $expectedResult = [
@@ -66,15 +65,15 @@ class LitteratureTest extends TestCase
             $this->uploadAndGetExpectedVariant($language),
         ];
 
-        $action = new GetLitteratureListAction($language);
-        $litteratureList = $action->handle();
-        $this-> assertCount(20, LitteratureVariant::all());
-        $this->assertCount(2, $litteratureList);
-        $this->assertEqualsCanonicalizing($expectedResult, $litteratureList);
+        $action = new GetLiteratureListAction($language);
+        $literatureList = $action->handle();
+        $this-> assertCount(20, LiteratureVariant::all());
+        $this->assertCount(2, $literatureList);
+        $this->assertEqualsCanonicalizing($expectedResult, $literatureList);
     }
 
     /**
-     * Test delete litterature
+     * Test delete literature
      */
     public function test_delete_literature(): void
     {
@@ -84,13 +83,13 @@ class LitteratureTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('library.index'));
 
-        $this->assertCount(0, LitteratureVariant::all());
-        $this->assertCount(0, Litterature::all());
+        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Literature::all());
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
     }
 
     /**
-     * Test failing delete litterature
+     * Test failing delete literature
      */
     public function test_failing_delete_literature_yields_errors(): void
     {
@@ -105,15 +104,15 @@ class LitteratureTest extends TestCase
      */
     protected function uploadAndGetExpectedVariant(string $lang): object
     {
-        $litterature = Litterature::factory()->create();
-        $variants = LitteratureVariant::factory()
-            -> set('litterature_id', $litterature->id)
+        $literature = Literature::factory()->create();
+        $variants = LiteratureVariant::factory()
+            -> set('literature_id', $literature->id)
             -> count(9)
             ->create();
         $availableLanguages = $variants->pluck('language')->toArray();
 
-        $variant = LitteratureVariant::factory()
-        ->set('litterature_id', $litterature->id)
+        $variant = LiteratureVariant::factory()
+        ->set('literature_id', $literature->id)
         ->set('language', $lang)
         ->createOne();
         $availableLanguages[] = $lang;
@@ -121,21 +120,21 @@ class LitteratureTest extends TestCase
 
         return (object) [
             'id' => $variant->id,
-            'litterature_id' => $litterature->id,
+            'literature_id' => $literature->id,
             'language' => $variant->language,
             'availableLanguages' => $availableLanguages,
             'title' => $variant->title,
             'description' => $variant->description,
-            'category' => $litterature->category
+            'category' => $literature->category
         ];
     }
 
     /**
      * Helper
      */
-    protected function uploadLiterature(?File $file = null): Litterature
+    protected function uploadLiterature(?File $file = null): Literature
     {
-        $this->assertCount(0, Litterature::all());
+        $this->assertCount(0, Literature::all());
 
         Storage::fake();
         $file = $file ?? UploadedFile::fake()->create('test.pdf', 100);
@@ -144,18 +143,18 @@ class LitteratureTest extends TestCase
             'title' => $this->variantTitle,
             'description' => $this->variantDescription,
             'language' => $this->variantLanguage,
-            'category' => $this->litteratureCategory,
+            'category' => $this->literatureCategory,
             'file' => $file,
         ];
 
         $response = $this->post('/literature', $postData);
         $response->assertStatus(201);
 
-        $litteratures = Litterature::all();
-        $this->assertCount(1, $litteratures);
-        $this->assertCount(1, LitteratureVariant::all());
-        $this->assertInstanceOf(Litterature::class, $litteratures->first());
-        $this->assertEquals($this->litteratureCategory, $litteratures->first()->category);
-        return $litteratures->first();
+        $literatures = Literature::all();
+        $this->assertCount(1, $literatures);
+        $this->assertCount(1, LiteratureVariant::all());
+        $this->assertInstanceOf(Literature::class, $literatures->first());
+        $this->assertEquals($this->literatureCategory, $literatures->first()->category);
+        return $literatures->first();
     }
 }

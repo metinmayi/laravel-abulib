@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LitteratureVariantUploadRequest extends FormRequest
+class LiteratureUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class LitteratureVariantUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'litterature_id' => ['required', 'integer'],
-            'title' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'file' => ['required', 'file', 'mimes:pdf'],
-            'language' => ['required', 'string']
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'language' => 'required|string',
+            'category' => 'required|string',
+            'file' => 'required|file|mimes:pdf',
         ];
     }
 }

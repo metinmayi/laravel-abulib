@@ -1,26 +1,26 @@
 <?php
 
-use App\Http\Controllers\Admin;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Library;
-use App\Http\Controllers\Litterature;
-use App\Http\Controllers\LitteratureVariant;
+use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\LiteratureController;
+use App\Http\Controllers\LiteratureVariantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('landing.index'));
 
-Route::get('/admin', [Admin::class, 'index']);
-Route::get('/admin/newliterature', [Admin::class, 'newLiterature']);
+Route::get('/admin', [AdminController::class, 'index']);
+Route::get('/admin/newliterature', [AdminController::class, 'newLiterature']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/literature', [Litterature::class, 'upload'])->name('literature.upload');
-Route::post('/literature/delete/{id}', [Litterature::class, 'delete'])->name('literature.delete');
+Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload');
+Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete');
 
-Route::get('/litteratureVariant/{id}', [LitteratureVariant::class, 'getLitteratureBinary']);
-Route::post('/litteratureVariant', [LitteratureVariant::class, 'uploadLitteratureVariant']);
-Route::delete('/litteratureVariant/delete/{id}', [LitteratureVariant::class, 'delete'])->name('variant.delete');
+Route::get('/literatureVariant/{id}', [LiteratureVariantController::class, 'getLiteratureBinary']);
+Route::post('/literatureVariant', [LiteratureVariantController::class, 'uploadLiteratureVariant']);
+Route::delete('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
 
-Route::get('/library', [Library::class, 'index'])->name('library.index');
+Route::get('/library', [LibraryController::class, 'index'])->name('library.index');

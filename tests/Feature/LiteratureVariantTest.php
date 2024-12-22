@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Litterature;
-use App\Models\LitteratureVariant;
+use App\Models\Literature;
+use App\Models\LiteratureVariant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Testing\File;
@@ -15,28 +15,28 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 use TypeError;
 
-class LitteratureVariantTest extends TestCase
+class LiteratureVariantTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
-     * Test that a 404 is returned if the litterature variant is not found
+     * Test that a 404 is returned if the literature variant is not found
      */
-    public function test_get_litterature_binary_404_if_not_found(): void
+    public function test_get_literature_binary_404_if_not_found(): void
     {
-        $this->assertCount(0, LitteratureVariant::all());
-        $response = $this->get('/litteratureVariant/1');
+        $this->assertCount(0, LiteratureVariant::all());
+        $response = $this->get('/literatureVariant/1');
         $response->assertStatus(404);
     }
 
     /**
-     * Get litterature binary
+     * Get literature binary
      */
-    public function test_get_litterature_binary(): void
+    public function test_get_literature_binary(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
-        $response = $this->get('/litteratureVariant/' . $variant->id);
+        $response = $this->get('/literatureVariant/' . $variant->id);
         $response->assertStatus(200);
         $this->assertInstanceOf(BinaryFileResponse::class, $response->baseResponse);
     }
@@ -44,44 +44,44 @@ class LitteratureVariantTest extends TestCase
     /**
      * Test validation for uploading a variant
      */
-    public function test_upload_litterature_variant_validation_errors(): void
+    public function test_upload_literature_variant_validation_errors(): void
     {
-            $res = $this->post('/litteratureVariant');
-            $res->assertSessionHasErrors(['title','description', 'file', 'litterature_id']);
+            $res = $this->post('/literatureVariant');
+            $res->assertSessionHasErrors(['title','description', 'file', 'literature_id']);
             $res->assertStatus(302);
     }
 
     /**
-     * Test uploading a litterature variant without an existing litterature yields error
+     * Test uploading a literature variant without an existing literature yields error
      */
-    public function test_upload_litterature_variant_without_existing_litterature(): void
+    public function test_upload_literature_variant_without_existing_literature(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $response = $this->uploadLitteratureVariant(-1, $file);
+        $response = $this->uploadliteratureVariant(-1, $file);
 
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
     }
 
     /**
-     * Test uploading a litterature variant
+     * Test uploading a literature variant
      */
-    public function test_upload_litterature_variant(): void
+    public function test_upload_literature_variant(): void
     {
         $this->uploadVariantWithoutErrors();
     }
 
     /**
-     * Test uploading a litterature variant with an existing language yields error
+     * Test uploading a literature variant with an existing language yields error
      */
     public function test_upload_variant_with_existing_language_yields_error(): void
     {
-        $litterature = Litterature::factory()->create();
+        $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
         $language = fake()->languageCode();
 
-        $this->uploadLitteratureVariant($litterature->id, $file, lang: $language);
-        $response = $this->uploadLitteratureVariant($litterature->id, $file, lang: $language);
+        $this->uploadliteratureVariant($literature->id, $file, lang: $language);
+        $response = $this->uploadliteratureVariant($literature->id, $file, lang: $language);
 
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
@@ -92,14 +92,14 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_delete_variant_removes_file_and_entry(): void
     {
-        $litterature = Litterature::factory()->create();
+        $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        [$response] = $this->uploadVariantWithoutErrors($litterature->id, $file);
+        [$response] = $this->uploadVariantWithoutErrors($literature->id, $file);
 
-        $response = $this->delete(route('variant.delete', ['id' => $litterature->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $literature->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
-        $this->assertCount(0, LitteratureVariant::all());
+        $this->assertCount(0, LiteratureVariant::all());
     }
 
     /**
@@ -127,17 +127,17 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_provide_error_if_cannot_delete_file_when_deleting_variant(): void
     {
-        $litterature = Litterature::factory()->create();
+        $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $this->uploadVariantWithoutErrors($litterature->id, $file);
+        $this->uploadVariantWithoutErrors($literature->id, $file);
 
         Storage::shouldReceive('delete')
             ->once()
             ->andReturn(false);
-        $response = $this->delete(route('variant.delete', ['id' => $litterature->id]));
+        $response = $this->delete(route('variant.delete', ['id' => $literature->id]));
         $response->assertStatus(302);
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
-        $this->assertCount(1, LitteratureVariant::all());
+        $this->assertCount(1, LiteratureVariant::all());
     }
 
     /**
@@ -145,18 +145,18 @@ class LitteratureVariantTest extends TestCase
      */
     public function test_deleting_variant_does_not_delete_literature(): void
     {
-        $litterature = Litterature::factory()->createOne();
-        $this->uploadVariantWithoutErrors(litteratureId: $litterature->id);
+        $literature = Literature::factory()->createOne();
+        $this->uploadVariantWithoutErrors(literatureId: $literature->id);
 
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        [$rez, $variant] = $this->uploadVariantWithoutErrors(litteratureId:$litterature->id, file: $file, lang: 'kurdish');
-        $this->assertCount(1, Litterature::all());
+        [$rez, $variant] = $this->uploadVariantWithoutErrors(literatureId:$literature->id, file: $file, lang: 'kurdish');
+        $this->assertCount(1, Literature::all());
 
         $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
-        $this->assertCount(1, LitteratureVariant::all());
-        $this->assertCount(1, Litterature::all());
+        $this->assertCount(1, LiteratureVariant::all());
+        $this->assertCount(1, Literature::all());
     }
 
     /**
@@ -165,60 +165,60 @@ class LitteratureVariantTest extends TestCase
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
-        $this->assertCount(1, Litterature::all());
+        $this->assertCount(1, Literature::all());
 
         $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
-        $this->assertCount(0, LitteratureVariant::all());
-        $this->assertCount(0, Litterature::all());
+        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Literature::all());
     }
 
     /**
-     * Helper for uploading a litterature variant.
-     * @return array{TestResponse<Response>, LitteratureVariant}
+     * Helper for uploading a literature variant.
+     * @return array{TestResponse<Response>, LiteratureVariant}
      */
-    private function uploadVariantWithoutErrors(?int $litteratureId = null, ?File $file = null, ?string $lang = null): array
+    private function uploadVariantWithoutErrors(?int $literatureId = null, ?File $file = null, ?string $lang = null): array
     {
-        $litteratureId = $litteratureId ?? Litterature::factory()->createOne()->id;
+        $literatureId = $literatureId ?? Literature::factory()->createOne()->id;
         $file = $file ?? UploadedFile::fake()->create('test.pdf', 100);
         $language = $lang ?? fake()->languageCode();
         $title = fake()->title();
         $description = fake()->sentence();
 
-        $count = count(LitteratureVariant::all());
+        $count = count(LiteratureVariant::all());
 
-        $response = $this->uploadLitteratureVariant($litteratureId, $file, $title, $description, $language);
+        $response = $this->uploadliteratureVariant($literatureId, $file, $title, $description, $language);
         $response->assertStatus(201);
-        $this->assertCount($count + 1, LitteratureVariant::all());
+        $this->assertCount($count + 1, LiteratureVariant::all());
 
         $this->assertTrue(Storage::disk()->exists($file->hashName()));
 
-        $variant = LitteratureVariant::query()->where('litterature_id', '=', $litteratureId)->where('language', '=', $language)->first();
+        $variant = LiteratureVariant::query()->where('literature_id', '=', $literatureId)->where('language', '=', $language)->first();
         $this->assertNotNull($variant);
         $this->assertEquals($file->hashName(), $variant->url);
         $this->assertEquals($title, $variant->title);
         $this->assertEquals($description, $variant->description);
         $this->assertEquals($language, $variant->language);
-        $this->assertEquals($litteratureId, $variant->litterature_id);
+        $this->assertEquals($literatureId, $variant->literature_id);
 
         return [$response, $variant];
     }
 
     /**
-     * Helper for uploading a litterature variant.
+     * Helper for uploading a literature variant.
      * @return TestResponse<Response>
      */
-    private function uploadLitteratureVariant(int $litteratureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
+    private function uploadliteratureVariant(int $literatureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
     {
         Storage::fake();
 
         $language = $lang ?? fake()->languageCode();
-        $response = $this->post('/litteratureVariant', [
+        $response = $this->post('/literatureVariant', [
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),
             'file' => $file,
-            'litterature_id' => $litteratureId,
+            'literature_id' => $literatureId,
             'language' => $language
         ]);
 

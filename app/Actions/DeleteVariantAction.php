@@ -2,13 +2,13 @@
 
 namespace App\Actions;
 
-use App\Models\Litterature;
-use App\Models\LitteratureVariant;
+use App\Models\Literature;
+use App\Models\LiteratureVariant;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Action for uploading litterature variant
+ * Action for uploading literature variant
  */
 class DeleteVariantAction
 {
@@ -24,9 +24,9 @@ class DeleteVariantAction
     */
     public function handle(int $id): ?bool
     {
-        $variant = LitteratureVariant::find($id);
+        $variant = LiteratureVariant::find($id);
         if (! $variant) {
-            Log::error('Tried to delete a litterature variant without it existing', ['id' => $id]);
+            Log::error('Tried to delete a literature variant without it existing', ['id' => $id]);
             return false;
         }
 
@@ -36,10 +36,10 @@ class DeleteVariantAction
             return false;
         }
 
-        $remainingVariants = LitteratureVariant::where('litterature_id', $variant->litterature_id)->count();
+        $remainingVariants = LiteratureVariant::where('literature_id', $variant->literature_id)->count();
         if ($remainingVariants === 1) {
-            $litterature = Litterature::findOrFail($variant->litterature_id);
-            return $litterature->delete();
+            $literature = Literature::findOrFail($variant->literature_id);
+            return $literature->delete();
         }
 
         return $variant->delete();

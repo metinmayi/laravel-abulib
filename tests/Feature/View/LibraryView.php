@@ -13,7 +13,7 @@ class ZzaTest extends TestCase
     public function test_library_renders_literatures(): void
     {
         $contents = $this->view('zza', [
-            'litteratureList' => [
+            'literatureList' => [
                 [
                     'title' => 'The Book of Zza',
                     'author' => 'Zza',
@@ -35,7 +35,7 @@ class ZzaTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
         $contents = $this->view('zza', [
-            'litteratureList' => [
+            'literatureList' => [
                 [
                     'title' => 'The Book of Zza',
                     'author' => 'Zza',
@@ -56,7 +56,7 @@ class ZzaTest extends TestCase
     public function test_library_doenst_render_edit_button_if_logged_out(): void
     {
         $contents = $this->view('zza', [
-            'litteratureList' => [
+            'literatureList' => [
                 [
                     'title' => 'The Book of Zza',
                     'author' => 'Zza',

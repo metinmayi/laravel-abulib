@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteVariantAction;
-use App\Actions\UploadLitteratureVariantAction;
-use App\Http\Requests\LitteratureVariantUploadRequest;
-use App\Models\LitteratureVariant as ModelsLitteratureVariant;
+use App\Actions\UploadLiteratureVariantAction;
+use App\Http\Requests\LiteratureVariantUploadRequest;
+use App\Models\LiteratureVariant as ModelsLiteratureVariant;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class LitteratureVariant extends Controller
+class LiteratureVariantController extends Controller
 {
     /**
-     * Get litterature binary. Used for PDF source.
+     * Get literature binary. Used for PDF source.
      */
-    public function getLitteratureBinary(int $id): BinaryFileResponse | ResponseFactory | Response
+    public function getLiteratureBinary(int $id): BinaryFileResponse | ResponseFactory | Response
     {
-        $variant = ModelsLitteratureVariant::find($id);
+        $variant = ModelsLiteratureVariant::find($id);
         if (!$variant) {
             return response(null, 404);
         }
@@ -30,15 +29,15 @@ class LitteratureVariant extends Controller
     }
 
     /**
-     * Upload a litterature variant
+     * Upload a literature variant
      */
-    public function uploadLitteratureVariant(LitteratureVariantUploadRequest $request): RedirectResponse
+    public function uploadLiteratureVariant(LiteratureVariantUploadRequest $request): RedirectResponse
     {
-        $action = new UploadLitteratureVariantAction($request->safe()->all());
+        $action = new UploadLiteratureVariantAction($request->safe()->all());
 
         /** @var int */
-        $litteratureId = $request->get('litterature_id');
-        [$success] = $action->handle($litteratureId);
+        $literatureId = $request->get('literature_id');
+        [$success] = $action->handle($literatureId);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

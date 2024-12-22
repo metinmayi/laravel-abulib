@@ -10,9 +10,15 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('litteratures', function (Blueprint $table) {
+        Schema::create('literature_variants', function (Blueprint $table) {
             $table->id();
-            $table->enum('category', ['poetry', 'research', 'book', 'article']);
+            $table->foreignId('literature_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->string('language');
+            $table->string('title');
+            $table->string('description');
+            $table->string('url');
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });
@@ -23,6 +29,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('litteratures');
+        Schema::dropIfExists('literature_variants');
     }
 };

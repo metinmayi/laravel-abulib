@@ -3,28 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteLiteratureAction;
-use App\Actions\UploadLitteratureAction;
-use App\Actions\UploadLitteratureVariantAction;
-use App\Http\Requests\LitteratureUploadRequest;
+use App\Actions\UploadLiteratureAction;
+use App\Actions\UploadLiteratureVariantAction;
+use App\Http\Requests\LiteratureUploadRequest;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
-class Litterature extends Controller
+class LiteratureController extends Controller
 {
     /**
-     * Upload litterature
+     * Upload literature
      */
-    public function upload(LitteratureUploadRequest $request): Response | ResponseFactory
+    public function upload(LiteratureUploadRequest $request): Response | ResponseFactory
     {
         $data = $request->all();
-        $uploadLitteratureAction = new UploadLitteratureAction($data, new UploadLitteratureVariantAction($data));
-        $uploadLitteratureAction->handle();
+        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadLiteratureVariantAction($data));
+        $uploadLiteratureAction->handle();
         return response(null, 201);
     }
 
     /**
-     * Delete litterature
+     * Delete literature
      */
     public function delete(int $id): RedirectResponse
     {
