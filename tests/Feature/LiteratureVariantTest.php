@@ -46,8 +46,8 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_upload_literature_variant_validation_errors(): void
     {
-            $res = $this->post('/literatureVariant');
-            $res->assertSessionHasErrors(['title','description', 'file', 'literature_id']);
+            $res = $this->post('/literatureVariant/upload/0');
+            $res->assertSessionHasErrors(['title','description', 'file']);
             $res->assertStatus(302);
     }
 
@@ -96,7 +96,7 @@ class LiteratureVariantTest extends TestCase
         $file = UploadedFile::fake()->create('test.pdf', 100);
         [$response] = $this->uploadVariantWithoutErrors($literature->id, $file);
 
-        $response = $this->delete(route('variant.delete', ['id' => $literature->id]));
+        $response = $this->post(route('variant.delete', ['id' => $literature->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
@@ -108,7 +108,7 @@ class LiteratureVariantTest extends TestCase
     public function test_validation_errors_when_deleting_variant(): void
     {
         Exceptions::fake();
-        $this->delete(route('variant.delete', ['id' => 'notNumeric']));
+        $this->post(route('variant.delete', ['id' => 'notNumeric']));
         Exceptions::assertReported(TypeError::class);
     }
 
@@ -117,7 +117,7 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_provide_error_if_deleting_non_existing_variant(): void
     {
-        $response = $this->delete(route('variant.delete', ['id' => 55]));
+        $response = $this->post(route('variant.delete', ['id' => 55]));
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
     }
@@ -134,7 +134,7 @@ class LiteratureVariantTest extends TestCase
         Storage::shouldReceive('delete')
             ->once()
             ->andReturn(false);
-        $response = $this->delete(route('variant.delete', ['id' => $literature->id]));
+        $response = $this->post(route('variant.delete', ['id' => $literature->id]));
         $response->assertStatus(302);
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $this->assertCount(1, LiteratureVariant::all());
@@ -152,7 +152,7 @@ class LiteratureVariantTest extends TestCase
         [$rez, $variant] = $this->uploadVariantWithoutErrors(literatureId:$literature->id, file: $file, lang: 'kurdish');
         $this->assertCount(1, Literature::all());
 
-        $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
+        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(1, LiteratureVariant::all());
@@ -167,7 +167,7 @@ class LiteratureVariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
         $this->assertCount(1, Literature::all());
 
-        $response = $this->delete(route('variant.delete', ['id' => $variant->id]));
+        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
         $response->assertStatus(201);
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
@@ -214,11 +214,10 @@ class LiteratureVariantTest extends TestCase
         Storage::fake();
 
         $language = $lang ?? fake()->languageCode();
-        $response = $this->post('/literatureVariant', [
+        $response = $this->post("/literatureVariant/upload/$literatureId", [
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),
             'file' => $file,
-            'literature_id' => $literatureId,
             'language' => $language
         ]);
 

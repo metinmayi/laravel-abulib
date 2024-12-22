@@ -22,7 +22,6 @@ class LiteratureVariantUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'literature_id' => ['required', 'integer'],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'file' => ['required', 'file', 'mimes:pdf'],
