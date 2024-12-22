@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginFormRequest;
+use App\Http\Requests\RegisterFormRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +16,7 @@ class AuthController extends Controller
     /**
      * Registers a user.
      */
-    public function register(LoginFormRequest $request): RedirectResponse
+    public function register(RegisterFormRequest $request): RedirectResponse
     {
         try {
             $user = User::create([
@@ -30,6 +31,18 @@ class AuthController extends Controller
 
         event(new Registered($user));
         Auth::login($user);
+
+        return redirect(route('library'));
+    }
+
+    /**
+     * Logs a user in.
+     */
+    public function login(LoginFormRequest $request): RedirectResponse
+    {
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return redirect()->back()->withErrors(['Error' => 'Invalid credentials.']);
+        }
 
         return redirect(route('library'));
     }

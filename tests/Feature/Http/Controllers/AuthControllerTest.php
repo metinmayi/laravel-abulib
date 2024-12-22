@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
@@ -55,5 +56,49 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors('Error', 'An error occured. Please contact your son.');
+    }
+
+    /**
+     * Test logging in a user.
+     */
+    public function test_login_user_without_input_yields_validation_errors(): void
+    {
+        $response = $this->post('/login');
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['email', 'password']);
+    }
+
+    /**
+     * Test logging in a user.
+     */
+    public function test_logging_in_user(): void
+    {
+        $user = \App\Models\User::factory()->create();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('library'));
+        $this->assertTrue(Auth::check());
+    }
+
+    /**
+     * Test logging in a user with invalid credentials.
+     */
+    public function test_logging_in_user_with_invalid_credentials(): void
+    {
+        $user = \App\Models\User::factory()->create();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'invalid-password',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors('Error', 'Invalid credentials.');
     }
 }
