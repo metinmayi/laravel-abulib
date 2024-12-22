@@ -39,6 +39,11 @@
                     <button class="w-full bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 transition">
                         Read
                     </button>
+                    @auth
+                    <a class="bg-orange-500 text-white py-1 px-2 rounded hover:bg-orange-600 transition mt-2 justify-self-center" href="/edit/{{$litterature->id}}">
+                        Edit (Abdul only)
+                    </a>
+                    @endauth
                 </div>
             </div>
             @endforeach
