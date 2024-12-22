@@ -13,6 +13,7 @@ Route::get('/admin', [Admin::class, 'index']);
 Route::get('/admin/newliterature', [Admin::class, 'newLiterature']);
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/litterature', [Litterature::class, 'uploadLitterature']);

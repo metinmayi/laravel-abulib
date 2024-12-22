@@ -19,6 +19,7 @@
             <ul class="space-y-4">
                 <li><a href="#about" class="text-lg hover:text-gray-500">About Abdulbaghi</a></li>
                 <li><a href="/library" class="text-lg hover:text-gray-500">Library</a></li>
+                <li><a href="/login" class="text-lg hover:text-gray-500">Login</a></li>
             </ul>
         </nav>
     </div>
