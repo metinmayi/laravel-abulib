@@ -11,6 +11,7 @@ class UnitTest extends TestCase
      */
     public function test_example(): void
     {
+        /** @phpstan-ignore method.alreadyNarrowedType */
         $this->assertTrue(true);
     }
 }
