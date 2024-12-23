@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteVariantAction;
+use App\Actions\UpdateLiteratureVariantAction;
 use App\Actions\UploadLiteratureVariantAction;
+use App\Http\Requests\LiteratureVariantUpdateRequest;
 use App\Http\Requests\LiteratureVariantUploadRequest;
 use App\Models\LiteratureVariant as ModelsLiteratureVariant;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -41,6 +43,19 @@ class LiteratureVariantController extends Controller
         }
 
         return redirect()->back(201);
+    }
+
+    /**
+     * Update a variant.
+     */
+    public function update(int $id, LiteratureVariantUpdateRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $success = (new UpdateLiteratureVariantAction($id, $validated))->handle();
+        if (!$success) {
+            return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
+        }
+        return redirect()->back();
     }
 
     /**

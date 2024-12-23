@@ -4,13 +4,16 @@ namespace Tests\Feature;
 
 use App\Models\Literature;
 use App\Models\LiteratureVariant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 use TypeError;
@@ -18,6 +21,8 @@ use TypeError;
 class LiteratureVariantTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected \Illuminate\Contracts\Filesystem\Filesystem $storage;
 
     /**
      * Test that a 404 is returned if the literature variant is not found
@@ -175,6 +180,172 @@ class LiteratureVariantTest extends TestCase
     }
 
     /**
+     * Test that the update variant endpoint requires authentication
+     */
+    public function test_update_variant_endpoint_requires_auth(): void
+    {
+        $response = $this->post(route('variant.update', ['id' => 1]));
+        $response->assertStatus(403);
+    }
+
+    /**
+     * Test that the update variant endpoint requires a valid variant id
+     * @param array<string, string> $input       Input data.
+     * @param boolean               $shouldError Whether the request should error.
+     * @param array<string>         $errors      Expected errors.
+     */
+    #[DataProvider('updateVariantValidationProvider')]
+    public function test_update_variant_endpoint_validation(array $input, bool $shouldError = false, array $errors = []): void
+    {
+        $this->actingAs(User::factory()->createOne());
+        $response = $this->post(route('variant.update', ['id' => 1]), $input);
+        $response->assertStatus(302);
+
+        if ($shouldError) {
+            $response->assertSessionHasErrors($errors);
+        } else {
+            $response->assertSessionHasNoErrors();
+        }
+    }
+
+    /**
+     * Data provider for update variant validation
+     * @return array<int, array{array<string, string>, bool, array<string>}>
+     */
+    public static function updateVariantValidationProvider(): array
+    {
+        $errors = ['title', 'description', 'language', 'file'];
+        return [
+            [[], true, $errors],
+            [['title' => ''],true, $errors],
+            [['description' => ''],true,  $errors],
+            [['language' => ''], true, $errors],
+            [['file' => ''], true, $errors],
+            [['title' => 'test'], false, []],
+            [['description' => 'test'], false, []],
+            [['language' => 'test'], false, []],
+            [['file' => UploadedFile::fake()->create('test.pdf', 100)], false, []],
+        ];
+    }
+
+    /**
+     * Test updating a variant that does not exist yields errors and logs.
+     */
+    public function test_update_variant_that_does_not_exist(): void
+    {
+        Log::shouldReceive('error')->once();
+
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => -1]))
+            ->post(route('variant.update', ['id' => -1]), ['title' => 'test'])
+            ->assertStatus(302)
+            ->assertRedirect(route('variant.editPage', ['id' => -1]))
+            ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+    }
+
+    /**
+     * Test updating a variant title, description and language
+     */
+    #[DataProvider('updateVariantPropertyProvider')]
+    public function test_update_variant_property(string $property, string $value): void
+    {
+        [$res, $variant] = $this->uploadVariantWithoutErrors();
+
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->post(route('variant.update', ['id' => $variant->id]), [$property => $value])
+            ->assertStatus(302)
+            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertSessionHasNoErrors();
+
+        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $this->assertEquals($value, $variant->$property);
+    }
+
+    /**
+     * Data provider for updating a variant title, description and/or language
+     * @return array<int, array{string, string}>
+     */
+    public static function updateVariantPropertyProvider(): array
+    {
+        return [
+            ['title', 'new title'],
+            ['description', 'new description'],
+            ['language', 'new language'],
+        ];
+    }
+
+    /**
+     * Test updating a variant file
+     */
+    public function test_update_variant_file(): void
+    {
+        [$res, $variant] = $this->uploadVariantWithoutErrors();
+        $oldUrl = $variant->url;
+
+        $newFile = UploadedFile::fake()->create('test.pdf', 100);
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->assertStatus(302)
+            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertSessionHasNoErrors();
+
+        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $this->assertEquals($newFile->hashName(), $variant->url);
+        $this->assertTrue(Storage::disk()->exists($newFile->hashName()));
+        $this->assertFalse(Storage::disk()->exists($oldUrl));
+    }
+
+    /**
+     * Test updating a variant file yields error if uploading new file fails
+     */
+    public function test_update_variant_file_fails_if_uploading_new_file_fails(): void
+    {
+        [$res, $variant] = $this->uploadVariantWithoutErrors();
+        $oldUrl = $variant->url;
+        $newFile = UploadedFile::fake()->create('test.pdf', 100);
+
+        Storage::shouldReceive('putFile')
+            ->once()
+            ->andReturn(false);
+        Storage::shouldReceive('delete')->never();
+
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->assertStatus(302)
+            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+
+        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $this->assertEquals($oldUrl, $variant->url);
+    }
+
+    /**
+     * Test updating a variant loggs error if deleting old file fails
+     */
+    public function test_update_variant_file_fails_if_deleting_old_file_fails(): void
+    {
+        [$res, $variant] = $this->uploadVariantWithoutErrors();
+        $newFile = UploadedFile::fake()->create('test.pdf', 100);
+
+        Storage::shouldReceive('putFile')
+            ->once()
+            ->andReturn(true);
+            Storage::shouldReceive('delete')
+            ->once()
+            ->andReturn(false);
+        Log::shouldReceive('error')->once();
+
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->assertStatus(302)
+            ->assertSessionHasNoErrors();
+    }
+
+    /**
      * Helper for uploading a literature variant.
      * @return array{TestResponse<Response>, LiteratureVariant}
      */
@@ -211,7 +382,7 @@ class LiteratureVariantTest extends TestCase
      */
     private function uploadliteratureVariant(int $literatureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
     {
-        Storage::fake();
+        $this->storage = Storage::fake();
 
         $language = $lang ?? fake()->languageCode();
         $response = $this->post("/literatureVariant/upload/$literatureId", [

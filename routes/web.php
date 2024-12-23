@@ -22,5 +22,7 @@ Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])-
 Route::get('/literatureVariant/{id}', [LiteratureVariantController::class, 'getLiteratureBinary']);
 Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'uploadLiteratureVariant']);
 Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
+Route::post('/literatureVariant/update/{id}', [LiteratureVariantController::class, 'update'])->name('variant.update');
+Route::get('/literatureVariant/edit/{id}', [LiteratureVariantController::class, 'edit'])->name('variant.editPage');
 
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
