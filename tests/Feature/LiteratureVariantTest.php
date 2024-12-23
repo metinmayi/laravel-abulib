@@ -346,6 +346,24 @@ class LiteratureVariantTest extends TestCase
     }
 
     /**
+     * Test updating a variant language to an existing language yields error
+     */
+    public function test_update_variant_language_to_existing_language_yields_error(): void
+    {
+        [$res, $variant] = $this->uploadVariantWithoutErrors();
+
+        [$res, $secondVariant] = $this->uploadVariantWithoutErrors($variant->literature_id);
+
+
+        $this->actingAs(User::factory()->createOne())
+            ->from(route('variant.editPage', ['id' => $secondVariant->id]))
+            ->post(route('variant.update', ['id' => $secondVariant->id]), ['language' => $variant->language])
+            ->assertStatus(302)
+            ->assertRedirect(route('variant.editPage', ['id' => $secondVariant->id]))
+            ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
+    }
+
+    /**
      * Helper for uploading a literature variant.
      * @return array{TestResponse<Response>, LiteratureVariant}
      */

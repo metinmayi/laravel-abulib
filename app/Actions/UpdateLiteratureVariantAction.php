@@ -37,7 +37,9 @@ class UpdateLiteratureVariantAction
         }
 
         if (isset($this->data['language']) && is_string($this->data['language'])) {
-            $variant->language = $this->data['language'];
+            if (! $this->updateLanguage($this->data['language'], $variant)) {
+                return false;
+            }
         }
 
         if (isset($this->data['description']) && is_string($this->data['description'])) {
@@ -72,6 +74,24 @@ class UpdateLiteratureVariantAction
         }
 
         $variant->url = $url;
+        return true;
+    }
+
+    /**
+     * Update the language of the variant.
+     */
+    protected function updateLanguage(string $language, LiteratureVariant &$variant): bool
+    {
+        $alreadyExist = LiteratureVariant::query()
+            ->where('language', $language)
+            ->where('literature_id', $variant->literature_id)
+            ->first();
+        if ($alreadyExist) {
+            Log::error("Language $language already exists for literature with id $variant->literature_id");
+            return false;
+        }
+
+        $variant->language = $language;
         return true;
     }
 }
