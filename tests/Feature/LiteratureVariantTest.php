@@ -51,9 +51,10 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_upload_literature_variant_validation_errors(): void
     {
-            $res = $this->post('/literatureVariant/upload/0');
-            $res->assertSessionHasErrors(['title','description', 'file']);
-            $res->assertStatus(302);
+            $this->actingAs(User::factory()->createOne())
+                ->post('/literatureVariant/upload/0')
+                ->assertSessionHasErrors(['title','description', 'file'])
+                ->assertStatus(302);
     }
 
     /**
@@ -113,7 +114,10 @@ class LiteratureVariantTest extends TestCase
     public function test_validation_errors_when_deleting_variant(): void
     {
         Exceptions::fake();
-        $this->post(route('variant.delete', ['id' => 'notNumeric']));
+
+        $this->actingAs(User::factory()->createOne())
+            ->post(route('variant.delete', ['id' => 'notNumeric']));
+
         Exceptions::assertReported(TypeError::class);
     }
 
@@ -122,9 +126,10 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_provide_error_if_deleting_non_existing_variant(): void
     {
-        $response = $this->post(route('variant.delete', ['id' => 55]));
-        $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
-        $response->assertStatus(302);
+        $this->actingAs(User::factory()->createOne())
+            ->post(route('variant.delete', ['id' => -1]))
+            ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.'])
+            ->assertStatus(302);
     }
 
     /**
@@ -184,8 +189,9 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_update_variant_endpoint_requires_auth(): void
     {
-        $response = $this->post(route('variant.update', ['id' => 1]));
-        $response->assertStatus(403);
+        $this->post(route('variant.update', ['id' => 1]))
+            ->assertStatus(302)
+            ->assertRedirect(route('landingPage'));
     }
 
     /**
@@ -400,6 +406,7 @@ class LiteratureVariantTest extends TestCase
      */
     private function uploadliteratureVariant(int $literatureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
     {
+        $this->actingAs(User::factory()->createOne());
         $this->storage = Storage::fake();
 
         $language = $lang ?? fake()->languageCode();

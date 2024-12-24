@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Actions\GetLiteratureListAction;
 use App\Models\Literature;
 use App\Models\LiteratureVariant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
@@ -32,6 +33,26 @@ class LiteratureTest extends TestCase
     public function test_upload_literature_creates_literature(): void
     {
         $this->uploadLiterature();
+    }
+
+    /**
+     * Test upload literature requires auth
+     */
+    public function test_upload_literature_requires_auth(): void
+    {
+        $this->post(route('literature.upload'))
+            ->assertRedirect(route('landingPage'))
+            ->assertStatus(302);
+    }
+
+    /**
+     * Test delete literature requires auth
+     */
+    public function test_delete_literature_requires_auth(): void
+    {
+        $this->post(route('literature.delete', ['id' => -1]))
+            ->assertRedirect(route('landingPage'))
+            ->assertStatus(302);
     }
 
     /**
@@ -93,6 +114,7 @@ class LiteratureTest extends TestCase
      */
     public function test_failing_delete_literature_yields_errors(): void
     {
+        $this->actingAs(User::factory()->create());
         $response = $this->post('/literature/delete/-1');
         $response->assertStatus(302);
         $response->assertRedirect(route('library.index'));
@@ -134,6 +156,7 @@ class LiteratureTest extends TestCase
      */
     protected function uploadLiterature(?File $file = null): Literature
     {
+        $this->actingAs(User::factory()->create());
         $this->assertCount(0, Literature::all());
 
         Storage::fake();

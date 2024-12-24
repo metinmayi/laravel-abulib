@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,14 +15,20 @@ class AdminControllerTest extends TestCase
      */
     public function testIndexPageRendersCorrectView(): void
     {
-        // Send a GET request to the index route
-        $response = $this->get('/admin');
+        $this->actingAs(User::factory()->create())
+            ->get('/admin')
+            ->assertStatus(200)
+            ->assertViewIs('admin.index');
+    }
 
-        // Assert the response is OK
-        $response->assertStatus(200);
-
-        // Assert the correct view is returned
-        $response->assertViewIs('admin.index');
+    /**
+     * Test index page only accessible to authenticated users.
+     */
+    public function testIndexPageOnlyAccessibleToAuthenticatedUsers(): void
+    {
+        $this->get('/admin')
+            ->assertStatus(302)
+            ->assertRedirect(route('landingPage'));
     }
 
     /**
@@ -29,13 +36,19 @@ class AdminControllerTest extends TestCase
      */
     public function testNewLiteraturePageRendersCorrectView(): void
     {
-        // Send a GET request to the new literature route
-        $response = $this->get('/admin/newliterature');
+        $this->actingAs(User::factory()->create())
+            ->get('/admin/newliterature')
+            ->assertStatus(200)
+            ->assertViewIs('admin.newliterature');
+    }
 
-        // Assert the response is OK
-        $response->assertStatus(200);
-
-        // Assert the correct view is returned
-        $response->assertViewIs('admin.newliterature');
+    /**
+     * Test index page only accessible to authenticated users.
+     */
+    public function testNewLiteratureOnlyAccessibleToAuthenticatedUsers(): void
+    {
+        $this->get('/admin/newliterature')
+            ->assertStatus(302)
+            ->assertRedirect(route('landingPage'));
     }
 }
