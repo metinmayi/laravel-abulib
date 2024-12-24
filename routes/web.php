@@ -14,7 +14,7 @@ Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->m
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
 Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload')->middleware('auth');
 Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete')->middleware('auth');
