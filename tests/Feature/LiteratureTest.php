@@ -80,7 +80,7 @@ class LiteratureTest extends TestCase
      */
     public function test_get_literature_list_returns_expected_variants(): void
     {
-        $language = 'ku';
+        $language = 'my-language';
         $expectedResult = [
             $this->uploadAndGetExpectedVariant($language),
             $this->uploadAndGetExpectedVariant($language),
