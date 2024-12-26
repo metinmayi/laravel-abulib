@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Literature;
 use App\Models\LiteratureVariant;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,23 @@ class LiteratureVariantSeeder extends Seeder
      */
     public function run(): void
     {
-        LiteratureVariant::factory()->count(30)->create();
+        LiteratureVariant::factory()
+            ->set('literature_id', Literature::factory()->create()->id)
+            ->count(2)
+            ->create();
+
+            LiteratureVariant::factory()
+            ->set('literature_id', Literature::factory()->create()->id)
+            ->count(5)
+            ->create();
+
+            LiteratureVariant::factory()
+            ->set('literature_id', Literature::factory()->create()->id)
+            ->count(3)
+            ->create();
+
+            LiteratureVariant::factory()
+                ->count(10)
+                ->create();
     }
 }
