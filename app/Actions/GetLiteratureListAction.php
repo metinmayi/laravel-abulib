@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Models\LiteratureVariant;
+use App\Data\LiteratureListItem;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -19,38 +19,37 @@ class GetLiteratureListAction
 
     /**
      * Handle the action
-     * @return array<mixed>
+     * @return array<LiteratureListItem>
      */
     public function handle(): array
     {
-        // Fetch language variants with available languages for each literature
-        $languageVariants = DB::table('literatures')
-          ->join('literature_variants', 'literatures.id', '=', 'literature_variants.literature_id')
-          ->select(
-              'literatures.id as literature_id',
-              'literatures.category',
-              'literature_variants.id',
-              'literature_variants.title',
-              'literature_variants.description',
-              'literature_variants.language'
-          )
-          ->where('literature_variants.language', $this->language)
-          ->get();
-
-        $literatureIds = $languageVariants->pluck('literature_id')->unique();
-
-        // Preload all available languages for the fetched literature IDs
-        $languagesByLiterature = LiteratureVariant::whereIn('literature_id', $literatureIds)
-          ->get()
-          ->groupBy('literature_id')
-          ->map(fn ($variants) => $variants->pluck('language')->toArray());
-
-        // Add available languages to each variant
-        $languageVariants->transform(function ($variant) use ($languagesByLiterature) {
-            $variant->availableLanguages = $languagesByLiterature[$variant->literature_id] ?? [];
-            return $variant;
+        $lang = $this->language;
+        $literatures = DB::table('literatures')
+        ->leftJoin('literature_variants as lv', function ($join) use ($lang) {
+            $join->on('literatures.id', '=', 'lv.literature_id')
+              ->where('lv.language', '=', $lang);
+        })
+        ->select(
+            'literatures.id',
+            'literatures.category',
+            DB::raw("COALESCE(lv.title, 'Not available') as title"),
+            DB::raw("COALESCE(lv.description, 'Not available') as description"),
+            DB::raw("(SELECT GROUP_CONCAT(language) 
+                    FROM literature_variants 
+                    WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
+        )
+        ->get()
+        ->map(function ($literature) {
+            // Convert availableLanguages string to array
+            $literature->availableLanguages = explode(',', $literature->availableLanguages);
+            return $literature;
         });
 
-        return $languageVariants->toArray();
+        $literatureList = [];
+        foreach ($literatures as $literature) {
+            $literatureList[] = new LiteratureListItem($literature);
+        }
+
+        return $literatureList;
     }
 }
