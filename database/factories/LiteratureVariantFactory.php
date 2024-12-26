@@ -21,8 +21,8 @@ class LiteratureVariantFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->title(),
-            'description' => fake()->paragraph(1),
+            'title' => fake()->sentence(1),
+            'description' => fake()->paragraph(2),
             'language' => fake()->languageCode(),
             'url' => fake()->url(),
             'literature_id' => Literature::factory(),

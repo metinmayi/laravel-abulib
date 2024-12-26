@@ -13,6 +13,11 @@ class LiteratureVariantSeeder extends Seeder
      */
     public function run(): void
     {
+
+        LiteratureVariant::factory()
+            ->set('language', 'kurdish')
+            ->count(3)
+            ->create();
         LiteratureVariant::factory()
             ->set('literature_id', Literature::factory()->create()->id)
             ->count(2)
