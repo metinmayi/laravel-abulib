@@ -16,6 +16,7 @@ class LibraryViewTest extends TestCase
     private const TEST_LANGUAGES = ['My-Test-Language'];
     private const TEST_CATEGORY = 'My-Test-Category';
     private const TEST_ID = 1;
+    private const VARIANT_ID = 1;
 
     /**
      * Test that library view renders literatures.
@@ -64,6 +65,7 @@ class LibraryViewTest extends TestCase
                     'availableLanguages' => self::TEST_LANGUAGES,
                     'category' => self::TEST_CATEGORY,
                     'id' => self::TEST_ID,
+                    'variantId' => self::VARIANT_ID,
                 ],
             ],
         ]);
