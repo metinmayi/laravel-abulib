@@ -11,6 +11,7 @@ Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
 Route::get('/admin', [AdminController::class, 'index'])->middleware('auth');
 Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->middleware('auth');
+Route::get('/admin/newvariant', [AdminController::class, 'newLiterature'])->middleware('auth');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));

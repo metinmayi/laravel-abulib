@@ -14,7 +14,7 @@
             <h1 class="mt-10 text-3xl">Admin Panel</h1>
             <ul class="space-y-4">
                 <li><a href="/admin/newliterature" class="text-lg hover:text-gray-500">Upload literature</a></li>
-                <li><a href="/admin/add-language" class="text-lg hover:text-gray-500">Upload Language Variant</a></li>
+                <li><a href="/admin/newvariant" class="text-lg hover:text-gray-500">Upload Language Variant</a></li>
             </ul>
             @endauth
         </nav>

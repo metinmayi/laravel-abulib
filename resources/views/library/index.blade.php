@@ -27,8 +27,12 @@
                         Read
                     </button>
                     @auth
+                    <p class="mt-2">Admin Section</p>
                     <a class="bg-orange-500 text-white py-1 px-2 rounded hover:bg-orange-600 transition mt-2 justify-self-center" href="/edit/{{$literature->id}}">
-                        Edit (Abdul only)
+                        Edit
+                    </a>
+                    <a class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 transition mt-2 justify-self-center" href="asd">
+                        Add language variant
                     </a>
                     @endauth
                 </div>

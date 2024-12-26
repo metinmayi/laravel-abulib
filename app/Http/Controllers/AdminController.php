@@ -21,4 +21,12 @@ final class AdminController extends Controller
     {
         return view('admin.newliterature');
     }
+
+    /**
+     * New variant page
+     */
+    public function newvariant(): View
+    {
+        return view('admin.newvariant');
+    }
 }
