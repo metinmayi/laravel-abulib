@@ -12,10 +12,10 @@
     @component('components.siderbar')@endcomponent
     <!-- Page -->
     <main class="max-w-6xl p-6 mt-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="flex flex-wrap justify-evenly">
             @foreach ($literatureList as $literature)
             <!-- Literature Card -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+            <div class="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 w-1/4">
                 <div class="p-6">
                     <h2 class="text-2xl font-bold mb-2 text-gray-900">{{$literature->title}}</h2>
                     <p class="text-gray-600 text-sm mb-4">{{$literature->description}}</p>
