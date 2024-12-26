@@ -39,7 +39,7 @@ class LibraryViewTest extends TestCase
         $this->actingAs(User::factory()->create());
 
         $this->getContent()
-            ->assertSeeText('Edit (Abdul only)');
+            ->assertSeeTextInOrder(['Admin Section', 'Edit']);
     }
 
     /**
@@ -48,7 +48,7 @@ class LibraryViewTest extends TestCase
     public function test_library_doenst_render_edit_button_if_logged_out(): void
     {
         $this->getContent()
-            ->assertDontSee('Edit (Abdul only)');
+            ->assertDontSeeText('Admin Section');
     }
 
     /**

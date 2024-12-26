@@ -22,6 +22,17 @@ class AdminControllerTest extends TestCase
     }
 
     /**
+     * Test the new variant page returns the correct view.
+     */
+    public function testNewVariantPageRendersCorrectView(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->get('/admin/newvariant')
+            ->assertStatus(200)
+            ->assertViewIs('admin.newvariant');
+    }
+
+    /**
      * Test index page only accessible to authenticated users.
      */
     public function testIndexPageOnlyAccessibleToAuthenticatedUsers(): void
