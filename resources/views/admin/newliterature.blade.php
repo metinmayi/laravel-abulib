@@ -29,10 +29,9 @@
 
       <label for="category" class="block text-sm font-medium mb-2">Category:</label>
       <select id="category" name="category" placeholder="Select the category of the literature" required class="block w-full p-2 border rounded mb-4">
-        <option value="article">Article</option>
-        <option value="book">Book</option>
-        <option value="poem">Poem</option>
-        <option value="research">Research</option>
+        @foreach (\App\Models\Literature::CATEGORIES as $val)
+        <option value="{{ $val }}">{{ ucfirst($val) }}</option>
+        @endforeach
       </select>
       <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
     </form>

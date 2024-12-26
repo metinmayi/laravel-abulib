@@ -18,7 +18,7 @@ class LiteratureFactory extends Factory
     public function definition(): array
     {
         return [
-            'category' => fake()->randomElement(['poetry', 'research', 'book', 'article']),
+            'category' => fake()->randomElement($this->model::CATEGORIES),
         ];
     }
 }

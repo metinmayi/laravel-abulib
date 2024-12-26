@@ -10,5 +10,7 @@ class Literature extends Model
     /** @use HasFactory<\Database\Factories\LiteratureFactory> */
     use HasFactory;
 
+    public const CATEGORIES = ['poem', 'research', 'book', 'article'];
+
     protected $fillable = ['category'];
 }
