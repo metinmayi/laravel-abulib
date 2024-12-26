@@ -25,25 +25,26 @@ class GetLiteratureListAction
     {
         $lang = $this->language;
         $literatures = DB::table('literatures')
-        ->leftJoin('literature_variants as lv', function ($join) use ($lang) {
-            $join->on('literatures.id', '=', 'lv.literature_id')
-              ->where('lv.language', '=', $lang);
-        })
-        ->select(
-            'literatures.id',
-            'literatures.category',
-            DB::raw("COALESCE(lv.title, 'Not available') as title"),
-            DB::raw("COALESCE(lv.description, 'Not available') as description"),
-            DB::raw("(SELECT GROUP_CONCAT(language) 
-                    FROM literature_variants 
-                    WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
-        )
-        ->get()
-        ->map(function ($literature) {
-            // Convert availableLanguages string to array
-            $literature->availableLanguages = explode(',', $literature->availableLanguages);
-            return $literature;
-        });
+            ->leftJoin('literature_variants as lv', function ($join) use ($lang) {
+                $join->on('literatures.id', '=', 'lv.literature_id')
+                    ->where('lv.language', '=', $lang);
+            })
+            ->select(
+                'literatures.id',
+                'literatures.category',
+                DB::raw("COALESCE(lv.title, 'Not available') as title"),
+                DB::raw("COALESCE(lv.description, 'Not available') as description"),
+                DB::raw("COALESCE(lv.id, NULL) as variantId"), // Include the literature_variant.id
+                DB::raw("(SELECT GROUP_CONCAT(language) 
+                          FROM literature_variants 
+                          WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
+            )
+            ->get()
+            ->map(function ($literature) {
+                // Convert availableLanguages string to array
+                $literature->availableLanguages = explode(',', $literature->availableLanguages);
+                return $literature;
+            });
 
         $literatureList = [];
         foreach ($literatures as $literature) {

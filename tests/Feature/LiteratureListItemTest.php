@@ -25,35 +25,46 @@ class LiteratureListItemTest extends TestCase
     public static function literatureListItemDataProvider(): array
     {
         return [[
-            (object) [
+            (object) [ // Missing ID
                 'title' => 'Title',
                 'description' => 'Description',
                 'availableLanguages' => ['kurdish', 'swedish'],
                 'category' => 'category',
+                'variantId' => 1,
             ]],
-            [(object) [
+            [(object) [ // Missing title
                 'id' => 1,
                 'description' => 'Description',
                 'availableLanguages' => ['kurdish', 'swedish'],
                 'category' => 'category',
+                'variantId' => 1,
             ]],
-            [(object) [
+            [(object) [ // Missing description
                 'id' => 1,
                 'title' => 'Title',
                 'availableLanguages' => ['kurdish', 'swedish'],
                 'category' => 'category',
             ]],
-            [(object) [
+            [(object) [ // Missing availableLanguages
                 'id' => 1,
                 'title' => 'Title',
                 'description' => 'Description',
                 'category' => 'category',
+                'variantId' => 1,
             ]],
-            [(object) [
+            [(object) [ // Missing category
                 'id' => 1,
                 'title' => 'Title',
                 'description' => 'Description',
                 'availableLanguages' => ['kurdish', 'swedish'],
+                'variantId' => 1,
+            ]],
+            [(object) [ // Missing variantId
+                'id' => 1,
+                'title' => 'Title',
+                'description' => 'Description',
+                'availableLanguages' => ['kurdish', 'swedish'],
+                'category' => 'category',
             ]],
         ];
     }
@@ -69,6 +80,7 @@ class LiteratureListItemTest extends TestCase
             'description' => 'Description',
             'availableLanguages' => ['kurdish', 'swedish'],
             'category' => 'category',
+            'variantId' => 1
         ];
 
         $listItem = new LiteratureListItem($data);
