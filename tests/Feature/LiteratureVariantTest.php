@@ -189,7 +189,7 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_update_variant_endpoint_requires_auth(): void
     {
-        $this->post(route('variant.update', ['id' => 1]))
+        $this->post(route('variant.edit', ['id' => 1]))
             ->assertStatus(302)
             ->assertRedirect(route('landingPage'));
     }
@@ -204,7 +204,7 @@ class LiteratureVariantTest extends TestCase
     public function test_update_variant_endpoint_validation(array $input, bool $shouldError = false, array $errors = []): void
     {
         $this->actingAs(User::factory()->createOne());
-        $response = $this->post(route('variant.update', ['id' => 1]), $input);
+        $response = $this->post(route('variant.edit', ['id' => 1]), $input);
         $response->assertStatus(302);
 
         if ($shouldError) {
@@ -243,7 +243,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => -1]))
-            ->post(route('variant.update', ['id' => -1]), ['title' => 'test'])
+            ->post(route('variant.edit', ['id' => -1]), ['title' => 'test'])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => -1]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -259,7 +259,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.update', ['id' => $variant->id]), [$property => $value])
+            ->post(route('variant.edit', ['id' => $variant->id]), [$property => $value])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
@@ -292,7 +292,7 @@ class LiteratureVariantTest extends TestCase
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
@@ -319,7 +319,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -346,7 +346,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
+            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
     }
@@ -363,7 +363,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $secondVariant->id]))
-            ->post(route('variant.update', ['id' => $secondVariant->id]), ['language' => $variant->language])
+            ->post(route('variant.edit', ['id' => $secondVariant->id]), ['language' => $variant->language])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $secondVariant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);

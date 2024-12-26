@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteVariantAction;
-use App\Actions\UpdateLiteratureVariantAction;
+use App\Actions\EditLiteratureVariantAction;
 use App\Actions\UploadLiteratureVariantAction;
 use App\Http\Requests\LiteratureVariantUpdateRequest;
 use App\Http\Requests\LiteratureVariantUploadRequest;
@@ -46,12 +46,12 @@ class LiteratureVariantController extends Controller
     }
 
     /**
-     * Update a variant.
+     * Edit a variant.
      */
-    public function update(int $id, LiteratureVariantUpdateRequest $request): RedirectResponse
+    public function edit(int $id, LiteratureVariantUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $success = (new UpdateLiteratureVariantAction($id, $validated))->handle();
+        $success = (new EditLiteratureVariantAction($id, $validated))->handle();
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth'], function () {
 
   Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant-upload');
   Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
-  Route::post('/literatureVariant/update/{id}', [LiteratureVariantController::class, 'update'])->name('variant.update');
+  Route::post('/literatureVariant/edit/{id}', [LiteratureVariantController::class, 'edit'])->name('variant.edit');
 });
 
 Route::post('/register', [AuthController::class, 'register']);

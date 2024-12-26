@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Action for updating Literature
+ * Action for editing Literature
  */
-class UpdateLiteratureVariantAction
+class EditLiteratureVariantAction
 {
   /**
    * Constructor.
-   * @param integer              $id   The id of the variant to update.
-   * @param array<string, mixed> $data The data to update.
+   * @param integer              $id   The id of the variant to edit.
+   * @param array<string, mixed> $data The data to use for editing.
    */
     public function __construct(protected int $id, protected array $data)
     {
@@ -28,7 +28,7 @@ class UpdateLiteratureVariantAction
     {
         $variant = LiteratureVariant::query()->find($this->id);
         if (! $variant) {
-            Log::error("Variant with id $this->id not found when attempting to update");
+            Log::error("Variant with id $this->id not found when attempting to edit");
             return false;
         }
 
@@ -37,7 +37,7 @@ class UpdateLiteratureVariantAction
         }
 
         if (isset($this->data['language']) && is_string($this->data['language'])) {
-            if (! $this->updateLanguage($this->data['language'], $variant)) {
+            if (! $this->editLanguage($this->data['language'], $variant)) {
                 return false;
             }
         }
@@ -47,7 +47,7 @@ class UpdateLiteratureVariantAction
         }
 
         if (isset($this->data['file']) && $this->data['file'] instanceof UploadedFile) {
-            if (! $this->updateFile($this->data['file'], $variant)) {
+            if (! $this->editFile($this->data['file'], $variant)) {
                 return false;
             }
         }
@@ -58,9 +58,9 @@ class UpdateLiteratureVariantAction
     }
 
     /**
-     * Update the file of the variant.
+     * Edit the file of the variant.
      */
-    protected function updateFile(UploadedFile $file, LiteratureVariant &$variant): bool
+    protected function editFile(UploadedFile $file, LiteratureVariant &$variant): bool
     {
         $url = Storage::putFile('', $file);
         if (! $url) {
@@ -78,9 +78,9 @@ class UpdateLiteratureVariantAction
     }
 
     /**
-     * Update the language of the variant.
+     * Edit the language of the variant.
      */
-    protected function updateLanguage(string $language, LiteratureVariant &$variant): bool
+    protected function editLanguage(string $language, LiteratureVariant &$variant): bool
     {
         $alreadyExist = LiteratureVariant::query()
             ->where('language', $language)
