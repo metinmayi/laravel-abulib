@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AdminControllerTest extends TestCase
@@ -11,55 +12,38 @@ class AdminControllerTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Test the index page returns the correct view.
+     * Test the admin page returns the correct view.
      */
-    public function testIndexPageRendersCorrectView(): void
+    #[DataProvider('adminPagesProvider')]
+    public function testAdminPageRendersCorrectView(string $route, string $view): void
     {
         $this->actingAs(User::factory()->create())
-            ->get('/admin')
+            ->get($route)
             ->assertStatus(200)
-            ->assertViewIs('admin.index');
+            ->assertViewIs($view);
     }
 
     /**
-     * Test the new variant page returns the correct view.
+     * Test that the admin pages are protected.
      */
-    public function testNewVariantPageRendersCorrectView(): void
+    #[DataProvider('adminPagesProvider')]
+    public function testAdminPagesAreProtected(string $route): void
     {
-        $this->actingAs(User::factory()->create())
-            ->get('/admin/newvariant')
-            ->assertStatus(200)
-            ->assertViewIs('admin.newvariant');
-    }
-
-    /**
-     * Test index page only accessible to authenticated users.
-     */
-    public function testIndexPageOnlyAccessibleToAuthenticatedUsers(): void
-    {
-        $this->get('/admin')
+        $this->get($route)
             ->assertStatus(302)
-            ->assertRedirect(route('landingPage'));
+            ->assertRedirect('/');
     }
 
     /**
-     * Test the new literature page returns the correct view.
+     * Data provider for the admin pages.
+     * @return array<array<string>>
      */
-    public function testNewLiteraturePageRendersCorrectView(): void
+    public static function adminPagesProvider(): array
     {
-        $this->actingAs(User::factory()->create())
-            ->get('/admin/newliterature')
-            ->assertStatus(200)
-            ->assertViewIs('admin.newliterature');
-    }
-
-    /**
-     * Test index page only accessible to authenticated users.
-     */
-    public function testNewLiteratureOnlyAccessibleToAuthenticatedUsers(): void
-    {
-        $this->get('/admin/newliterature')
-            ->assertStatus(302)
-            ->assertRedirect(route('landingPage'));
+        return [
+            ['/admin/newvariant', 'admin.newvariant'],
+            ['/admin/newliterature', 'admin.newliterature'],
+            ['/admin/editvariant/1', 'admin.editvariant'],
+        ];
     }
 }

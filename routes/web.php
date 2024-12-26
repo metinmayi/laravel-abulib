@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
-Route::get('/admin', [AdminController::class, 'index'])->middleware('auth');
 Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->middleware('auth');
 Route::get('/admin/newvariant', [AdminController::class, 'newVariant'])->middleware('auth');
+Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->middleware('auth');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));

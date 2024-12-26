@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LiteratureVariant;
 use Illuminate\Contracts\View\View;
 
 final class AdminController extends Controller
 {
-  /**
-   * Index page
-   */
-    public function index(): View
-    {
-        return view('admin.index');
-    }
-
     /**
      * New literature page
      */
@@ -28,5 +21,13 @@ final class AdminController extends Controller
     public function newvariant(): View
     {
         return view('admin.newvariant');
+    }
+
+    /**
+     * Edit literature page
+     */
+    public function editVariant(int $id): View
+    {
+        return view('admin.editvariant', ['variant' => LiteratureVariant::find($id)]);
     }
 }
