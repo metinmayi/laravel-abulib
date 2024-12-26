@@ -242,10 +242,10 @@ class LiteratureVariantTest extends TestCase
         Log::shouldReceive('error')->once();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => -1]))
+            ->from(route('admin.editvariantpage', ['id' => -1]))
             ->post(route('variant.update', ['id' => -1]), ['title' => 'test'])
             ->assertStatus(302)
-            ->assertRedirect(route('variant.editPage', ['id' => -1]))
+            ->assertRedirect(route('admin.editvariantpage', ['id' => -1]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
     }
 
@@ -258,10 +258,10 @@ class LiteratureVariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->post(route('variant.update', ['id' => $variant->id]), [$property => $value])
             ->assertStatus(302)
-            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
 
         $variant = LiteratureVariant::query()->findOrFail($variant->id);
@@ -291,10 +291,10 @@ class LiteratureVariantTest extends TestCase
 
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
-            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
 
         $variant = LiteratureVariant::query()->findOrFail($variant->id);
@@ -318,10 +318,10 @@ class LiteratureVariantTest extends TestCase
         Storage::shouldReceive('delete')->never();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
-            ->assertRedirect(route('variant.editPage', ['id' => $variant->id]))
+            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
 
         $variant = LiteratureVariant::query()->findOrFail($variant->id);
@@ -345,7 +345,7 @@ class LiteratureVariantTest extends TestCase
         Log::shouldReceive('error')->once();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => $variant->id]))
+            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->post(route('variant.update', ['id' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
@@ -362,10 +362,10 @@ class LiteratureVariantTest extends TestCase
 
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.editPage', ['id' => $secondVariant->id]))
+            ->from(route('admin.editvariantpage', ['id' => $secondVariant->id]))
             ->post(route('variant.update', ['id' => $secondVariant->id]), ['language' => $variant->language])
             ->assertStatus(302)
-            ->assertRedirect(route('variant.editPage', ['id' => $secondVariant->id]))
+            ->assertRedirect(route('admin.editvariantpage', ['id' => $secondVariant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
     }
 

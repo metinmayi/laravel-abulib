@@ -9,21 +9,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
-Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->middleware('auth');
-Route::get('/admin/newvariant', [AdminController::class, 'newVariant'])->middleware('auth');
-Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->middleware('auth');
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->name('admin.newliteraturepage');
+  Route::get('/admin/newvariant', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
+  Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
+
+  Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload');
+  Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete');
+
+  Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant-upload');
+  Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
+  Route::post('/literatureVariant/update/{id}', [LiteratureVariantController::class, 'update'])->name('variant.update');
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
-Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload')->middleware('auth');
-Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete')->middleware('auth');
-
 Route::get('/literatureVariant/{id}', [LiteratureVariantController::class, 'getLiteratureBinary']);
-Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'uploadLiteratureVariant'])->name('variant-upload')->middleware('auth');
-Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete')->middleware('auth');
-Route::post('/literatureVariant/update/{id}', [LiteratureVariantController::class, 'update'])->name('variant.update')->middleware('auth');
-Route::get('/literatureVariant/edit/{id}', [LiteratureVariantController::class, 'edit'])->name('variant.editPage')->middleware('auth');
 
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');

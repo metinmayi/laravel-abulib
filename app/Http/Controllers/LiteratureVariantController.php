@@ -33,7 +33,7 @@ class LiteratureVariantController extends Controller
     /**
      * Upload a literature variant
      */
-    public function uploadLiteratureVariant(int $literatureId, LiteratureVariantUploadRequest $request): RedirectResponse
+    public function upload(int $literatureId, LiteratureVariantUploadRequest $request): RedirectResponse
     {
         $action = new UploadLiteratureVariantAction($request->safe()->all());
 
