@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\LiteratureController;
 use App\Http\Controllers\LiteratureVariantController;
+use App\Http\Controllers\ReadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
@@ -29,3 +30,5 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/literatureVariant/{id}', [LiteratureVariantController::class, 'getLiteratureBinary']);
 
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
+
+Route::get('/reader/{variantId}', [ReadController::class, 'index'])->name('read.index');

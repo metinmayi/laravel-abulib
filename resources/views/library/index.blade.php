@@ -23,9 +23,9 @@
                         <div><strong>Languages:</strong>{{implode(',', $literature->availableLanguages)}}</div>
                         <div><strong>Category:</strong> {{$literature->category}}</div>
                     </div>
-                    <button class="w-full bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 transition">
+                    <a class="w-full bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 transition" href="{{ route('read.index', ['variantId' => $literature->variantId ?? -1]) }}">
                         Read
-                    </button>
+                    </a>
                     @auth
                     <p class="mt-2">Admin Section</p>
                     <a class="bg-orange-500 text-white py-1 px-2 rounded hover:bg-orange-600 transition mt-2 justify-self-center" href="/admin/edit/{{$literature->variantId}}">
