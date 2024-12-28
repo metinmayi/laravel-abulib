@@ -69,6 +69,6 @@ class LiteratureVariantController extends Controller
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
 
-        return redirect()->back(201);
+        return redirect(route('library.index'));
     }
 }

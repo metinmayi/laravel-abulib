@@ -100,10 +100,10 @@ class LiteratureVariantTest extends TestCase
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        [$response] = $this->uploadVariantWithoutErrors($literature->id, $file);
+        $this->uploadVariantWithoutErrors($literature->id, $file);
 
-        $response = $this->post(route('variant.delete', ['id' => $literature->id]));
-        $response->assertStatus(201);
+        $this->post(route('variant.delete', ['id' => $literature->id]))
+            ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
     }
@@ -162,8 +162,8 @@ class LiteratureVariantTest extends TestCase
         [$rez, $variant] = $this->uploadVariantWithoutErrors(literatureId:$literature->id, file: $file, lang: 'kurdish');
         $this->assertCount(1, Literature::all());
 
-        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
-        $response->assertStatus(201);
+        $this->post(route('variant.delete', ['id' => $variant->id]))
+            ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(1, LiteratureVariant::all());
         $this->assertCount(1, Literature::all());
@@ -177,8 +177,8 @@ class LiteratureVariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
         $this->assertCount(1, Literature::all());
 
-        $response = $this->post(route('variant.delete', ['id' => $variant->id]));
-        $response->assertStatus(201);
+        $this->post(route('variant.delete', ['id' => $variant->id]))
+            ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::disk()->exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
         $this->assertCount(0, Literature::all());
