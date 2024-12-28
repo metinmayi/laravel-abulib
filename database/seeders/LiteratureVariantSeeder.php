@@ -13,9 +13,13 @@ class LiteratureVariantSeeder extends Seeder
      */
     public function run(): void
     {
-
         LiteratureVariant::factory()
-            ->count(20)
+            ->count(5)
+            ->create();
+
+            LiteratureVariant::factory()
+            ->set('literature_id', Literature::factory()->createOne()->id)
+            ->count(3)
             ->create();
     }
 }
