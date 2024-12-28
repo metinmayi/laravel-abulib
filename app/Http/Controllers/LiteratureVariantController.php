@@ -35,7 +35,7 @@ class LiteratureVariantController extends Controller
      */
     public function upload(int $literatureId, LiteratureVariantUploadRequest $request): RedirectResponse
     {
-        $action = new UploadLiteratureVariantAction($request->safe()->all());
+        $action = new UploadLiteratureVariantAction($request->validated());
 
         [$success] = $action->handle($literatureId);
         if (!$success) {

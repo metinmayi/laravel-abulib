@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Literature;
 use App\Models\LiteratureVariant;
 use Illuminate\Contracts\View\View;
 
@@ -18,9 +19,10 @@ final class AdminController extends Controller
     /**
      * New variant page
      */
-    public function newvariant(): View
+    public function newvariant(int $literatureId): View
     {
-        return view('admin.newvariant');
+        $literature = Literature::query()->findOrFail($literatureId);
+        return view('admin.newvariant', ['literature_id' => $literature->id]);
     }
 
     /**

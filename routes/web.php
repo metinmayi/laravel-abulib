@@ -12,13 +12,13 @@ Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
 Route::group(['middleware' => 'auth'], function () {
   Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->name('admin.newliteraturepage');
-  Route::get('/admin/newvariant', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
+  Route::get('/admin/newvariant/{id}', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
   Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
 
   Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload');
   Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete');
 
-  Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant-upload');
+  Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant.upload');
   Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
   Route::post('/literatureVariant/edit/{id}', [LiteratureVariantController::class, 'edit'])->name('variant.edit');
 });
