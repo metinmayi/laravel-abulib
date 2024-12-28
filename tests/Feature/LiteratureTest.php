@@ -185,8 +185,8 @@ class LiteratureTest extends TestCase
             'file' => $file,
         ];
 
-        $response = $this->post('/literature', $postData);
-        $response->assertStatus(201);
+        $this->post('/literature', $postData)
+            ->assertRedirect(route('library.index'));
 
         $literatures = Literature::all();
         $this->assertCount(1, $literatures);

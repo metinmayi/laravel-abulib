@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Literature;
 use App\Models\LiteratureVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,15 +27,26 @@ class AdminControllerTest extends TestCase
     }
 
     /**
-     * Test the admin page returns the correct view.
+     * Test the admin edit variant page renders correctly
      */
-    #[DataProvider('adminPagesProvider')]
-    public function testAdminPageRendersCorrectView(string $route, string $view): void
+    public function testNewVariantPageRendersCorrectly(): void
+    {
+        $literature = Literature::factory()->createOne();
+        $this->actingAs(User::factory()->create())
+            ->get("/admin/newvariant/$literature->id")
+            ->assertStatus(200)
+            ->assertViewIs('admin.newvariant');
+    }
+
+    /**
+     * Test the admin edit variant page renders correctly
+     */
+    public function testNewLiteraturePageRendersCorrectly(): void
     {
         $this->actingAs(User::factory()->create())
-            ->get($route)
+            ->get("/admin/newliterature")
             ->assertStatus(200)
-            ->assertViewIs($view);
+            ->assertViewIs('admin.newliterature');
     }
 
     /**
@@ -55,8 +67,9 @@ class AdminControllerTest extends TestCase
     public static function adminPagesProvider(): array
     {
         return [
-            ['/admin/newvariant', 'admin.newvariant'],
             ['/admin/newliterature', 'admin.newliterature'],
+            ['/admin/newvariant/-1', 'admin.newvariant'],
+            ['/admin/editvariant/1', 'admin.editvariant'],
         ];
     }
 }
