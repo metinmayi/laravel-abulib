@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\LiteratureVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -10,6 +11,19 @@ use Tests\TestCase;
 class AdminControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+
+    /**
+     * Test the admin edit variant page renders correctly
+     */
+    public function testEditVariantPageRendersCorrectly(): void
+    {
+        $variant = LiteratureVariant::factory()->createOne();
+        $this->actingAs(User::factory()->create())
+            ->get("/admin/editvariant/$variant->id")
+            ->assertStatus(200)
+            ->assertViewIs('admin.editvariant');
+    }
 
     /**
      * Test the admin page returns the correct view.
@@ -43,7 +57,6 @@ class AdminControllerTest extends TestCase
         return [
             ['/admin/newvariant', 'admin.newvariant'],
             ['/admin/newliterature', 'admin.newliterature'],
-            ['/admin/editvariant/1', 'admin.editvariant'],
         ];
     }
 }
