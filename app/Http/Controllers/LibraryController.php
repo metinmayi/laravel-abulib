@@ -12,7 +12,7 @@ class LibraryController extends Controller
      */
     public function index(): View
     {
-        $literatureList = (new GetLiteratureListAction('kurdish'))->handle();
+        $literatureList = (new GetLiteratureListAction(app()->getLocale()))->handle();
         return view('library.index', ['literatureList' => $literatureList]);
     }
 }
