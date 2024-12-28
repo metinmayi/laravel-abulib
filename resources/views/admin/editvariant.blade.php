@@ -63,9 +63,12 @@
             <div>
                 <label for="language" class="block text-sm font-medium text-gray-700">Language</label>
                 <div class="flex items-center gap-2">
-                    <input type="text" id="language" name="language"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:opacity-50"
-                        disabled />
+                    <select id="language" name="language" placeholder="Enter the language of the literature" required disabled
+                        class="block w-full p-2 border rounded mb-4">
+                        @foreach (\App\Models\Literature::LANGUAGES as $val)
+                            <option value="{{ $val }}">{{ ucfirst($val) }}</option>
+                        @endforeach
+                    </select>
                     <button type="button"
                         onclick="document.getElementById('language').disabled = false; this.disabled = true;"
                         class="px-3 py-1 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">

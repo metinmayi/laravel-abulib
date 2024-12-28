@@ -25,8 +25,11 @@
       <textarea type="text" id="description" name="description" placeholder="Enter the description of the literature" required class="block w-full p-2 border rounded mb-4"></textarea>
 
       <label for="language" class="block text-sm font-medium mb-2">Language:</label>
-      <input type="text" id="language" name="language" placeholder="Enter the language of the literature" required class="block w-full p-2 border rounded mb-4">
-
+      <select id="language" name="language" placeholder="Enter the language of the literature" required class="block w-full p-2 border rounded mb-4">
+        @foreach (\App\Models\Literature::LANGUAGES as $val)
+        <option value="{{ $val }}">{{ ucfirst($val) }}</option>
+        @endforeach
+      </select>
       <label for="category" class="block text-sm font-medium mb-2">Category:</label>
       <select id="category" name="category" placeholder="Select the category of the literature" required class="block w-full p-2 border rounded mb-4">
         @foreach (\App\Models\Literature::CATEGORIES as $val)
