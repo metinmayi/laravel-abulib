@@ -25,10 +25,10 @@ class LibraryViewTest extends TestCase
     {
         $this->getContent()
             ->assertSeeInOrder([
+                self::TEST_CATEGORY,
                 self::TEST_TITLE,
                 self::TEST_DESCRIPTION,
                 implode(',', self::TEST_LANGUAGES),
-                self::TEST_CATEGORY,
             ]);
     }
 
