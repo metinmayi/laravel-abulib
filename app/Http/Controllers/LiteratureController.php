@@ -15,12 +15,12 @@ class LiteratureController extends Controller
     /**
      * Upload literature
      */
-    public function upload(LiteratureUploadRequest $request): Response | ResponseFactory
+    public function upload(LiteratureUploadRequest $request): RedirectResponse
     {
         $data = $request->all();
         $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadLiteratureVariantAction($data));
         $uploadLiteratureAction->handle();
-        return response(null, 201);
+        return redirect()->route('library.index');
     }
 
     /**
