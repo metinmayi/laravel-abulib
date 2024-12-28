@@ -120,8 +120,8 @@ class LiteratureTest extends TestCase
             ->createOne();
 
         $literatureList = (new GetLiteratureListAction('Non-Matching-Lang'))->handle();
-        $this->assertEquals('Not available', $literatureList[0]->title);
-        $this->assertEquals('Not available', $literatureList[0]->description);
+        $this->assertEquals('Not available in english', $literatureList[0]->title);
+        $this->assertEquals('Not available in english', $literatureList[0]->description);
         $this->assertEquals([$lang], $literatureList[0]->availableLanguages);
         $this->assertEquals($literature->category, $literatureList[0]->category);
     }

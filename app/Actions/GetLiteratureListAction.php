@@ -32,9 +32,9 @@ class GetLiteratureListAction
             ->select(
                 'literatures.id',
                 'literatures.category',
-                DB::raw("COALESCE(lv.title, 'Not available') as title"),
-                DB::raw("COALESCE(lv.description, 'Not available') as description"),
-                DB::raw("COALESCE(lv.id, NULL) as variantId"), // Include the literature_variant.id
+                DB::raw("COALESCE(lv.title, 'Not available in english') as title"),
+                DB::raw("COALESCE(lv.description, 'Not available in english') as description"),
+                DB::raw("COALESCE(lv.id, NULL) as variantId"),
                 DB::raw("(SELECT GROUP_CONCAT(language) 
                           FROM literature_variants 
                           WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
