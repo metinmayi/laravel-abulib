@@ -23,7 +23,7 @@ class LiteratureVariantFactory extends Factory
         return [
             'title' => fake()->sentence(1),
             'description' => fake()->paragraph(2),
-            'language' => fake()->languageCode(),
+            'language' => fake()->randomElement(Literature::LANGUAGES),
             'url' => fake()->url(),
             'literature_id' => Literature::factory(),
         ];

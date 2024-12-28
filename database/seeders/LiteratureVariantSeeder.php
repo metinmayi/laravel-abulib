@@ -15,26 +15,7 @@ class LiteratureVariantSeeder extends Seeder
     {
 
         LiteratureVariant::factory()
-            ->set('language', 'kurdish')
-            ->count(3)
+            ->count(20)
             ->create();
-        LiteratureVariant::factory()
-            ->set('literature_id', Literature::factory()->create()->id)
-            ->count(2)
-            ->create();
-
-            LiteratureVariant::factory()
-            ->set('literature_id', Literature::factory()->create()->id)
-            ->count(5)
-            ->create();
-
-            LiteratureVariant::factory()
-            ->set('literature_id', Literature::factory()->create()->id)
-            ->count(3)
-            ->create();
-
-            LiteratureVariant::factory()
-                ->count(10)
-                ->create();
     }
 }
