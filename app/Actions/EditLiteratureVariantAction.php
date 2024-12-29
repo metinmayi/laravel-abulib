@@ -68,7 +68,7 @@ class EditLiteratureVariantAction
             return false;
         }
 
-        if (! Storage::delete($variant->url)) {
+        if ($variant->url && ! Storage::delete($variant->url)) {
             Log::error("Failed to delete old file at $variant->url");
             return false;
         }

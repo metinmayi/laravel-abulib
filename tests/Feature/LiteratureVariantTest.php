@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 use TypeError;
 
@@ -40,6 +39,7 @@ class LiteratureVariantTest extends TestCase
     public function test_get_literature_binary(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
+        $this->assertNotNull($variant->url);
 
         $this->get('/literatureVariant/' . $variant->id)
             ->assertStatus(200)
@@ -157,7 +157,7 @@ class LiteratureVariantTest extends TestCase
     public function test_deleting_variant_does_not_delete_literature(): void
     {
         $literature = Literature::factory()->createOne();
-        $this->uploadVariantWithoutErrors(literatureId: $literature->id);
+        $this->uploadVariantWithoutErrors(literatureId: $literature->id, lang:'swedish');
 
         $file = UploadedFile::fake()->create('test.pdf', 100);
         [$rez, $variant] = $this->uploadVariantWithoutErrors(literatureId:$literature->id, file: $file, lang: 'kurdish');
@@ -289,6 +289,7 @@ class LiteratureVariantTest extends TestCase
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
         $oldUrl = $variant->url;
+        $this->assertNotNull($oldUrl);
 
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
         $this->actingAs(User::factory()->createOne())
@@ -357,9 +358,9 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_update_variant_language_to_existing_language_yields_error(): void
     {
-        [$res, $variant] = $this->uploadVariantWithoutErrors();
+        [$res, $variant] = $this->uploadVariantWithoutErrors(lang: 'My-Test-Lang');
 
-        [$res, $secondVariant] = $this->uploadVariantWithoutErrors($variant->literature_id);
+        [$res, $secondVariant] = $this->uploadVariantWithoutErrors($variant->literature_id, lang:'Another-Test-Lang');
 
 
         $this->actingAs(User::factory()->createOne())
@@ -378,7 +379,8 @@ class LiteratureVariantTest extends TestCase
     {
         $literatureId = $literatureId ?? Literature::factory()->createOne()->id;
         $file = $file ?? UploadedFile::fake()->create('test.pdf', 100);
-        $language = $lang ?? fake()->languageCode();
+        /** @var string */
+        $language = $lang ?? fake()->randomElement(Literature::LANGUAGES);
         $title = fake()->title();
         $description = fake()->sentence();
 
@@ -410,7 +412,7 @@ class LiteratureVariantTest extends TestCase
         $this->actingAs(User::factory()->createOne());
         $this->storage = Storage::fake();
 
-        $language = $lang ?? fake()->languageCode();
+        $language = $lang ?? fake()->randomElement(Literature::LANGUAGES);
         $response = $this->post("/literatureVariant/upload/$literatureId", [
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),

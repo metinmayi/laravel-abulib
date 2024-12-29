@@ -31,7 +31,7 @@ class DeleteVariantAction
         }
 
         $filePath = $variant->url;
-        if (! Storage::delete($filePath)) {
+        if ($filePath && ! Storage::delete($filePath)) {
             Log::error('Failed to delete file related to variant', ['id' => $id, 'filePath' => $filePath]);
             return false;
         }

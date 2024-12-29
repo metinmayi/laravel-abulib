@@ -17,8 +17,8 @@ return new class () extends Migration {
                 ->cascadeOnDelete();
             $table->string('language');
             $table->string('title');
-            $table->string('description');
-            $table->string('url');
+            $table->string('description')->nullable();
+            $table->string('url')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });

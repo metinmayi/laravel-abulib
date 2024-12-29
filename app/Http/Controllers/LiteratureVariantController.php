@@ -21,7 +21,7 @@ class LiteratureVariantController extends Controller
     public function getLiteratureBinary(int $id): ResponseFactory | Response
     {
         $variant = ModelsLiteratureVariant::query()->find($id);
-        if (!$variant) {
+        if (!$variant || !$variant->url) {
             return response(null, 404);
         }
 
