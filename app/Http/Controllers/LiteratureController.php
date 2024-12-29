@@ -38,9 +38,9 @@ class LiteratureController extends Controller
     /**
      * Delete literature
      */
-    public function delete(int $id): RedirectResponse
+    public function destroy(int $literature): RedirectResponse
     {
-        $action = new DeleteLiteratureAction($id);
+        $action = new DeleteLiteratureAction($literature);
         if (!$action->handle()) {
             return redirect(route('library.index'))->with('Error', 'An error occured. Please contact your son.');
         }

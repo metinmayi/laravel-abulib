@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use App\Models\Literature;
 use App\Models\LiteratureVariant;
 use App\Models\User;
+use Illuminate\Http\Testing\File;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
@@ -18,24 +20,27 @@ class LiteratureControllerTest extends TestCase
 
     /**
      * Test routes are protected
+     * @param string             $route  Route.
+     * @param array<string, int> $params Route parameters.
      */
     #[DataProvider('protectedRoutesProvider')]
-    public function test_routes_are_protected(string $route): void
+    public function test_routes_are_protected(string $route, array $params = []): void
     {
-        $this->get(route($route))
+        $this->get(route($route, $params))
             ->assertRedirect(route('landingPage'))
             ->assertStatus(302);
     }
 
     /**
      * Data provider for protected routes
-     * @return array<array<string>>
+     * @return array<int, list<array<string, int>|string>>
      */
     public static function protectedRoutesProvider(): array
     {
         return [
             ['literature.create'],
             ['literature.store'],
+            ['literature.destroy', ['literature' => 1]],
         ];
     }
 
@@ -56,6 +61,43 @@ class LiteratureControllerTest extends TestCase
      */
     public function test_store_literature(): void
     {
+        $this->storeLiterature();
+    }
+
+    /**
+     * Test delete literature
+     */
+    public function test_delete_literature(): void
+    {
+        $file  = UploadedFile::fake()->create('test.pdf', 100);
+        $literature = $this->storeLiterature(file: $file);
+
+        $this->delete(route('literature.destroy', ['literature' => $literature->id]))
+            ->assertStatus(302)
+            ->assertRedirect(route('library.index'));
+
+        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Literature::all());
+        $this->assertFalse(Storage::exists($file->hashName()));
+    }
+
+    /**
+     * Test failing delete literature
+     */
+    public function test_failing_delete_literature_yields_errors(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->delete(route('literature.destroy', ['literature' => 1]))
+            ->assertStatus(302)
+            ->assertRedirect(route('library.index'))
+            ->assertSessionHas('Error', 'An error occured. Please contact your son.');
+    }
+
+    /**
+     * Helper method to store literature
+     */
+    protected function storeLiterature(?File $file = null): Literature
+    {
         $this->assertEquals(0, Literature::count());
         $this->assertEquals(0, LiteratureVariant::count());
 
@@ -65,7 +107,7 @@ class LiteratureControllerTest extends TestCase
                 'description' => 'Test Description',
                 'language' => 'kurdish',
                 'category' => 'research',
-                'file' => UploadedFile::fake()->create('test.pdf', 100),
+                'file' => $file ?? UploadedFile::fake()->create('test.pdf', 100),
                 'english-title' => 'English Title',
                 'kurdish-title' => 'Kurdish Title',
                 'swedish-title' => 'Swedish Title',
@@ -80,5 +122,7 @@ class LiteratureControllerTest extends TestCase
             $this->assertEquals(1, LiteratureVariant::query()->where('language', 'english')->count());
             $this->assertEquals(1, LiteratureVariant::query()->where('language', 'swedish')->count());
             $this->assertEquals(1, LiteratureVariant::query()->where('language', 'arabic')->count());
+
+            return Literature::query()->firstOrFail();
     }
 }
