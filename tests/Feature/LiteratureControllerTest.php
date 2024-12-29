@@ -13,7 +13,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
-#[Group('current')]
 class LiteratureControllerTest extends TestCase
 {
     use RefreshDatabase;
