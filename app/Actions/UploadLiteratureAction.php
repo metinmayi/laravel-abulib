@@ -14,8 +14,11 @@ class UploadLiteratureAction
    * Constructor.
    * @param array<mixed> $data Data passed in.
    */
-    public function __construct(protected array $data, protected UploadLiteratureVariantAction $uploadLiteratureVariantAction)
-    {
+    public function __construct(
+        protected array $data,
+        protected UploadLiteratureVariantAction $uploadLiteratureVariantAction,
+        protected UpdateLiteratureVariantTitlesAction $updateLiteratureVariantAction
+    ) {
     }
 
   /**
@@ -28,6 +31,7 @@ class UploadLiteratureAction
             $literature->save();
 
             $this->uploadLiteratureVariantAction->handle($literature->id);
+            $this->updateLiteratureVariantAction->handle($literature->id);
         });
     }
 }

@@ -19,6 +19,10 @@ class LiteratureUploadRequest extends FormRequest
             'language' => 'required|string',
             'category' => 'required|string',
             'file' => 'required|file|mimes:pdf',
+            'english-title' => 'required|string',
+            'kurdish-title' => 'required|string',
+            'swedish-title' => 'required|string',
+            'arabic-title' => 'required|string',
         ];
     }
 }

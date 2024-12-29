@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Literature;
+use App\Models\LiteratureVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -56,18 +57,28 @@ class LiteratureControllerTest extends TestCase
     public function test_store_literature(): void
     {
         $this->assertEquals(0, Literature::count());
+        $this->assertEquals(0, LiteratureVariant::count());
 
         $this->actingAs(User::factory()->create())
             ->post(route('literature.store'), [
                 'title' => 'Test Title',
                 'description' => 'Test Description',
-                'language' => 'Test Language',
+                'language' => 'kurdish',
                 'category' => 'research',
                 'file' => UploadedFile::fake()->create('test.pdf', 100),
+                'english-title' => 'English Title',
+                'kurdish-title' => 'Kurdish Title',
+                'swedish-title' => 'Swedish Title',
+                'arabic-title' => 'Arabic Title',
             ])
             ->assertRedirect(route('library.index'))
             ->assertStatus(302);
 
             $this->assertEquals(1, Literature::count());
+            $this->assertEquals(4, LiteratureVariant::count());
+            $this->assertEquals(1, LiteratureVariant::query()->where('language', 'kurdish')->count());
+            $this->assertEquals(1, LiteratureVariant::query()->where('language', 'english')->count());
+            $this->assertEquals(1, LiteratureVariant::query()->where('language', 'swedish')->count());
+            $this->assertEquals(1, LiteratureVariant::query()->where('language', 'arabic')->count());
     }
 }
