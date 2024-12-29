@@ -8,13 +8,6 @@ use Illuminate\Contracts\View\View;
 
 final class AdminController extends Controller
 {
-    /**
-     * New literature page
-     */
-    public function newliterature(): View
-    {
-        return view('admin.newliterature');
-    }
 
     /**
      * New variant page

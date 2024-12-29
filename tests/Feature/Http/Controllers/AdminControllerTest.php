@@ -56,7 +56,6 @@ class AdminControllerTest extends TestCase
     public static function adminPagesProvider(): array
     {
         return [
-            ['/admin/newliterature', 'admin.newliterature'],
             ['/admin/newvariant/-1', 'admin.newvariant'],
             ['/admin/editvariant/1', 'admin.editvariant'],
         ];

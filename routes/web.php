@@ -12,10 +12,10 @@ Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
 Route::group(['middleware' => 'auth'], function () {
   Route::resource('literature', LiteratureController::class);
+
   Route::get('/admin/newvariant/{id}', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
   Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
 
-  Route::post('/literature', [LiteratureController::class, 'upload'])->name('literature.upload');
   Route::post('/literature/delete/{id}', [LiteratureController::class, 'delete'])->name('literature.delete');
 
   Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant.upload');

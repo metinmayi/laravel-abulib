@@ -27,25 +27,6 @@ class LiteratureTest extends TestCase
     protected string $variantLanguage = 'Test Language';
     protected string $fileName;
 
-
-    /**
-     * Test upload literature
-     */
-    public function test_upload_literature_creates_literature(): void
-    {
-        $this->uploadLiterature();
-    }
-
-    /**
-     * Test upload literature requires auth
-     */
-    public function test_upload_literature_requires_auth(): void
-    {
-        $this->post(route('literature.upload'))
-            ->assertRedirect(route('landingPage'))
-            ->assertStatus(302);
-    }
-
     /**
      * Test delete literature requires auth
      */
