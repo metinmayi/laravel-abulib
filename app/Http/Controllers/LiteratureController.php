@@ -6,12 +6,18 @@ use App\Actions\DeleteLiteratureAction;
 use App\Actions\UploadLiteratureAction;
 use App\Actions\UploadLiteratureVariantAction;
 use App\Http\Requests\LiteratureUploadRequest;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 
 class LiteratureController extends Controller
 {
+    /**
+     * Show form to create literature.
+     */
+    public function create()
+    {
+        return view('literature.create-literature');
+    }
+
     /**
      * Upload literature
      */

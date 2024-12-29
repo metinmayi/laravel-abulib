@@ -39,17 +39,6 @@ class AdminControllerTest extends TestCase
     }
 
     /**
-     * Test the admin edit variant page renders correctly
-     */
-    public function testNewLiteraturePageRendersCorrectly(): void
-    {
-        $this->actingAs(User::factory()->create())
-            ->get("/admin/newliterature")
-            ->assertStatus(200)
-            ->assertViewIs('admin.newliterature');
-    }
-
-    /**
      * Test that the admin pages are protected.
      */
     #[DataProvider('adminPagesProvider')]

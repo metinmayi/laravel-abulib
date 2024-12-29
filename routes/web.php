@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('/admin/newliterature', [AdminController::class, 'newLiterature'])->name('admin.newliteraturepage');
+  Route::resource('literature', LiteratureController::class);
   Route::get('/admin/newvariant/{id}', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
   Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
 
