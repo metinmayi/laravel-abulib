@@ -42,7 +42,7 @@ class UploadLiteratureVariantAction
 
         /** @var UploadedFile */
         $file = $this->data['file'];
-        $fileName = Storage::disk('local')->putFile('', $file);
+        $fileName = Storage::putFile('', $file);
 
         $this->data['url'] = $fileName;
         $this->data['literature_id'] = $literatureId;

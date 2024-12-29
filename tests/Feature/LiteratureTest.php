@@ -73,7 +73,7 @@ class LiteratureTest extends TestCase
         $this->assertEquals($this->variantLanguage, $variant->language);
         $this->assertEquals($this->fileName, $variant->url);
         $this->assertEquals($literature->id, $variant->literature_id);
-        $this->assertTrue(Storage::disk()->exists($this->fileName));
+        $this->assertTrue(Storage::exists($this->fileName));
     }
 
     /**
@@ -151,7 +151,7 @@ class LiteratureTest extends TestCase
 
         $this->assertCount(0, LiteratureVariant::all());
         $this->assertCount(0, Literature::all());
-        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertFalse(Storage::exists($file->hashName()));
     }
 
     /**

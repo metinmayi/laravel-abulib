@@ -12,22 +12,23 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LiteratureVariantController extends Controller
 {
     /**
      * Get literature binary. Used for PDF source.
      */
-    public function getLiteratureBinary(int $id): BinaryFileResponse | ResponseFactory | Response
+    public function getLiteratureBinary(int $id): ResponseFactory | Response
     {
         $variant = ModelsLiteratureVariant::find($id);
         if (!$variant) {
             return response(null, 404);
         }
 
-        $pdf = Storage::disk('local')->path($variant->url);
-        return response()->file($pdf);
+        $content = Storage::get($variant->url);
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 
     /**

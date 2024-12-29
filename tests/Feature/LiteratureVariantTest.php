@@ -41,9 +41,10 @@ class LiteratureVariantTest extends TestCase
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
-        $response = $this->get('/literatureVariant/' . $variant->id);
-        $response->assertStatus(200);
-        $this->assertInstanceOf(BinaryFileResponse::class, $response->baseResponse);
+        $this->get('/literatureVariant/' . $variant->id)
+            ->assertStatus(200)
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertContent(Storage::get($variant->url) ?? '');
     }
 
     /**
@@ -104,7 +105,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->post(route('variant.delete', ['id' => $literature->id]))
             ->assertRedirect(route('library.index'));
-        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
     }
 
@@ -164,7 +165,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->post(route('variant.delete', ['id' => $variant->id]))
             ->assertRedirect(route('library.index'));
-        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(1, LiteratureVariant::all());
         $this->assertCount(1, Literature::all());
     }
@@ -179,7 +180,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->post(route('variant.delete', ['id' => $variant->id]))
             ->assertRedirect(route('library.index'));
-        $this->assertFalse(Storage::disk()->exists($file->hashName()));
+        $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
         $this->assertCount(0, Literature::all());
     }
@@ -299,8 +300,8 @@ class LiteratureVariantTest extends TestCase
 
         $variant = LiteratureVariant::query()->findOrFail($variant->id);
         $this->assertEquals($newFile->hashName(), $variant->url);
-        $this->assertTrue(Storage::disk()->exists($newFile->hashName()));
-        $this->assertFalse(Storage::disk()->exists($oldUrl));
+        $this->assertTrue(Storage::exists($newFile->hashName()));
+        $this->assertFalse(Storage::exists($oldUrl));
     }
 
     /**
@@ -387,7 +388,7 @@ class LiteratureVariantTest extends TestCase
         $response->assertStatus(201);
         $this->assertCount($count + 1, LiteratureVariant::all());
 
-        $this->assertTrue(Storage::disk()->exists($file->hashName()));
+        $this->assertTrue(Storage::exists($file->hashName()));
 
         $variant = LiteratureVariant::query()->where('literature_id', '=', $literatureId)->where('language', '=', $language)->first();
         $this->assertNotNull($variant);
