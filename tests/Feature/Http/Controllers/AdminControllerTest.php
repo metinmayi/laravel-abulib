@@ -21,7 +21,7 @@ class AdminControllerTest extends TestCase
     {
         $variant = LiteratureVariant::factory()->createOne();
         $this->actingAs(User::factory()->create())
-            ->get("/admin/editvariant/$variant->id")
+            ->get(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertStatus(200)
             ->assertViewIs('admin.editvariant');
     }

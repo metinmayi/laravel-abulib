@@ -14,7 +14,7 @@
     <!-- Forms -->
     <main class="max-w-6xl p-6 mt-10 w-3/4">
         <h2 class="text-2xl font-semibold mb-4">Upload new language variant</h2>
-        <form action="{{ route('variant.upload', ['literatureId' => $literature_id]) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('variant.store') }}" method="POST" enctype="multipart/form-data">
             @if ($errors->any())
                 {!! implode('', $errors->all('<div>:message</div>')) !!}
             @endif

@@ -53,7 +53,7 @@ class LiteratureVariantTest extends TestCase
     public function test_upload_literature_variant_validation_errors(): void
     {
             $this->actingAs(User::factory()->createOne())
-                ->post('/literatureVariant/upload/0')
+                ->post(route('variant.store', ['variant' => -1]))
                 ->assertSessionHasErrors(['title'])
                 ->assertStatus(302);
     }
@@ -101,9 +101,9 @@ class LiteratureVariantTest extends TestCase
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $this->uploadVariantWithoutErrors($literature->id, $file);
+        [$res, $variant] = $this->uploadVariantWithoutErrors($literature->id, $file);
 
-        $this->post(route('variant.delete', ['id' => $literature->id]))
+        $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
@@ -117,7 +117,7 @@ class LiteratureVariantTest extends TestCase
         Exceptions::fake();
 
         $this->actingAs(User::factory()->createOne())
-            ->post(route('variant.delete', ['id' => 'notNumeric']));
+            ->delete(route('variant.destroy', ['variant' => 'notNumeric']));
 
         Exceptions::assertReported(TypeError::class);
     }
@@ -128,7 +128,7 @@ class LiteratureVariantTest extends TestCase
     public function test_provide_error_if_deleting_non_existing_variant(): void
     {
         $this->actingAs(User::factory()->createOne())
-            ->post(route('variant.delete', ['id' => -1]))
+            ->delete(route('variant.destroy', ['variant' => -1]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.'])
             ->assertStatus(302);
     }
@@ -140,12 +140,12 @@ class LiteratureVariantTest extends TestCase
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $this->uploadVariantWithoutErrors($literature->id, $file);
+        [$res, $variant] = $this->uploadVariantWithoutErrors($literature->id, $file);
 
         Storage::shouldReceive('delete')
             ->once()
             ->andReturn(false);
-        $response = $this->post(route('variant.delete', ['id' => $literature->id]));
+        $response = $this->delete(route('variant.destroy', ['variant' => $variant->id]));
         $response->assertStatus(302);
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $this->assertCount(1, LiteratureVariant::all());
@@ -163,7 +163,7 @@ class LiteratureVariantTest extends TestCase
         [$rez, $variant] = $this->uploadVariantWithoutErrors(literatureId:$literature->id, file: $file, lang: 'kurdish');
         $this->assertCount(1, Literature::all());
 
-        $this->post(route('variant.delete', ['id' => $variant->id]))
+        $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(1, LiteratureVariant::all());
@@ -178,7 +178,7 @@ class LiteratureVariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
         $this->assertCount(1, Literature::all());
 
-        $this->post(route('variant.delete', ['id' => $variant->id]))
+        $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
         $this->assertCount(0, LiteratureVariant::all());
@@ -190,7 +190,7 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_update_variant_endpoint_requires_auth(): void
     {
-        $this->post(route('variant.edit', ['id' => 1]))
+        $this->patch(route('variant.update', ['variant' => 1]))
             ->assertStatus(302)
             ->assertRedirect(route('landingPage'));
     }
@@ -205,7 +205,7 @@ class LiteratureVariantTest extends TestCase
     public function test_update_variant_endpoint_validation(array $input, bool $shouldError = false, array $errors = []): void
     {
         $this->actingAs(User::factory()->createOne());
-        $response = $this->post(route('variant.edit', ['id' => 1]), $input);
+        $response = $this->patch(route('variant.update', ['variant' => 1]), $input);
         $response->assertStatus(302);
 
         if ($shouldError) {
@@ -244,7 +244,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => -1]))
-            ->post(route('variant.edit', ['id' => -1]), ['title' => 'test'])
+            ->patch(route('variant.update', ['variant' => -1]), ['title' => 'test'])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => -1]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -260,7 +260,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.edit', ['id' => $variant->id]), [$property => $value])
+            ->patch(route('variant.update', ['variant' => $variant->id]), [$property => $value])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
@@ -294,7 +294,7 @@ class LiteratureVariantTest extends TestCase
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
+            ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
@@ -321,7 +321,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
+            ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -348,7 +348,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $variant->id]))
-            ->post(route('variant.edit', ['id' => $variant->id]), ['file' => $newFile])
+            ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
     }
@@ -365,7 +365,7 @@ class LiteratureVariantTest extends TestCase
 
         $this->actingAs(User::factory()->createOne())
             ->from(route('admin.editvariantpage', ['id' => $secondVariant->id]))
-            ->post(route('variant.edit', ['id' => $secondVariant->id]), ['language' => $variant->language])
+            ->patch(route('variant.update', ['variant' => $secondVariant->id]), ['language' => $variant->language])
             ->assertStatus(302)
             ->assertRedirect(route('admin.editvariantpage', ['id' => $secondVariant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
@@ -413,11 +413,12 @@ class LiteratureVariantTest extends TestCase
         $this->storage = Storage::fake();
 
         $language = $lang ?? fake()->randomElement(Literature::LANGUAGES);
-        $response = $this->post("/literatureVariant/upload/$literatureId", [
+        $response = $this->post(route('variant.store'), [
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),
             'file' => $file,
             'language' => $language,
+            'literature_id' => $literatureId,
         ]);
 
         return $response;

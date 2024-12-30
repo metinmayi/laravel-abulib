@@ -23,7 +23,7 @@
             <p><strong>Language:</strong> <span id="current-language">{{ $variant->language }}</span></p>
         </div>
 
-        <form action={{ route('variant.edit', ['id' => $variant->id]) }} method="POST" enctype="multipart/form-data"
+        <form action={{ route('variant.edit', ['variant' => $variant->id]) }} method="POST" enctype="multipart/form-data"
             class="space-y-6">
             @csrf
             <!-- Title -->

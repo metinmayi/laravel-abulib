@@ -34,11 +34,11 @@ class LiteratureVariantController extends Controller
     /**
      * Upload a literature variant
      */
-    public function upload(int $literatureId, UploadLiteratureVariantData $data): RedirectResponse
+    public function store(UploadLiteratureVariantData $data): RedirectResponse
     {
         $action = new UploadLiteratureVariantAction();
 
-        [$success] = $action->handle($literatureId, $data);
+        [$success] = $action->handle($data->literature_id ?? -1, $data);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
@@ -49,10 +49,10 @@ class LiteratureVariantController extends Controller
     /**
      * Edit a variant.
      */
-    public function edit(int $id, LiteratureVariantUpdateRequest $request): RedirectResponse
+    public function update(int $variant, LiteratureVariantUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $success = (new EditLiteratureVariantAction($id, $validated))->handle();
+        $success = (new EditLiteratureVariantAction($variant, $validated))->handle();
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
@@ -62,10 +62,10 @@ class LiteratureVariantController extends Controller
     /**
      * Delete a variant.
      */
-    public function delete(int $id): RedirectResponse
+    public function destroy(int $variant): RedirectResponse
     {
         $action = new DeleteVariantAction();
-        $success = $action->handle($id);
+        $success = $action->handle($variant);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

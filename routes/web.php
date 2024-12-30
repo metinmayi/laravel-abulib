@@ -11,20 +11,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
 
 Route::group(['middleware' => 'auth'], function () {
-  Route::resource('literature', LiteratureController::class);
+  Route::resources([
+    'literature' => LiteratureController::class,
+    'variant' => LiteratureVariantController::class,
+  ]);
 
   Route::get('/admin/newvariant/{id}', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
   Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
-
-  Route::post('/literatureVariant/upload/{literatureId}', [LiteratureVariantController::class, 'upload'])->name('variant.upload');
-  Route::post('/literatureVariant/delete/{id}', [LiteratureVariantController::class, 'delete'])->name('variant.delete');
-  Route::post('/literatureVariant/edit/{id}', [LiteratureVariantController::class, 'edit'])->name('variant.edit');
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
+// Should be moved to reader
 Route::get('/literatureVariant/{id}', [LiteratureVariantController::class, 'getLiteratureBinary']);
 
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
