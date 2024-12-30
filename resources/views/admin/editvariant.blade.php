@@ -92,12 +92,13 @@
                 </button>
             </div>
         </form>
-        <form action={{ route('variant.delete', ['id' => $variant->id]) }} method="POST" class="space-y-6">
+        <form action={{ route('literature.destroy', ['literature' => $variant->literature_id]) }} method="POST" class="space-y-6">
             @csrf
+            @method('DELETE')
             <div>
                 <button type="submit"
                     class="mt-10 w-full px-4 py-2 bg-red-500 text-white font-medium text-sm rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Delete Variant
+                    Delete Literature
                 </button>
             </div>
         </form>

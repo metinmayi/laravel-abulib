@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 
 final class AdminController extends Controller
 {
-
     /**
      * New variant page
      */
