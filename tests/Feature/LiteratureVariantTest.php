@@ -54,7 +54,7 @@ class LiteratureVariantTest extends TestCase
     {
             $this->actingAs(User::factory()->createOne())
                 ->post('/literatureVariant/upload/0')
-                ->assertSessionHasErrors(['title','description', 'file'])
+                ->assertSessionHasErrors(['title'])
                 ->assertStatus(302);
     }
 
@@ -417,7 +417,7 @@ class LiteratureVariantTest extends TestCase
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),
             'file' => $file,
-            'language' => $language
+            'language' => $language,
         ]);
 
         return $response;

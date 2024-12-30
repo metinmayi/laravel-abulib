@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteLiteratureAction;
-use App\Actions\UpdateLiteratureVariantTitlesAction;
 use App\Actions\UploadLiteratureAction;
 use App\Actions\UploadLiteratureVariantAction;
-use App\Http\Requests\LiteratureUploadRequest;
+use App\Data\UploadLiteratureData;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -23,14 +22,9 @@ class LiteratureController extends Controller
     /**
      * Upload literature
      */
-    public function store(LiteratureUploadRequest $request): RedirectResponse
+    public function store(UploadLiteratureData $data): RedirectResponse
     {
-        $data = $request->all();
-        $uploadLiteratureAction = new UploadLiteratureAction(
-            $data,
-            new UploadLiteratureVariantAction($data),
-            new UpdateLiteratureVariantTitlesAction($data)
-        );
+        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadLiteratureVariantAction());
         $uploadLiteratureAction->handle();
         return redirect()->route('library.index');
     }

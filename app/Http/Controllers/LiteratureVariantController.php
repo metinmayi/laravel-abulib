@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\DeleteVariantAction;
 use App\Actions\EditLiteratureVariantAction;
 use App\Actions\UploadLiteratureVariantAction;
+use App\Data\UploadLiteratureVariantData;
 use App\Http\Requests\LiteratureVariantUpdateRequest;
-use App\Http\Requests\LiteratureVariantUploadRequest;
 use App\Models\LiteratureVariant as ModelsLiteratureVariant;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -34,11 +34,11 @@ class LiteratureVariantController extends Controller
     /**
      * Upload a literature variant
      */
-    public function upload(int $literatureId, LiteratureVariantUploadRequest $request): RedirectResponse
+    public function upload(int $literatureId, UploadLiteratureVariantData $data): RedirectResponse
     {
-        $action = new UploadLiteratureVariantAction($request->validated());
+        $action = new UploadLiteratureVariantAction();
 
-        [$success] = $action->handle($literatureId);
+        [$success] = $action->handle($literatureId, $data);
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

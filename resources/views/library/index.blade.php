@@ -21,7 +21,7 @@
                     <div class="p-6">
                         <p>{{ ucfirst($literature->category) }}</p>
                         <h2 class="text-2xl font-bold mb-2 text-gray-900">{{ $literature->title }}</h2>
-                        <p class="text-gray-600 text-sm mb-4">{{ $literature->description }}</p>
+                        <p class="text-gray-600 text-sm mb-4">{{ $literature->description ?? 'No Desc'}}</p>
                         <div class="text-xs text-gray-500 mb-4 space-y-1">
                             <div><strong>Languages:</strong>{{ implode(',', $literature->availableLanguages) }}</div>
                         </div>

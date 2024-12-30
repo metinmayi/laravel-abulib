@@ -7,16 +7,16 @@ class LiteratureListItem
     protected const REQUIRED_KEYS = [
         'id',
         'variantId',
+        'description',
         'category',
         'title',
-        'description',
         'availableLanguages',
     ];
 
     public string $id;
-    public ?string $variantId;
+    public string $variantId;
     public string $title;
-    public string $description;
+    public ?string $description;
     public string $category;
 
     /** @var array<string> */

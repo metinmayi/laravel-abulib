@@ -23,25 +23,24 @@ class GetLiteratureListAction
      */
     public function handle(): array
     {
-        $lang = $this->language;
         $literatures = DB::table('literatures')
-            ->leftJoin('literature_variants as lv', function ($join) use ($lang) {
+            ->leftJoin('literature_variants as lv', function ($join) {
                 $join->on('literatures.id', '=', 'lv.literature_id')
-                    ->where('lv.language', '=', $lang);
+                ->where('lv.language', '=', $this->language);
             })
             ->select(
                 'literatures.id',
                 'literatures.category',
-                DB::raw("COALESCE(lv.title, 'Not available in english') as title"),
-                DB::raw("COALESCE(lv.description, 'Not available in english') as description"),
-                DB::raw("COALESCE(lv.id, NULL) as variantId"),
+                'lv.title',
+                'lv.description',
+                'lv.id as variantId',
                 DB::raw("(SELECT GROUP_CONCAT(language) 
-                          FROM literature_variants 
-                          WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
+                  FROM literature_variants 
+                  WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
             )
             ->get()
             ->map(function ($literature) {
-                // Convert availableLanguages string to array
+            // Convert availableLanguages string to array
                 $literature->availableLanguages = explode(',', $literature->availableLanguages);
                 return $literature;
             });
