@@ -12,18 +12,17 @@
     @component('components.siderbar')
     @endcomponent
     <!-- Page -->
-    <main class="max-w-6xl p-6 mt-10">
-        <div class="flex flex-wrap gap-3 justify-evenly">
+    <main class="w-3/4 flex flex-wrap gap-3 justify-evenly items-start mt-10">
             @foreach ($literatureList as $literature)
                 <!-- Literature Card -->
                 <div
-                    class="bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 w-1/4">
+                    class="bg-white shadow-md rounded-lg transform hover:scale-105 transition duration-300 w-1/4">
                     <div class="p-6">
                         <p>{{ ucfirst($literature->category) }}</p>
                         <h2 class="text-2xl font-bold mb-2 text-gray-900">{{ $literature->title }}</h2>
                         <p class="text-gray-600 text-sm mb-4">{{ $literature->description ?? 'No Desc'}}</p>
                         <div class="text-xs text-gray-500 mb-4 space-y-1">
-                            <div><strong>Languages:</strong>{{ implode(',', $literature->availableLanguages) }}</div>
+                            <p><strong>Languages:</strong>{{ implode(',', $literature->availableLanguages) }}</p>
                         </div>
                         <a class="w-full bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 transition"
                             href="{{ route('read.index', ['variantId' => $literature->variantId ?? -1]) }}">
@@ -43,7 +42,6 @@
                     </div>
                 </div>
             @endforeach
-        </div>
     </main>
 </body>
 
