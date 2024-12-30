@@ -36,7 +36,8 @@ class GetLiteratureListAction
                 'lv.id as variantId',
                 DB::raw("(SELECT GROUP_CONCAT(language) 
                   FROM literature_variants 
-                  WHERE literature_variants.literature_id = literatures.id) as availableLanguages")
+                  WHERE literature_variants.literature_id = literatures.id 
+                  AND literature_variants.url IS NOT NULL) as availableLanguages")
             )
             ->get()
             ->map(function ($literature) {

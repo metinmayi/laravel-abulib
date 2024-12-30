@@ -27,6 +27,12 @@ class GetLiteratureListActionTest extends TestCase
             ->state(['language' => 'Test-Lang'])
             ->createOne();
 
+        // Add a variant without a URL to test that it is not included in the available languages
+        LiteratureVariant::factory()
+            ->for($literature)
+            ->state(['language' => 'Test-Lang-2', 'url' => null])
+            ->createOne();
+
         $languages = $variants->pluck('language')->push($additionalVariant->language)->toArray();
 
         $action = new \App\Actions\GetLiteratureListAction('Test-Lang');
