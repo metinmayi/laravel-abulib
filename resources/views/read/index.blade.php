@@ -19,7 +19,7 @@
         <!-- Description Section -->
         <div class="mt-6">
             <h3 class="text-xl font-semibold text-blue-700">Description:</h3>
-            <p class="mt-2 text-gray-700">{{ $literatureItem['description']}}</p>
+            <p class="mt-2 text-gray-700">{{ $literatureItem['description'] }}</p>
         </div>
 
         <!-- Available Languages Section -->
@@ -37,7 +37,8 @@
         <!-- PDF Reader Section -->
         <div class="mt-6">
             <h3 class="text-xl font-semibold text-blue-700">Read the Book:</h3>
-            <object class="w-full h-screen border rounded-lg" data="/literatureVariant/{{$literatureItem['id']}}" type="application/pdf">
+            <object class="w-full h-screen border rounded-lg" data="/literatureVariant/{{ $literatureItem['id'] }}"
+                type="application/pdf">
                 <p class="text-gray-700">Your browser does not support PDFs.
                     <a href="path/to/your/book.pdf" class="text-blue-600 hover:underline">Download the PDF</a> to read
                     it.

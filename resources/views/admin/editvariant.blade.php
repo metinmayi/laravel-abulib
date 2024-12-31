@@ -23,8 +23,8 @@
             <p><strong>Language:</strong> <span id="current-language">{{ $variant->language }}</span></p>
         </div>
 
-        <form action={{ route('variant.edit', ['variant' => $variant->id]) }} method="POST" enctype="multipart/form-data"
-            class="space-y-6">
+        <form action={{ route('variant.edit', ['variant' => $variant->id]) }} method="POST"
+            enctype="multipart/form-data" class="space-y-6">
             @csrf
             <!-- Title -->
             @if ($errors->any())
@@ -63,8 +63,8 @@
             <div>
                 <label for="language" class="block text-sm font-medium text-gray-700">Language</label>
                 <div class="flex items-center gap-2">
-                    <select id="language" name="language" placeholder="Enter the language of the literature" required disabled
-                        class="block w-full p-2 border rounded mb-4">
+                    <select id="language" name="language" placeholder="Enter the language of the literature" required
+                        disabled class="block w-full p-2 border rounded mb-4">
                         @foreach (\App\Models\Literature::LANGUAGES as $val)
                             <option value="{{ $val }}">{{ ucfirst($val) }}</option>
                         @endforeach
@@ -92,7 +92,8 @@
                 </button>
             </div>
         </form>
-        <form action={{ route('literature.destroy', ['literature' => $variant->literature_id]) }} method="POST" class="space-y-6">
+        <form action={{ route('literature.destroy', ['literature' => $variant->literature_id]) }} method="POST"
+            class="space-y-6">
             @csrf
             @method('DELETE')
             <div>

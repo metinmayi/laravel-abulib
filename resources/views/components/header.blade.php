@@ -833,21 +833,23 @@
             <div class="cs-ul-wrapper">
                 <ul id="cs-expanded" class="cs-ul" aria-expanded="false">
                     <li class="cs-li">
-                        <a href="{{route('landingPage')}}" class="cs-li-link {{ Request::is('/') ? 'cs-active' : '' }}">
+                        <a href="{{ route('landingPage') }}"
+                            class="cs-li-link {{ Request::is('/') ? 'cs-active' : '' }}">
                             Home
                         </a>
                     </li>
                     <li class="cs-li">
-                        <a href="{{route('library.index')}}" class="cs-li-link {{ Request::is('library') ? 'cs-active' : '' }}">
-                        Library
+                        <a href="{{ route('library.index') }}"
+                            class="cs-li-link {{ Request::is('library') ? 'cs-active' : '' }}">
+                            Library
                         </a>
                     </li>
                     @guest
-                    <li class="cs-li">
-                        <a href="{{route('auth.login')}}" class="cs-li-link">
-                            Login
-                        </a>
-                    </li>
+                        <li class="cs-li">
+                            <a href="{{ route('auth.login') }}" class="cs-li-link">
+                                Login
+                            </a>
+                        </li>
                     @endguest
                 </ul>
             </div>

@@ -8,9 +8,10 @@
                 <li><a href="/library" class="text-lg hover:text-gray-500">Library</a></li>
                 <li><a href="/login" class="text-lg hover:text-gray-500">Login</a></li>
                 @auth
-                <li><a href="{{ route('literature.create') }}" class="text-lg hover:text-gray-500">Upload literature</a></li>
+                    <li><a href="{{ route('literature.create') }}" class="text-lg hover:text-gray-500">Upload literature</a>
+                    </li>
                 @endauth
-                    
+
             </ul>
         </nav>
     </div>
