@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-100 flex min-h-screen">
-    @component('components.siderbar')
+    @component('components.header')
     @endcomponent
     <!-- Main Content -->
     <div class="flex-1 flex justify-center items-center">
