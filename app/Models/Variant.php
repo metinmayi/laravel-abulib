@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class LiteratureVariant extends Model
+class Variant extends Model
 {
-    /** @use HasFactory<\Database\Factories\LiteratureVariantFactory> */
+    /** @use HasFactory<\Database\Factories\VariantFactory> */
     use HasFactory;
 
     protected $fillable = ['title', 'description', 'language', 'url', 'literature_id'];
 
     /**
-     * Get the literature that owns the LiteratureVariant
+     * Get the literature that owns the Variant
      * @return BelongsTo<Literature, $this>
      */
     public function literature(): BelongsTo

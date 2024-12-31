@@ -24,7 +24,7 @@ class GetLiteratureListAction
     public function handle(): array
     {
         $literatures = DB::table('literatures')
-            ->leftJoin('literature_variants as lv', function ($join) {
+            ->leftJoin('variants as lv', function ($join) {
                 $join->on('literatures.id', '=', 'lv.literature_id')
                 ->where('lv.language', '=', $this->language);
             })
@@ -35,9 +35,9 @@ class GetLiteratureListAction
                 'lv.description',
                 'lv.id as variantId',
                 DB::raw("(SELECT GROUP_CONCAT(language) 
-                  FROM literature_variants 
-                  WHERE literature_variants.literature_id = literatures.id 
-                  AND literature_variants.url IS NOT NULL) as availableLanguages")
+                  FROM variants 
+                  WHERE variants.literature_id = literatures.id 
+                  AND variants.url IS NOT NULL) as availableLanguages")
             )
             ->get()
             ->map(function ($literature) {

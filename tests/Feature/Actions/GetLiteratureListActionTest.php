@@ -3,7 +3,7 @@
 namespace Tests\Feature\Actions;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -18,17 +18,17 @@ class GetLiteratureListActionTest extends TestCase
     public function testAvailableLanguages(): void
     {
         $literature = Literature::factory()->createOne();
-        $variants = LiteratureVariant::factory()
+        $variants = Variant::factory()
             ->for($literature)
             ->count(3)
             ->create();
-        $additionalVariant = LiteratureVariant::factory()
+        $additionalVariant = Variant::factory()
             ->for($literature)
             ->state(['language' => 'Test-Lang'])
             ->createOne();
 
         // Add a variant without a URL to test that it is not included in the available languages
-        LiteratureVariant::factory()
+        Variant::factory()
             ->for($literature)
             ->state(['language' => 'Test-Lang-2', 'url' => null])
             ->createOne();

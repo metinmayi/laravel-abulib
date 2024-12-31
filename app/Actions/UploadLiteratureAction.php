@@ -16,7 +16,7 @@ class UploadLiteratureAction
    */
     public function __construct(
         protected UploadLiteratureData $data,
-        protected UploadLiteratureVariantAction $uploadLiteratureVariantAction
+        protected UploadVariantAction $uploadVariantAction
     ) {
     }
 
@@ -30,7 +30,7 @@ class UploadLiteratureAction
             $literature->save();
 
             foreach (Literature::LANGUAGES as $language) {
-                $this->uploadLiteratureVariantAction->handle($literature->id, $this->data->literatures[$language]);
+                $this->uploadVariantAction->handle($literature->id, $this->data->literatures[$language]);
             }
         });
     }

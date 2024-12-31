@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use App\Models\User;
 use Illuminate\Http\Testing\File;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,7 +77,7 @@ class LiteratureControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('library.index'));
 
-        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Variant::all());
         $this->assertCount(0, Literature::all());
         $this->assertFalse(Storage::exists($file->hashName()));
     }
@@ -100,7 +100,7 @@ class LiteratureControllerTest extends TestCase
     protected function storeLiterature(?File $file = null): Literature
     {
         $this->assertEquals(0, Literature::count());
-        $this->assertEquals(0, LiteratureVariant::count());
+        $this->assertEquals(0, Variant::count());
 
         $file = UploadedFile::fake()->create('test.pdf', 100);  // Fake file for the main literature
 
@@ -142,38 +142,38 @@ class LiteratureControllerTest extends TestCase
         $this->assertEquals(1, Literature::count());
         $literature = Literature::query()->firstOrFail();
 
-    // Assert the LiteratureVariant entries have been created
-        $this->assertEquals(4, LiteratureVariant::count());
+    // Assert the Variant entries have been created
+        $this->assertEquals(4, Variant::count());
 
     // Check that each language has the correct number of variants
-        $this->assertEquals(1, LiteratureVariant::where('language', 'english')->count());
-        $this->assertEquals(1, LiteratureVariant::where('language', 'kurdish')->count());
-        $this->assertEquals(1, LiteratureVariant::where('language', 'swedish')->count());
-        $this->assertEquals(1, LiteratureVariant::where('language', 'arabic')->count());
+        $this->assertEquals(1, Variant::where('language', 'english')->count());
+        $this->assertEquals(1, Variant::where('language', 'kurdish')->count());
+        $this->assertEquals(1, Variant::where('language', 'swedish')->count());
+        $this->assertEquals(1, Variant::where('language', 'arabic')->count());
 
-    // Assert the correct properties for each LiteratureVariant
-        $this->assertDatabaseHas('literature_variants', [
+    // Assert the correct properties for each Variant
+        $this->assertDatabaseHas('variants', [
         'literature_id' => $literature->id,
         'language' => 'english',
         'title' => 'English Title',
         'description' => 'English Description',
         ]);
 
-        $this->assertDatabaseHas('literature_variants', [
+        $this->assertDatabaseHas('variants', [
         'literature_id' => $literature->id,
         'language' => 'kurdish',
         'title' => 'Kurdish Title',
         'description' => 'Kurdish Description',
         ]);
 
-        $this->assertDatabaseHas('literature_variants', [
+        $this->assertDatabaseHas('variants', [
         'literature_id' => $literature->id,
         'language' => 'swedish',
         'title' => 'Swedish Title',
         'description' => 'Swedish Description',
         ]);
 
-        $this->assertDatabaseHas('literature_variants', [
+        $this->assertDatabaseHas('variants', [
         'literature_id' => $literature->id,
         'language' => 'arabic',
         'title' => 'Arabic Title',

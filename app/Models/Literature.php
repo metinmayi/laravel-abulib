@@ -18,10 +18,10 @@ class Literature extends Model
 
     /**
      * Get the variants for the literature.
-     * @return HasMany<LiteratureVariant, $this>
+     * @return HasMany<Variant, $this>
      */
     public function variants(): HasMany
     {
-        return $this->hasMany(LiteratureVariant::class);
+        return $this->hasMany(Variant::class);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +24,7 @@ class DeleteVariantAction
     */
     public function handle(int $id): ?bool
     {
-        $variant = LiteratureVariant::find($id);
+        $variant = Variant::find($id);
         if (! $variant) {
             Log::error('Tried to delete a literature variant without it existing', ['id' => $id]);
             return false;
@@ -36,7 +36,7 @@ class DeleteVariantAction
             return false;
         }
 
-        $remainingVariants = LiteratureVariant::where('literature_id', $variant->literature_id)->count();
+        $remainingVariants = Variant::where('literature_id', $variant->literature_id)->count();
         if ($remainingVariants === 1) {
             $literature = Literature::findOrFail($variant->literature_id);
             return $literature->delete();

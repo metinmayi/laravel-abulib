@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +17,7 @@ class ReaderTest extends TestCase
     public function test_reader_renders_correct_view(): void
     {
         $literature = Literature::factory()->createOne();
-        $variants = LiteratureVariant::factory()->set('literature_id', $literature->id)->count(2)->create();
+        $variants = Variant::factory()->set('literature_id', $literature->id)->count(2)->create();
         $firstVariant = $variants->firstOrFail();
         $langauges = $variants->pluck('language')->toArray();
 

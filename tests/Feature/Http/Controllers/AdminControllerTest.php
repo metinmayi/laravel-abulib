@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -19,7 +19,7 @@ class AdminControllerTest extends TestCase
      */
     public function testEditVariantPageRendersCorrectly(): void
     {
-        $variant = LiteratureVariant::factory()->createOne();
+        $variant = Variant::factory()->createOne();
         $this->actingAs(User::factory()->create())
             ->get(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertStatus(200)

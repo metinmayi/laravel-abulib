@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Contracts\View\View;
 
 final class AdminController extends Controller
@@ -22,6 +22,6 @@ final class AdminController extends Controller
      */
     public function editVariant(int $id): View
     {
-        return view('admin.editvariant', ['variant' => LiteratureVariant::find($id)]);
+        return view('admin.editvariant', ['variant' => Variant::find($id)]);
     }
 }

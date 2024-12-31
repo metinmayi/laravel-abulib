@@ -5,7 +5,7 @@ namespace App\Data;
 use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
-class UploadLiteratureVariantData extends Data
+class UploadVariantData extends Data
 {
   /**
    * Constructor.

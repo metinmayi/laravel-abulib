@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 use TypeError;
 
-class LiteratureVariantTest extends TestCase
+class VariantTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -28,7 +28,7 @@ class LiteratureVariantTest extends TestCase
      */
     public function test_get_literature_binary_404_if_not_found(): void
     {
-        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Variant::all());
         $response = $this->get('/literatureVariant/1');
         $response->assertStatus(404);
     }
@@ -106,7 +106,7 @@ class LiteratureVariantTest extends TestCase
         $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
-        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Variant::all());
     }
 
     /**
@@ -148,7 +148,7 @@ class LiteratureVariantTest extends TestCase
         $response = $this->delete(route('variant.destroy', ['variant' => $variant->id]));
         $response->assertStatus(302);
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
-        $this->assertCount(1, LiteratureVariant::all());
+        $this->assertCount(1, Variant::all());
     }
 
     /**
@@ -166,7 +166,7 @@ class LiteratureVariantTest extends TestCase
         $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
-        $this->assertCount(1, LiteratureVariant::all());
+        $this->assertCount(1, Variant::all());
         $this->assertCount(1, Literature::all());
     }
 
@@ -181,7 +181,7 @@ class LiteratureVariantTest extends TestCase
         $this->delete(route('variant.destroy', ['variant' => $variant->id]))
             ->assertRedirect(route('library.index'));
         $this->assertFalse(Storage::exists($file->hashName()));
-        $this->assertCount(0, LiteratureVariant::all());
+        $this->assertCount(0, Variant::all());
         $this->assertCount(0, Literature::all());
     }
 
@@ -265,7 +265,7 @@ class LiteratureVariantTest extends TestCase
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
 
-        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $variant = Variant::query()->findOrFail($variant->id);
         $this->assertEquals($value, $variant->$property);
     }
 
@@ -299,7 +299,7 @@ class LiteratureVariantTest extends TestCase
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHasNoErrors();
 
-        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $variant = Variant::query()->findOrFail($variant->id);
         $this->assertEquals($newFile->hashName(), $variant->url);
         $this->assertTrue(Storage::exists($newFile->hashName()));
         $this->assertFalse(Storage::exists($oldUrl));
@@ -326,7 +326,7 @@ class LiteratureVariantTest extends TestCase
             ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
 
-        $variant = LiteratureVariant::query()->findOrFail($variant->id);
+        $variant = Variant::query()->findOrFail($variant->id);
         $this->assertEquals($oldUrl, $variant->url);
     }
 
@@ -373,7 +373,7 @@ class LiteratureVariantTest extends TestCase
 
     /**
      * Helper for uploading a literature variant.
-     * @return array{TestResponse<Response>, LiteratureVariant}
+     * @return array{TestResponse<Response>, Variant}
      */
     private function uploadVariantWithoutErrors(?int $literatureId = null, ?File $file = null, ?string $lang = null): array
     {
@@ -384,15 +384,15 @@ class LiteratureVariantTest extends TestCase
         $title = fake()->title();
         $description = fake()->sentence();
 
-        $count = count(LiteratureVariant::all());
+        $count = count(Variant::all());
 
         $response = $this->uploadliteratureVariant($literatureId, $file, $title, $description, $language);
         $response->assertStatus(201);
-        $this->assertCount($count + 1, LiteratureVariant::all());
+        $this->assertCount($count + 1, Variant::all());
 
         $this->assertTrue(Storage::exists($file->hashName()));
 
-        $variant = LiteratureVariant::query()->where('literature_id', '=', $literatureId)->where('language', '=', $language)->first();
+        $variant = Variant::query()->where('literature_id', '=', $literatureId)->where('language', '=', $language)->first();
         $this->assertNotNull($variant);
         $this->assertEquals($file->hashName(), $variant->url);
         $this->assertEquals($title, $variant->title);

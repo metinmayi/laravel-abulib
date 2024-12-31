@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteVariantAction;
-use App\Actions\EditLiteratureVariantAction;
-use App\Actions\UploadLiteratureVariantAction;
-use App\Data\UploadLiteratureVariantData;
-use App\Http\Requests\LiteratureVariantUpdateRequest;
-use App\Models\LiteratureVariant as ModelsLiteratureVariant;
+use App\Actions\EditVariantAction;
+use App\Actions\UploadVariantAction;
+use App\Data\UploadVariantData;
+use App\Http\Requests\VariantUpdateRequest;
+use App\Models\Variant as ModelsVariant;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
-class LiteratureVariantController extends Controller
+class VariantController extends Controller
 {
     /**
      * Get literature binary. Used for PDF source.
      */
     public function getLiteratureBinary(int $id): ResponseFactory | Response
     {
-        $variant = ModelsLiteratureVariant::query()->find($id);
+        $variant = ModelsVariant::query()->find($id);
         if (!$variant || !$variant->url) {
             return response(null, 404);
         }
@@ -34,9 +34,9 @@ class LiteratureVariantController extends Controller
     /**
      * Upload a literature variant
      */
-    public function store(UploadLiteratureVariantData $data): RedirectResponse
+    public function store(UploadVariantData $data): RedirectResponse
     {
-        $action = new UploadLiteratureVariantAction();
+        $action = new UploadVariantAction();
 
         [$success] = $action->handle($data->literature_id ?? -1, $data);
         if (!$success) {
@@ -49,10 +49,10 @@ class LiteratureVariantController extends Controller
     /**
      * Edit a variant.
      */
-    public function update(int $variant, LiteratureVariantUpdateRequest $request): RedirectResponse
+    public function update(int $variant, VariantUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $success = (new EditLiteratureVariantAction($variant, $validated))->handle();
+        $success = (new EditVariantAction($variant, $validated))->handle();
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }

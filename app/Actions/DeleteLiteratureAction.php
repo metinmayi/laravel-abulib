@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -29,7 +29,7 @@ class DeleteLiteratureAction
             return false;
         }
 
-        $variants = LiteratureVariant::query()->where('literature_id', $this->id)->get();
+        $variants = Variant::query()->where('literature_id', $this->id)->get();
         foreach ($variants as $variant) {
             $action = new DeleteVariantAction();
             $action->handle($variant->id);

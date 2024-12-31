@@ -6,12 +6,12 @@ use App\Models\Literature;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LiteratureVariant>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Variant>
  */
-class LiteratureVariantFactory extends Factory
+class VariantFactory extends Factory
 {
 
-    protected $model = \App\Models\LiteratureVariant::class;
+    protected $model = \App\Models\Variant::class;
 
     /**
      * Define the model's default state.

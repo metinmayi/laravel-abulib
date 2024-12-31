@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class LiteratureVariantModelTest extends TestCase
+class VariantModelTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -14,7 +14,7 @@ class LiteratureVariantModelTest extends TestCase
      */
     public function test_model_to_array(): void
     {
-        $literature = \App\Models\LiteratureVariant::factory()->make();
+        $literature = \App\Models\Variant::factory()->make();
 
         $this->assertEquals(['title', 'description', 'language', 'url', 'literature_id'], array_keys($literature->toArray()));
     }
@@ -24,7 +24,7 @@ class LiteratureVariantModelTest extends TestCase
      */
     public function test_retrieving_literature(): void
     {
-        $variant = \App\Models\LiteratureVariant::factory()->createOne();
+        $variant = \App\Models\Variant::factory()->createOne();
 
         $this->assertNotNull($variant->literature);
         $this->assertEquals($variant->literature_id, $variant->literature->id);

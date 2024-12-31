@@ -2,17 +2,16 @@
 
 namespace App\Actions;
 
-use App\Data\UploadLiteratureVariantData;
+use App\Data\UploadVariantData;
 use App\Models\Literature;
-use App\Models\LiteratureVariant;
-use Illuminate\Http\UploadedFile;
+use App\Models\Variant;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * Action for uploading literature variant
  */
-class UploadLiteratureVariantAction
+class UploadVariantAction
 {
   /**
    * Constructor.
@@ -25,14 +24,14 @@ class UploadLiteratureVariantAction
    * Main method
    * @return array{bool, int}
    */
-    public function handle(int $literatureId, UploadLiteratureVariantData $data): array
+    public function handle(int $literatureId, UploadVariantData $data): array
     {
         if (! Literature::find($literatureId)) {
             Log::error('Tried to upload a literature variant without an existing literature', ['literature_id' => $literatureId, 'data' => $data]);
             return [false, -1];
         }
 
-        $alreadyExists = LiteratureVariant::where('literature_id', $literatureId)
+        $alreadyExists = Variant::where('literature_id', $literatureId)
             ->where('language', $data->language)
             ->exists();
         if ($alreadyExists) {
@@ -47,7 +46,7 @@ class UploadLiteratureVariantAction
 
         $data->literature_id = $literatureId;
 
-        $variant = new LiteratureVariant((array) $data);
+        $variant = new Variant((array) $data);
         return [$variant->save(), $variant->id];
     }
 }

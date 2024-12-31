@@ -25,7 +25,7 @@ class LiteratureModelTest extends TestCase
     public function test_retrieving_literature_variants(): void
     {
         $literature = \App\Models\Literature::factory()->createOne();
-        $variant = \App\Models\LiteratureVariant::factory()->recycle($literature)->createOne();
+        $variant = \App\Models\Variant::factory()->recycle($literature)->createOne();
 
         $this->assertCount(1, $literature->variants);
         $this->assertEquals($variant->id, $literature->variants->firstOrFail()->id);

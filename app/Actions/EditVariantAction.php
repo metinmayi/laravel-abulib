@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Models\LiteratureVariant;
+use App\Models\Variant;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Action for editing Literature
  */
-class EditLiteratureVariantAction
+class EditVariantAction
 {
   /**
    * Constructor.
@@ -26,7 +26,7 @@ class EditLiteratureVariantAction
    */
     public function handle(): bool
     {
-        $variant = LiteratureVariant::query()->find($this->id);
+        $variant = Variant::query()->find($this->id);
         if (! $variant) {
             Log::error("Variant with id $this->id not found when attempting to edit");
             return false;
@@ -60,7 +60,7 @@ class EditLiteratureVariantAction
     /**
      * Edit the file of the variant.
      */
-    protected function editFile(UploadedFile $file, LiteratureVariant &$variant): bool
+    protected function editFile(UploadedFile $file, Variant &$variant): bool
     {
         $url = Storage::putFile('', $file);
         if (! $url) {
@@ -80,9 +80,9 @@ class EditLiteratureVariantAction
     /**
      * Edit the language of the variant.
      */
-    protected function editLanguage(string $language, LiteratureVariant &$variant): bool
+    protected function editLanguage(string $language, Variant &$variant): bool
     {
-        $alreadyExist = LiteratureVariant::query()
+        $alreadyExist = Variant::query()
             ->where('language', $language)
             ->where('literature_id', $variant->literature_id)
             ->first();

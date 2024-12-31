@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\DeleteLiteratureAction;
 use App\Actions\UploadLiteratureAction;
-use App\Actions\UploadLiteratureVariantAction;
+use App\Actions\UploadVariantAction;
 use App\Data\UploadLiteratureData;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +24,7 @@ class LiteratureController extends Controller
      */
     public function store(UploadLiteratureData $data): RedirectResponse
     {
-        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadLiteratureVariantAction());
+        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadVariantAction());
         $uploadLiteratureAction->handle();
         return redirect()->route('library.index');
     }
