@@ -16,7 +16,7 @@
 </head>
 
 <body class="min-h-screen flex bg-gray-50 text-gray-800">
-    @component('components.siderbar')
+    @component('components.header')
     @endcomponent
     <!-- Forms -->
     <main class="max-w-6xl p-6 mt-10 w-3/4">
@@ -67,7 +67,8 @@
                             <!-- Language File Upload (Optional for each language) -->
                             <label for="{{ $val . '-file' }}"
                                 class="block text-sm font-medium mb-2">{{ ucfirst($val) . ' File' }}
-                                (Optional):</label>
+                                (Optional)
+                                :</label>
                             <input type="file" id="{{ $val . '-file' }}"
                                 name="literatures[{{ $val }}][file]" accept="application/pdf"
                                 class="block w-full p-2 border rounded mb-4">

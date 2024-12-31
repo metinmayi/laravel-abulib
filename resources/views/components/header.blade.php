@@ -851,6 +851,14 @@
                             </a>
                         </li>
                     @endguest
+                    @auth
+                        <li class="cs-li">
+                            <a href="{{ route('literature.create') }}"
+                                class="cs-li-link {{ Request::is('literature/create') ? 'cs-active' : '' }}">
+                                Upload Literature
+                            </a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </nav>

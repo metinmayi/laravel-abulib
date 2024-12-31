@@ -26,7 +26,7 @@
             <ul class="cs-card-group">
                 @foreach ($literatureList as $literature)
                     <li class="cs-item">
-                        <a href="" class="cs-link">
+                        <a href="{{ "reader/$literature->variantId" }}" class="cs-link">
                             <div class="cs-info">
                                 <div class="cs-flex">
                                     <span class="cs-tag">{{ ucfirst($literature->category) }}</span>
