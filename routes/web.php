@@ -4,8 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\LiteratureController;
+use App\Http\Controllers\ReaderController;
 use App\Http\Controllers\VariantController;
-use App\Http\Controllers\ReadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('landing.index'))->name('landingPage');
@@ -28,5 +28,5 @@ Route::get('/literatureVariant/{id}', [VariantController::class, 'getLiteratureB
 
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 
-Route::get('/reader/{variantId}', [ReadController::class, 'index'])->name('read.index');
-Route::get('/reader/variant/{id}', [ReadController::class, 'getLiteratureBinary'])->name('read.getLiteratureBinary');
+Route::get('/reader/{variantId}', [ReaderController::class, 'index'])->name('read.index');
+Route::get('/reader/variant/{id}', [ReaderController::class, 'getLiteratureBinary'])->name('read.getLiteratureBinary');

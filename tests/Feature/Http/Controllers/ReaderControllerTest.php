@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class ReaderTest extends TestCase
+class ReaderControllerTest extends TestCase
 {
     use RefreshDatabase;
 

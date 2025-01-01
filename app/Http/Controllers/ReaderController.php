@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
-class ReadController extends Controller
+class ReaderController extends Controller
 {
     /**
      * Display the reader page.
