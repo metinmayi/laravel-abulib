@@ -9,10 +9,10 @@
 </head>
 
 <body class="min-h-screen flex bg-gray-50 text-gray-800">
-    @component('components.siderbar')
+    @component('components.header')
     @endcomponent
 
-    <div class="w-3/4 p-6 bg-white shadow-md rounded-lg">
+    <div class="pt-36 w-3/4 p-6 bg-white shadow-md rounded-lg">
         <h1 class="text-2xl font-bold mb-6">Edit Literature</h1>
 
         <!-- Current Information -->
