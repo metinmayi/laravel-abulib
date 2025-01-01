@@ -168,6 +168,20 @@
     border: 2px solid #ffba43;
     overflow: hidden;
   }
+  #blog-1540 .cs-edit {
+    font-size: 1rem;
+    line-height: 1.2em;
+    text-align: center;
+    width: fit-content;
+    margin-right: 0;
+    padding: 0.5rem 1rem;
+    color: 'black';
+    border-radius: 6.25rem;
+    display: block;
+    position: relative;
+    border: 2px solid #d86704;
+    overflow: hidden;
+  }
   #blog-1540 .cs-date {
     font-size: 1rem;
     line-height: 1.5em;

@@ -9,13 +9,9 @@
     @vite('resources/css/library.css')
 </head>
 
-<body class="">
+<body>
     @component('components.header')
     @endcomponent
-    <!-- ============================================ -->
-    <!--                    Blog                      -->
-    <!-- ============================================ -->
-
     <section id="blog-1540">
         <div class="cs-container">
             <div class="cs-content">
@@ -30,12 +26,6 @@
                             <div class="cs-info">
                                 <div class="cs-flex">
                                     <span class="cs-tag">{{ ucfirst($literature->category) }}</span>
-                                    <span class="cs-date">
-                                        <img class="cs-icon" loading="lazy" decoding="async"
-                                            src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Images/Icons/calander.svg"
-                                            alt="icon" width="24" height="24" aria-hidden="true">
-                                        24 Sep, 2023
-                                    </span>
                                 </div>
                                 <h3 class="cs-h3">{{ ucfirst($literature->title) }}</h3>
                                 <p class="cs-item-text">{{ ucfirst($literature->description) }}</p>
@@ -50,6 +40,11 @@
                                 </div>
                             </div>
                         </a>
+                        @auth
+                            <span class="cs-edit mt-5">
+                                <a href="/variant/{{ $literature->variantId }}/edit">Edit</a>
+                            </span>
+                        @endauth
                     </li>
                 @endforeach
             </ul>

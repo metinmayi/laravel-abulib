@@ -28,7 +28,7 @@ class LibraryViewTest extends TestCase
                 self::TEST_CATEGORY,
                 self::TEST_TITLE,
                 self::TEST_DESCRIPTION,
-                implode(',', self::TEST_LANGUAGES),
+                ...self::TEST_LANGUAGES,
             ]);
     }
 
@@ -40,7 +40,7 @@ class LibraryViewTest extends TestCase
         $this->actingAs(User::factory()->create());
 
         $this->getContent()
-            ->assertSeeTextInOrder(['Admin Section', 'Edit']);
+            ->assertSee('Edit');
     }
 
     /**
@@ -49,7 +49,7 @@ class LibraryViewTest extends TestCase
     public function test_library_doenst_render_edit_button_if_logged_out(): void
     {
         $this->getContent()
-            ->assertDontSeeText('Admin Section');
+            ->assertDontSeeText('Edit');
     }
 
     /**
