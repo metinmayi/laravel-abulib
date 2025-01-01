@@ -26,7 +26,7 @@ class VariantTest extends TestCase
     /**
      * Test that a 404 is returned if the literature variant is not found
      */
-    public function test_get_literature_binary_404_if_not_found(): void
+    public function testGetLiteratureBinary404IfNotFound(): void
     {
         $this->assertCount(0, Variant::all());
         $response = $this->get('/literatureVariant/1');
@@ -36,7 +36,7 @@ class VariantTest extends TestCase
     /**
      * Get literature binary
      */
-    public function test_get_literature_binary(): void
+    public function testGetLiteratureBinary(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
         $this->assertNotNull($variant->url);
@@ -50,7 +50,7 @@ class VariantTest extends TestCase
     /**
      * Test validation for uploading a variant
      */
-    public function test_upload_literature_variant_validation_errors(): void
+    public function testUploadLiteratureVariantValidationErrors(): void
     {
             $this->actingAs(User::factory()->createOne())
                 ->post(route('variant.store', ['variant' => -1]))
@@ -61,10 +61,10 @@ class VariantTest extends TestCase
     /**
      * Test uploading a literature variant without an existing literature yields error
      */
-    public function test_upload_literature_variant_without_existing_literature(): void
+    public function testUploadLiteratureVariantWithoutExistingLiterature(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
-        $response = $this->uploadliteratureVariant(-1, $file);
+        $response = $this->uploadLiteratureVariant(-1, $file);
 
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
@@ -73,7 +73,7 @@ class VariantTest extends TestCase
     /**
      * Test uploading a literature variant
      */
-    public function test_upload_literature_variant(): void
+    public function testUploadLiteratureVariant(): void
     {
         $this->uploadVariantWithoutErrors();
     }
@@ -81,14 +81,14 @@ class VariantTest extends TestCase
     /**
      * Test uploading a literature variant with an existing language yields error
      */
-    public function test_upload_variant_with_existing_language_yields_error(): void
+    public function testUploadVariantWithExistingLanguageYieldsError(): void
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
         $language = fake()->languageCode();
 
-        $this->uploadliteratureVariant($literature->id, $file, lang: $language);
-        $response = $this->uploadliteratureVariant($literature->id, $file, lang: $language);
+        $this->uploadLiteratureVariant($literature->id, $file, lang: $language);
+        $response = $this->uploadLiteratureVariant($literature->id, $file, lang: $language);
 
         $response->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
         $response->assertStatus(302);
@@ -97,7 +97,7 @@ class VariantTest extends TestCase
     /**
      * Test deleting a variant
      */
-    public function test_delete_variant_removes_file_and_entry(): void
+    public function testDeleteVariantRemovesFileAndEntry(): void
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
@@ -112,7 +112,7 @@ class VariantTest extends TestCase
     /**
      * Test deleting a variant validation
      */
-    public function test_validation_errors_when_deleting_variant(): void
+    public function testValidationErrorsWhenDeletingVariant(): void
     {
         Exceptions::fake();
 
@@ -125,7 +125,7 @@ class VariantTest extends TestCase
     /**
      * Test deleting a variant validation
      */
-    public function test_provide_error_if_deleting_non_existing_variant(): void
+    public function testProvideErrorIfDeletingNonExistingVariant(): void
     {
         $this->actingAs(User::factory()->createOne())
             ->delete(route('variant.destroy', ['variant' => -1]))
@@ -136,7 +136,7 @@ class VariantTest extends TestCase
     /**
      * Test deleting a variant gives error message if cannot delete related file
      */
-    public function test_provide_error_if_cannot_delete_file_when_deleting_variant(): void
+    public function testProvideErrorIfCannotDeleteFileWhenDeletingVariant(): void
     {
         $literature = Literature::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 100);
@@ -154,7 +154,7 @@ class VariantTest extends TestCase
     /**
      * Test that deleting a variant doesn't delete the related literature.
      */
-    public function test_deleting_variant_does_not_delete_literature(): void
+    public function testDeletingVariantDoesNotDeleteLiterature(): void
     {
         $literature = Literature::factory()->createOne();
         $this->uploadVariantWithoutErrors(literatureId: $literature->id, lang:'swedish');
@@ -172,7 +172,7 @@ class VariantTest extends TestCase
 
     /**
      */
-    public function test_deleting_last_variant_deletes_literature(): void
+    public function testDeletingLastVariantDeletesLiterature(): void
     {
         $file = UploadedFile::fake()->create('test.pdf', 100);
         [$res, $variant] = $this->uploadVariantWithoutErrors(file: $file);
@@ -188,7 +188,7 @@ class VariantTest extends TestCase
     /**
      * Test that the update variant endpoint requires authentication
      */
-    public function test_update_variant_endpoint_requires_auth(): void
+    public function testUpdateVariantEndpointRequiresAuth(): void
     {
         $this->patch(route('variant.update', ['variant' => 1]))
             ->assertStatus(302)
@@ -202,7 +202,7 @@ class VariantTest extends TestCase
      * @param array<string>         $errors      Expected errors.
      */
     #[DataProvider('updateVariantValidationProvider')]
-    public function test_update_variant_endpoint_validation(array $input, bool $shouldError = false, array $errors = []): void
+    public function testUpdateVariantEndpointValidation(array $input, bool $shouldError = false, array $errors = []): void
     {
         $this->actingAs(User::factory()->createOne());
         $response = $this->patch(route('variant.update', ['variant' => 1]), $input);
@@ -238,7 +238,7 @@ class VariantTest extends TestCase
     /**
      * Test updating a variant that does not exist yields errors and logs.
      */
-    public function test_update_variant_that_does_not_exist(): void
+    public function testUpdateVariantThatDoesNotExist(): void
     {
         Log::shouldReceive('error')->once();
 
@@ -254,7 +254,7 @@ class VariantTest extends TestCase
      * Test updating a variant title, description and language
      */
     #[DataProvider('updateVariantPropertyProvider')]
-    public function test_update_variant_property(string $property, string $value): void
+    public function testUpdateVariantProperty(string $property, string $value): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
@@ -285,7 +285,7 @@ class VariantTest extends TestCase
     /**
      * Test updating a variant file
      */
-    public function test_update_variant_file(): void
+    public function testUpdateVariantFile(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
         $oldUrl = $variant->url;
@@ -308,7 +308,7 @@ class VariantTest extends TestCase
     /**
      * Test updating a variant file yields error if uploading new file fails
      */
-    public function test_update_variant_file_fails_if_uploading_new_file_fails(): void
+    public function testUpdateVariantFileFailsIfUploadingNewFileFails(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
         $oldUrl = $variant->url;
@@ -333,7 +333,7 @@ class VariantTest extends TestCase
     /**
      * Test updating a variant loggs error if deleting old file fails
      */
-    public function test_update_variant_file_fails_if_deleting_old_file_fails(): void
+    public function testUpdateVariantFileFailsIfDeletingOldFileFails(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors();
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
@@ -356,7 +356,7 @@ class VariantTest extends TestCase
     /**
      * Test updating a variant language to an existing language yields error
      */
-    public function test_update_variant_language_to_existing_language_yields_error(): void
+    public function testUpdateVariantLanguageToExistingLanguageYieldsError(): void
     {
         [$res, $variant] = $this->uploadVariantWithoutErrors(lang: 'My-Test-Lang');
 
@@ -386,7 +386,7 @@ class VariantTest extends TestCase
 
         $count = count(Variant::all());
 
-        $response = $this->uploadliteratureVariant($literatureId, $file, $title, $description, $language);
+        $response = $this->uploadLiteratureVariant($literatureId, $file, $title, $description, $language);
         $response->assertStatus(201);
         $this->assertCount($count + 1, Variant::all());
 
@@ -407,7 +407,7 @@ class VariantTest extends TestCase
      * Helper for uploading a literature variant.
      * @return TestResponse<Response>
      */
-    private function uploadliteratureVariant(int $literatureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
+    private function uploadLiteratureVariant(int $literatureId, File $file, ?string $title = null, ?string $description = null, ?string $lang = null): TestResponse
     {
         $this->actingAs(User::factory()->createOne());
         $this->storage = Storage::fake();
