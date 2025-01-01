@@ -8,11 +8,8 @@ use App\Actions\UploadVariantAction;
 use App\Data\UploadVariantData;
 use App\Http\Requests\VariantUpdateRequest;
 use App\Models\Variant as ModelsVariant;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 
 class VariantController extends Controller
 {
