@@ -29,3 +29,4 @@ Route::get('/literatureVariant/{id}', [VariantController::class, 'getLiteratureB
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 
 Route::get('/reader/{variantId}', [ReadController::class, 'index'])->name('read.index');
+Route::get('/reader/variant/{id}', [ReadController::class, 'getLiteratureBinary'])->name('read.getLiteratureBinary');

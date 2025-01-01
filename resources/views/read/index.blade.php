@@ -6,46 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Literature Management</title>
     @vite('resources/css/app.css')
+    @vite('resources/css/read.css')
 </head>
 
-<body class="min-h-screen flex bg-gray-50 text-gray-800">
-    @component('components.siderbar')
+<body>
+    @component('components.header')
     @endcomponent
-    <!-- Forms -->
-
-    <div class="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-lg w-3/4">
-        <h1 class="text-3xl font-bold text-blue-800">{{ $literatureItem['title'] }}</h1>
-
-        <!-- Description Section -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-blue-700">Description:</h3>
-            <p class="mt-2 text-gray-700">{{ $literatureItem['description'] }}</p>
-        </div>
-
-        <!-- Available Languages Section -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-blue-700">Available Languages:</h3>
-            <p class="mt-2 text-gray-700">{{ $literatureItem['availableLanguages'] }}</p>
-        </div>
-
-        <!-- Category Section -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-blue-700">Category:</h3>
-            <p class="mt-2 text-gray-700">{{ $literatureItem['category'] }}</p>
-        </div>
-
-        <!-- PDF Reader Section -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-blue-700">Read the Book:</h3>
-            <object class="w-full h-screen border rounded-lg" data="/literatureVariant/{{ $literatureItem['id'] }}"
-                type="application/pdf">
-                <p class="text-gray-700">Your browser does not support PDFs.
-                    <a href="path/to/your/book.pdf" class="text-blue-600 hover:underline">Download the PDF</a> to read
-                    it.
-                </p>
+    <section class="flex justify-center align-center pt-36">
+        <div class="w-3/4">
+            <div>
+                <h3 class="text-orange-400 text-3xl">{{ ucfirst($literatureItem['category']) }}</h3>
+                <h1 class="cs-title">{{ $literatureItem['title'] }}</h1>
+                <p class="text-lg">{{ $literatureItem['description'] }}</p>
+                <h4 class="text-2xl mt-3">Languages: </h4>
+                <ul class="list-disc ml-5 mt-2 mb-5">
+                    @foreach ($literatureItem['availableLanguages'] as $lang)
+                        <li>{{ ucfirst($lang) }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <object class="w-7/8 h-screen">
+                <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
+                    type="application/pdf" width="100%" height="600px" />
             </object>
-        </div>
-    </div>
-</body>
+    </section>
 
 </html>

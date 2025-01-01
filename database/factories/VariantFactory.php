@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Literature;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Variant>
@@ -24,7 +26,7 @@ class VariantFactory extends Factory
             'title' => fake()->sentence(1),
             'description' => fake()->paragraph(2),
             'language' => fake()->randomElement(Literature::LANGUAGES),
-            'url' => fake()->url(),
+            'url' => Storage::putFile('', UploadedFile::fake()->create('test.pdf', 100)),
             'literature_id' => Literature::factory(),
         ];
     }

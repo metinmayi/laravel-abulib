@@ -24,30 +24,6 @@ class VariantTest extends TestCase
     protected \Illuminate\Contracts\Filesystem\Filesystem $storage;
 
     /**
-     * Test that a 404 is returned if the literature variant is not found
-     */
-    public function testGetLiteratureBinary404IfNotFound(): void
-    {
-        $this->assertCount(0, Variant::all());
-        $response = $this->get('/literatureVariant/1');
-        $response->assertStatus(404);
-    }
-
-    /**
-     * Get literature binary
-     */
-    public function testGetLiteratureBinary(): void
-    {
-        [$res, $variant] = $this->uploadVariantWithoutErrors();
-        $this->assertNotNull($variant->url);
-
-        $this->get('/literatureVariant/' . $variant->id)
-            ->assertStatus(200)
-            ->assertHeader('Content-Type', 'application/pdf')
-            ->assertContent(Storage::get($variant->url) ?? '');
-    }
-
-    /**
      * Test validation for uploading a variant
      */
     public function testUploadLiteratureVariantValidationErrors(): void

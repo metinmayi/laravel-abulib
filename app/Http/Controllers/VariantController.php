@@ -17,22 +17,6 @@ use Illuminate\Support\Facades\Storage;
 class VariantController extends Controller
 {
     /**
-     * Get literature binary. Used for PDF source.
-     */
-    public function getLiteratureBinary(int $id): ResponseFactory | Response
-    {
-        $variant = ModelsVariant::query()->find($id);
-        if (!$variant || !$variant->url) {
-            return response(null, 404);
-        }
-
-        $content = Storage::get($variant->url);
-        return response($content, 200, [
-            'Content-Type' => 'application/pdf',
-        ]);
-    }
-
-    /**
      * Upload a literature variant
      */
     public function store(UploadVariantData $data): RedirectResponse
