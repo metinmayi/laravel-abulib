@@ -15,11 +15,11 @@
     </script>
 </head>
 
-<body class="min-h-screen flex bg-gray-50 text-gray-800">
+<body>
     @component('components.header')
     @endcomponent
     <!-- Forms -->
-    <main class="max-w-6xl p-6 mt-10 w-3/4">
+    <main class="max-w-6xl p-6 pt-36 w-3/4">
         <h2 class="text-2xl font-semibold mb-4">Upload New Literature</h2>
         <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data">
             @csrf
