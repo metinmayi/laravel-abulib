@@ -16,12 +16,4 @@ final class AdminController extends Controller
         $literature = Literature::query()->findOrFail($literatureId);
         return view('admin.newvariant', ['literature_id' => $literature->id]);
     }
-
-    /**
-     * Edit literature page
-     */
-    public function editVariant(int $id): View
-    {
-        return view('admin.editvariant', ['variant' => Variant::find($id)]);
-    }
 }

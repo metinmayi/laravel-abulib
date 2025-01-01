@@ -17,7 +17,6 @@ Route::group(['middleware' => 'auth'], function () {
   ]);
 
   Route::get('/admin/newvariant/{id}', [AdminController::class, 'newVariant'])->name('admin.newvariantpage');
-  Route::get('/admin/editvariant/{id}', [AdminController::class, 'editVariant'])->name('admin.editvariantpage');
 });
 
 Route::post('/register', [AuthController::class, 'register']);

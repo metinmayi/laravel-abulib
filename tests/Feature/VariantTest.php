@@ -243,10 +243,8 @@ class VariantTest extends TestCase
         Log::shouldReceive('error')->once();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => -1]))
             ->patch(route('variant.update', ['variant' => -1]), ['title' => 'test'])
             ->assertStatus(302)
-            ->assertRedirect(route('admin.editvariantpage', ['id' => -1]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
     }
 
@@ -259,10 +257,10 @@ class VariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
+            ->from(route('variant.edit', ['variant' => $variant->id]))
             ->patch(route('variant.update', ['variant' => $variant->id]), [$property => $value])
             ->assertStatus(302)
-            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
+            ->assertRedirect(route('variant.edit', ['variant' => $variant->id]))
             ->assertSessionHasNoErrors();
 
         $variant = Variant::query()->findOrFail($variant->id);
@@ -293,10 +291,10 @@ class VariantTest extends TestCase
 
         $newFile = UploadedFile::fake()->create('test.pdf', 100);
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
+            ->from(route('variant.edit', ['variant' => $variant->id]))
             ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
-            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
+            ->assertRedirect(route('variant.edit', ['variant' => $variant->id]))
             ->assertSessionHasNoErrors();
 
         $variant = Variant::query()->findOrFail($variant->id);
@@ -320,10 +318,8 @@ class VariantTest extends TestCase
         Storage::shouldReceive('delete')->never();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
-            ->assertRedirect(route('admin.editvariantpage', ['id' => $variant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
 
         $variant = Variant::query()->findOrFail($variant->id);
@@ -347,7 +343,6 @@ class VariantTest extends TestCase
         Log::shouldReceive('error')->once();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => $variant->id]))
             ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
@@ -364,10 +359,10 @@ class VariantTest extends TestCase
 
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('admin.editvariantpage', ['id' => $secondVariant->id]))
+            ->from(route('variant.edit', ['variant' => $secondVariant->id]))
             ->patch(route('variant.update', ['variant' => $secondVariant->id]), ['language' => $variant->language])
             ->assertStatus(302)
-            ->assertRedirect(route('admin.editvariantpage', ['id' => $secondVariant->id]))
+            ->assertRedirect(route('variant.edit', ['variant' => $secondVariant->id]))
             ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
     }
 

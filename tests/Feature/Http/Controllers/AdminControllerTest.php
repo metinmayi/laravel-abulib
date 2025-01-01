@@ -21,9 +21,9 @@ class AdminControllerTest extends TestCase
     {
         $variant = Variant::factory()->createOne();
         $this->actingAs(User::factory()->create())
-            ->get(route('admin.editvariantpage', ['id' => $variant->id]))
+            ->get(route('variant.edit', ['variant' => $variant->id]))
             ->assertStatus(200)
-            ->assertViewIs('admin.editvariant');
+            ->assertViewIs('variant.edit');
     }
 
     /**
@@ -57,7 +57,6 @@ class AdminControllerTest extends TestCase
     {
         return [
             ['/admin/newvariant/-1', 'admin.newvariant'],
-            ['/admin/editvariant/1', 'admin.editvariant'],
         ];
     }
 }
