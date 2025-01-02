@@ -23,9 +23,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', fn() => view('login'));
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
-// Should be moved to reader
-Route::get('/literatureVariant/{id}', [VariantController::class, 'getLiteratureBinary']);
-
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 
 Route::get('/reader/{variantId}', [ReaderController::class, 'index'])->name('read.index');
