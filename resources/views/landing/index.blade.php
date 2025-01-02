@@ -19,16 +19,12 @@
     <section id="hero-856">
         <div class="cs-container">
             <div class="cs-content">
-                <span class="cs-topper">Psychiatrist, Father and Husband</span>
+                <span class="cs-topper">A SWEDISH PHYSICIAN FROM KURDISTAN</span>
                 <h1 class="cs-title">
-                    A Lifetime of Work and Literature</h1>
+                    A Lifetime of Struggle and Success</h1>
                 <p class="cs-text">
-                    Abdulbaghi Ahmad is an expert in child mental health and psychiatry, specializing in childhood
-                    trauma and posttraumatic recovery. With extensive professional and volunteer experience in clinical
-                    settings, research, teaching, and administration, he has developed innovative methods for prevention
-                    and treatment. His work blends a bio-psycho-social model of trauma and growth, focusing on improving
-                    children's mental health. He has also authored research, books, and poems, and is currently
-                    exploring how indigenous food practices can foster healthy environments for child development.
+                    Abdulbaqi Mayi (Ahmad) is a child mental health expert, specialist in child and adolescent
+                    psychiatry and posttraumatic growth...etc.
                 </p>
             </div>
             <!--Hero Image-->

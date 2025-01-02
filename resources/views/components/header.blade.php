@@ -815,9 +815,9 @@
 <header id="cs-navigation">
     <div class="cs-container">
         <!--Nav Logo-->
-        <a href="" class="cs-logo" aria-label="back to home">
-            <img src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Images/Logos/consulting-logo.svg" alt="logo"
-                width="197" height="43" aria-hidden="true" decoding="async">
+        <a href="{{ route('landingPage') }}" class="cs-logo" aria-label="back to home">
+            <img src="{{ URL::asset('images/daisy.png') }}" alt="logo" width="197" height="50" aria-hidden="true"
+                decoding="async">
         </a>
         <!--Navigation List-->
         <nav class="cs-nav" role="navigation">
