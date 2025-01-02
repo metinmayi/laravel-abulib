@@ -14,10 +14,9 @@ class VariantUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required_without_all:description,language,file|string',
-            'description' => 'required_without_all:title,language,file|string',
-            'language' => 'required_without_all:title,description,file|string',
-            'file' => 'required_without_all:title,description,language|file',
+            'title' => 'required_without_all:description,file|string|nullable',
+            'description' => 'required_without_all:title,file|string|nullable',
+            'file' => 'required_without_all:title,description|file|nullable',
         ];
     }
 }

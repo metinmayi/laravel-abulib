@@ -1,6 +1,6 @@
-* Fix page for reading literature
-* Add Edit button to literature item
-* Fix Edit page
+* Other language nav button in reader page
+* Fix Logo
+* Domain + Cert
 * Laravel debugger tool, check amount of queries performed etc...
 * Caching DB queries or other things?
   - Will do as improvement when project is usable.

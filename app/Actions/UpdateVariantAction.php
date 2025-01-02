@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Action for editing Literature
  */
-class EditVariantAction
+class UpdateVariantAction
 {
   /**
    * Constructor.

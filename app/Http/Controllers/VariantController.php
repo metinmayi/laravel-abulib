@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteVariantAction;
-use App\Actions\EditVariantAction;
+use App\Actions\UpdateVariantAction;
 use App\Actions\UploadVariantAction;
 use App\Data\UploadVariantData;
 use App\Http\Requests\VariantUpdateRequest;
@@ -33,7 +33,7 @@ class VariantController extends Controller
      */
     public function edit(int $variant): View
     {
-        return view('variant.edit', ['variant' => ModelsVariant::findOrFail($variant)]);
+        return view('variant.edit', ['variant' => ModelsVariant::findOrFail($variant), 'variants' => ModelsVariant::all()]);
     }
 
     /**
@@ -42,7 +42,7 @@ class VariantController extends Controller
     public function update(int $variant, VariantUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $success = (new EditVariantAction($variant, $validated))->handle();
+        $success = (new UpdateVariantAction($variant, $validated))->handle();
         if (!$success) {
             return redirect()->back()->with('Error', 'Something went wrong. Contact your son.');
         }
