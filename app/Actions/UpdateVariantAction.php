@@ -36,12 +36,6 @@ class UpdateVariantAction
             $variant->title = $this->data['title'];
         }
 
-        if (isset($this->data['language']) && is_string($this->data['language'])) {
-            if (! $this->editLanguage($this->data['language'], $variant)) {
-                return false;
-            }
-        }
-
         if (isset($this->data['description']) && is_string($this->data['description'])) {
             $variant->description = $this->data['description'];
         }
@@ -74,24 +68,6 @@ class UpdateVariantAction
         }
 
         $variant->url = $url;
-        return true;
-    }
-
-    /**
-     * Edit the language of the variant.
-     */
-    protected function editLanguage(string $language, Variant &$variant): bool
-    {
-        $alreadyExist = Variant::query()
-            ->where('language', $language)
-            ->where('literature_id', $variant->literature_id)
-            ->first();
-        if ($alreadyExist) {
-            Log::error("Language $language already exists for literature with id $variant->literature_id");
-            return false;
-        }
-
-        $variant->language = $language;
         return true;
     }
 }

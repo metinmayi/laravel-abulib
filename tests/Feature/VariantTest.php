@@ -197,16 +197,14 @@ class VariantTest extends TestCase
      */
     public static function updateVariantValidationProvider(): array
     {
-        $errors = ['title', 'description', 'language', 'file'];
+        $errors = ['title', 'description', 'file'];
         return [
             [[], true, $errors],
             [['title' => ''],true, $errors],
             [['description' => ''],true,  $errors],
-            [['language' => ''], true, $errors],
             [['file' => ''], true, $errors],
             [['title' => 'test'], false, []],
             [['description' => 'test'], false, []],
-            [['language' => 'test'], false, []],
             [['file' => UploadedFile::fake()->create('test.pdf', 100)], false, []],
         ];
     }
@@ -233,10 +231,7 @@ class VariantTest extends TestCase
         [$res, $variant] = $this->uploadVariantWithoutErrors();
 
         $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.edit', ['variant' => $variant->id]))
             ->patch(route('variant.update', ['variant' => $variant->id]), [$property => $value])
-            ->assertStatus(302)
-            ->assertRedirect(route('variant.edit', ['variant' => $variant->id]))
             ->assertSessionHasNoErrors();
 
         $variant = Variant::query()->findOrFail($variant->id);
@@ -252,7 +247,6 @@ class VariantTest extends TestCase
         return [
             ['title', 'new title'],
             ['description', 'new description'],
-            ['language', 'new language'],
         ];
     }
 
@@ -322,24 +316,6 @@ class VariantTest extends TestCase
             ->patch(route('variant.update', ['variant' => $variant->id]), ['file' => $newFile])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
-    }
-
-    /**
-     * Test updating a variant language to an existing language yields error
-     */
-    public function testUpdateVariantLanguageToExistingLanguageYieldsError(): void
-    {
-        [$res, $variant] = $this->uploadVariantWithoutErrors(lang: 'My-Test-Lang');
-
-        [$res, $secondVariant] = $this->uploadVariantWithoutErrors($variant->literature_id, lang:'Another-Test-Lang');
-
-
-        $this->actingAs(User::factory()->createOne())
-            ->from(route('variant.edit', ['variant' => $secondVariant->id]))
-            ->patch(route('variant.update', ['variant' => $secondVariant->id]), ['language' => $variant->language])
-            ->assertStatus(302)
-            ->assertRedirect(route('variant.edit', ['variant' => $secondVariant->id]))
-            ->assertSessionHas(['Error' => 'Something went wrong. Contact your son.']);
     }
 
     /**
