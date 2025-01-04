@@ -19,7 +19,7 @@
     @component('components.header')
     @endcomponent
     <div class="max-w-4xl mx-auto pt-36">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Upload New Literature</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Upload <span class="text-orange-600">New Literature</span></h1>
 
         <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data">
             @csrf
@@ -38,7 +38,7 @@
                 <div class="overflow-hidden bg-white shadow rounded-lg">
                     <details class="w-full">
                         <summary
-                            class="px-6 py-4 bg-gray-50 border-b border-gray-200 font-medium text-gray-900 cursor-pointer hover:bg-gray-100">
+                            class="px-6 py-4 bg-orange-100 border-b border-gray-200 font-medium text-gray-900 cursor-pointer hover:bg-orange-200">
                             {{ ucfirst($val) }}</summary>
                         <div class="p-6 space-y-4">
                             <div>

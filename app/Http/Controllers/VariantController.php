@@ -34,7 +34,7 @@ class VariantController extends Controller
     public function edit(int $variant): View
     {
         $variant = Variant::query()->findOrFail($variant);
-        $variants = $variant->literature->variants->all();
+        $variants = $variant->literature?->variants->all();
         return view('variant.edit', ['variant' => $variant, 'variants' => $variants]);
     }
 
