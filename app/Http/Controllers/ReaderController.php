@@ -18,11 +18,11 @@ class ReaderController extends Controller
     {
         $variant = Variant::query()->findOrFail($variantId)->toArray();
         $literature = Literature::query()->findOrFail($variant['literature_id'])->toArray();
-        $languages = Variant::query()
+        $variants = Variant::query()
             ->where('literature_id', $variant['literature_id'])
             ->whereNot('url', null)
-            ->pluck('language')->toArray();
-        $variant['availableLanguages'] = $languages;
+            ->get();
+        $variant['availableVariants'] = $variants;
         $variant['category'] = $literature['category'];
         return view('read.index', ['literatureItem' => $variant]);
     }

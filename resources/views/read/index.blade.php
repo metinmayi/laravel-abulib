@@ -18,17 +18,22 @@
                 <h3 class="text-orange-400 text-3xl">{{ ucfirst($literatureItem['category']) }}</h3>
                 <h1 class="cs-title">{{ $literatureItem['title'] }}</h1>
                 <p class="text-lg">{{ $literatureItem['description'] }}</p>
-                <h4 class="text-2xl mt-3">Languages: </h4>
-                <ul class="list-disc ml-5 mt-2 mb-5">
-                    @foreach ($literatureItem['availableLanguages'] as $lang)
-                        <li>{{ ucfirst($lang) }}</li>
+                <div class="flex mt-5 flex-wrap gap-4 mb-8">
+                    @foreach ($literatureItem['availableVariants'] as $variant)
+                        <a href="{{ route('read.index', ['variantId' => $variant['id']]) }}"
+                            class="text-orange-600 border border-orange-600 px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition">{{ ucfirst($variant['language']) }}</a>
                     @endforeach
-                </ul>
+                </div>
             </div>
-            <object class="w-7/8 h-screen">
-                <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
-                    type="application/pdf" width="100%" height="600px" />
-            </object>
+            @if (isset($literatureItem['url']))
+                <object class="w-7/8 h-screen">
+                    <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
+                        type="application/pdf" width="100%" height="600px" />
+                </object>
+            @else
+                <p>No literature PDF available for this language. Please select another language
+                    from the list above.</p>
+            @endif
     </section>
 
 </html>

@@ -15,9 +15,6 @@
     <section id="blog-1540">
         <div class="cs-container">
             <div class="cs-content">
-                <p class="cs-text">
-                    Fråga baba om ett nice citat eller en samanfattning av hans totala arbete
-                </p>
             </div>
             <ul class="cs-card-group">
                 @foreach ($literatureList as $literature)
