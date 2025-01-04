@@ -7,7 +7,7 @@ use App\Actions\UpdateVariantAction;
 use App\Actions\UploadVariantAction;
 use App\Data\UploadVariantData;
 use App\Http\Requests\VariantUpdateRequest;
-use App\Models\Variant as ModelsVariant;
+use App\Models\Variant;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -33,7 +33,9 @@ class VariantController extends Controller
      */
     public function edit(int $variant): View
     {
-        return view('variant.edit', ['variant' => ModelsVariant::findOrFail($variant), 'variants' => ModelsVariant::all()]);
+        $variant = Variant::query()->findOrFail($variant);
+        $variants = $variant->literature->variants->all();
+        return view('variant.edit', ['variant' => $variant, 'variants' => $variants]);
     }
 
     /**
