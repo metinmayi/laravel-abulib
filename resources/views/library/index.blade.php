@@ -25,13 +25,12 @@
                                     <span class="cs-tag">{{ ucfirst($literature->category) }}</span>
                                 </div>
                                 <h3 class="cs-h3">{{ ucfirst($literature->title) }}</h3>
-                                <p class="cs-item-text">{{ ucfirst($literature->description) }}</p>
+                                <p class="cs-item-text">{{ ucfirst($literature->description ?? '-') }}</p>
                                 <div class="cs-bottom">
                                     <div class="cs-author-group">
                                         @foreach ($literature->availableLanguages as $lang)
-                                            <span class="cs-lang">
-                                                {{ ucfirst($lang) }}
-                                            </span>
+                                            <img width="30px" height="30px"
+                                                src="{{ URL::asset("images/$lang-flag.svg") }}" />
                                         @endforeach
                                     </div>
                                 </div>
