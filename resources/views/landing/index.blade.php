@@ -35,8 +35,8 @@
                 <source media="(min-width: 601px)" srcset="{{ URL::asset('images/abdul.jpg') }}">
                 <!--Desktop-->
                 <source media="(min-width: 1024px)" srcset="{{ URL::asset('images/abdul.jpg') }}">
-                <img aria-hidden="true" decoding="async" src="{{ URL::asset('images/abdul.jpg') }}" alt="therapy"
-                    width="570" height="701">
+                <img aria-hidden="true" decoding="async" src="{{ URL::asset('images/abdul.jpg') }}"
+                    alt="Image of Abdulbaqi Mayi" width="570" height="701">
             </picture>
         </div>
         <!--Change the svg path fill color to whatever color the section below is so you can match it and create the illusion it is all one piece-->

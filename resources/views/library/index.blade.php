@@ -29,7 +29,7 @@
                                 <div class="cs-bottom">
                                     <div class="cs-author-group">
                                         @foreach ($literature->availableLanguages as $lang)
-                                            <img width="30px" height="30px"
+                                            <img width="30px" height="30px" alt="{{ ucfirst($lang) }}"
                                                 src="{{ URL::asset("images/$lang-flag.svg") }}" />
                                         @endforeach
                                     </div>
