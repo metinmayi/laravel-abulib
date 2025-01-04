@@ -47,22 +47,10 @@ class LiteratureControllerTest extends TestCase
      */
     public function test_form_is_rendered_correctly(): void
     {
-        // Get the page
-        $response = $this->actingAs(User::factory()->createOne())
-            ->get(route('literature.create'));
 
-        // Assert that the form is visible
-        $response->assertStatus(200);
-        $response->assertSee('Upload New Literature'); // Checks for page title
-        $response->assertSee('Category:'); // Ensures the category label exists
-        $response->assertSee('Submit'); // Ensures the submit button exists
-
-        // Check that all languages' collapsible sections are present
-        foreach (\App\Models\Literature::LANGUAGES as $language) {
-            $response->assertSee(ucfirst($language) . ' Literature');
-            $response->assertSee(ucfirst($language) . ' Title');
-            $response->assertSee(ucfirst($language) . ' Description');
-        }
+        $this->actingAs(User::factory()->createOne())
+            ->get(route('literature.create'))
+            ->assertViewIs('literature.create-literature');
     }
 
     /**

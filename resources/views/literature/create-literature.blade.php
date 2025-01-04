@@ -18,73 +18,63 @@
 <body>
     @component('components.header')
     @endcomponent
-    <!-- Forms -->
-    <main class="max-w-6xl p-6 pt-36 w-3/4">
-        <h2 class="text-2xl font-semibold mb-4">Upload New Literature</h2>
+    <div class="max-w-4xl mx-auto pt-36">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Upload New Literature</h1>
+
         <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data">
             @csrf
-
-            <!-- Category Input (Shared across all forms) -->
-            <label for="category" class="block text-sm font-medium mb-2">Category:</label>
-            <select id="category" name="category" placeholder="Select the category of the literature" required
-                class="block w-full p-2 border rounded mb-4">
-                @foreach (\App\Models\Literature::CATEGORIES as $val)
-                    <option value="{{ $val }}">{{ ucfirst($val) }}</option>
-                @endforeach
-            </select>
-
-            <!-- Language-Specific Forms -->
-            <div id="languages">
-                @foreach (\App\Models\Literature::LANGUAGES as $val)
-                    <div class="language-form mb-8 p-6 border rounded-lg bg-white shadow-md">
-                        <!-- Collapsible Header -->
-                        <button type="button" onclick="toggleSection('{{ $val }}')"
-                            class="text-xl font-semibold text-gray-700 w-full text-left mb-4">
-                            {{ ucfirst($val) }} Literature
-                            <span class="ml-2">{{ '▼' }}</span>
-                        </button>
-
-                        <!-- Collapsible Section -->
-                        <div id="{{ $val }}-section" class="hidden">
-                            <!-- Divider -->
-                            <div class="border-t border-gray-300 my-4"></div>
-
-                            <!-- Language Title -->
-                            <label for="{{ $val . '-title' }}"
-                                class="block text-sm font-medium mb-2">{{ ucfirst($val) . ' Title' }}:</label>
-                            <input type="text" id="{{ $val . '-title' }}"
-                                name="literatures[{{ $val }}][title]"
-                                placeholder="{{ 'Enter the ' . $val . ' title of the literature' }}" required
-                                class="block w-full p-2 border rounded mb-4">
-
-                            <!-- Language Description -->
-                            <label for="{{ $val . '-description' }}"
-                                class="block text-sm font-medium mb-2">{{ ucfirst($val) . ' Description' }}:</label>
-                            <textarea id="{{ $val . '-description' }}" name="literatures[{{ $val }}][description]"
-                                placeholder="{{ 'Enter the ' . $val . ' description of the literature' }}"
-                                class="block w-full p-2 border rounded mb-4"></textarea>
-
-                            <!-- Language File Upload (Optional for each language) -->
-                            <label for="{{ $val . '-file' }}"
-                                class="block text-sm font-medium mb-2">{{ ucfirst($val) . ' File' }}
-                                (Optional)
-                                :</label>
-                            <input type="file" id="{{ $val . '-file' }}"
-                                name="literatures[{{ $val }}][file]" accept="application/pdf"
-                                class="block w-full p-2 border rounded mb-4">
-
-                            <!-- Hidden Language Field -->
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <select
+                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    id="category" name="category" placeholder="Select a category" required
+                    class="block w-full p-2 border rounded mb-4">
+                    @foreach (\App\Models\Literature::CATEGORIES as $val)
+                        <option value="{{ $val }}">{{ ucfirst($val) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @foreach (\App\Models\Literature::LANGUAGES as $val)
+                <div class="overflow-hidden bg-white shadow rounded-lg">
+                    <details class="w-full">
+                        <summary
+                            class="px-6 py-4 bg-gray-50 border-b border-gray-200 font-medium text-gray-900 cursor-pointer hover:bg-gray-100">
+                            {{ ucfirst($val) }}</summary>
+                        <div class="p-6 space-y-4">
+                            <div>
+                                <label for="{{ $val . '-title' }}"
+                                    class="block text-sm font-medium text-gray-700">Title</label>
+                                <input id="{{ $val . '-title' }}" name="literatures[{{ $val }}][title]"
+                                    type="text" required
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="{{ $val . '-description' }}"
+                                    class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea id="{{ $val . '-description' }}" name="literatures[{{ $val }}][description]" rows="3"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            </div>
+                            <div>
+                                <label for="{{ $val . '-file' }}"
+                                    class="block text-sm font-medium text-gray-700">File</label>
+                                <input id="{{ $val . '-file' }}" name="literatures[{{ $val }}][file]"
+                                    accept="application/pdf" type="file" accept=".pdf"
+                                    class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
                             <input type="hidden" name="literatures[{{ $val }}][language]"
                                 value="{{ $val }}">
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    </details>
+                </div>
+            @endforeach
 
-            <!-- Submit Button -->
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+
+            <button type="submit"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Upload Literature
+            </button>
         </form>
-    </main>
+    </div>
 </body>
 
 </html>
