@@ -842,19 +842,19 @@
                     <li class="cs-li">
                         <a href="{{ route('landingPage') }}"
                             class="cs-li-link {{ Request::is('/') ? 'cs-active' : '' }}">
-                            {{ __('Home') }}
+                            {{ __('messages.Home') }}
                         </a>
                     </li>
                     <li class="cs-li">
                         <a href="{{ route('library.index') }}"
                             class="cs-li-link {{ Request::is('library') ? 'cs-active' : '' }}">
-                            {{ __('Library') }}
+                            {{ __('messages.Library') }}
                         </a>
                     </li>
                     @guest
                         <li class="cs-li">
                             <a href="{{ route('auth.login') }}" class="cs-li-link">
-                                {{ __('Login') }}
+                                {{ __('messages.Login') }}
                             </a>
                         </li>
                     @endguest
