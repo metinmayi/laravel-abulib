@@ -22,7 +22,7 @@
                         <a href="{{ "reader/$literature->variantId" }}" class="cs-link">
                             <div class="cs-info">
                                 <div class="cs-flex">
-                                    <span class="cs-tag">{{ ucfirst($literature->category) }}</span>
+                                    <span class="cs-tag">{{ __(ucfirst($literature->category)) }}</span>
                                 </div>
                                 <h3 class="cs-h3">{{ ucfirst($literature->title) }}</h3>
                                 <p class="cs-item-text">{{ ucfirst($literature->description ?? '-') }}</p>
