@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\App;
 
 class LocaleControllerTest extends TestCase
 {
@@ -23,5 +24,8 @@ class LocaleControllerTest extends TestCase
     {
         $this->get(route('locale.change', ['locale' => 'russian']))
             ->assertSessionHas('locale', 'russian');
+
+        $this->get(route('landingPage'));
+        $this->assertEquals('russian', App::getLocale());
     }
 }
