@@ -821,7 +821,7 @@
                         class="w-8 h-8 border border-gray-300 rounded shadow-sm hover:scale-110 transition-transform duration-200">
                     <span
                         class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-800 text-white text-xs rounded px-2 py-1 transition-transform duration-200">
-                        {{ ucfirst($lang) }}
+                        {{ __(ucfirst($lang)) }}
                     </span>
                 </a>
             @endforeach
