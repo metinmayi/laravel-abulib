@@ -12,9 +12,9 @@
     @component('components.header')
     @endcomponent
     <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('Library') }}</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h1 class="ml-5 md:ml-0 text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('messages.Library') }}</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-11/12 mx-auto md:w-full">
             <!-- Fiction Card -->
             @foreach ($literatureList as $item)
                 <div
@@ -39,7 +39,6 @@
                     @endauth
                 </div>
             @endforeach
-
         </div>
     </div>
 
