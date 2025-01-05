@@ -31,7 +31,7 @@
                         type="application/pdf" width="100%" height="600px" />
                 </object>
             @else
-                <p>{{ __('No PDF available for this language. Please select another language from the list above.') }}
+                <p>{{ __('messages.no-pdf') }}
                 </p>
             @endif
     </section>
