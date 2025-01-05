@@ -814,11 +814,18 @@
 
 <header id="cs-navigation">
     <div class="cs-container">
-        <!--Nav Logo-->
-        <a href="{{ route('landingPage') }}" class="cs-logo" aria-label="back to home">
-            <img src="{{ URL::asset('images/daisy.png') }}" alt="logo" width="197" height="50" aria-hidden="true"
-                decoding="async">
-        </a>
+        <div class="cs-logo gap-2">
+            @foreach (\App\Models\Literature::LANGUAGES as $lang)
+                <a href="{{ route('locale.change', ['locale' => $lang]) }}" class="group relative">
+                    <img src="{{ asset("images/$lang-flag.svg") }}" alt="{{ $lang }} flag"
+                        class="w-8 h-8 border border-gray-300 rounded shadow-sm hover:scale-110 transition-transform duration-200">
+                    <span
+                        class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-800 text-white text-xs rounded px-2 py-1 transition-transform duration-200">
+                        {{ ucfirst($lang) }}
+                    </span>
+                </a>
+            @endforeach
+        </div>
         <!--Navigation List-->
         <nav class="cs-nav" role="navigation">
             <!--Mobile Nav Toggle-->
@@ -835,19 +842,19 @@
                     <li class="cs-li">
                         <a href="{{ route('landingPage') }}"
                             class="cs-li-link {{ Request::is('/') ? 'cs-active' : '' }}">
-                            Home
+                            {{ __('Home') }}
                         </a>
                     </li>
                     <li class="cs-li">
                         <a href="{{ route('library.index') }}"
                             class="cs-li-link {{ Request::is('library') ? 'cs-active' : '' }}">
-                            Library
+                            {{ __('Library') }}
                         </a>
                     </li>
                     @guest
                         <li class="cs-li">
                             <a href="{{ route('auth.login') }}" class="cs-li-link">
-                                Login
+                                {{ __('Login') }}
                             </a>
                         </li>
                     @endguest
