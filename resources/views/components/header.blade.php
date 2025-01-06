@@ -818,7 +818,7 @@
             @foreach (\App\Models\Literature::LANGUAGES as $lang)
                 <a href="{{ route('locale.change', ['locale' => $lang]) }}">
                     <img src="{{ asset("images/$lang-flag.svg") }}" alt="{{ $lang }} flag" loading="eager"
-                        class="w-8 h-8 border border-gray-300 rounded shadow-sm">
+                        class="border border-gray-300 rounded shadow-sm">
                     {{-- <span
                         class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-800 text-white text-xs rounded px-2 py-1 transition-transform duration-200">
                         {{ __(ucfirst($lang)) }}
