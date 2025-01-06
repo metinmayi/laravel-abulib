@@ -27,7 +27,7 @@
             </div>
             @if (isset($literatureItem['url']))
                 <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
-                    type="application/pdf" width="100%" height="600px" />
+                    type="application/pdf" width="100%" class="h-screen" />
             @else
                 <p>{{ __('messages.no-pdf') }}
                 </p>
