@@ -146,24 +146,12 @@
         }
 
         #cs-navigation .cs-logo {
-            width: auto;
-            height: 2.5rem;
             margin: 0 auto 0 0;
             padding: 0;
-            /* prevents padding from affecting height and width */
-            box-sizing: border-box;
             display: flex;
             justify-content: center;
             align-items: center;
-            order: 1;
             z-index: 10;
-        }
-
-        #cs-navigation .cs-logo img {
-            width: auto;
-            height: 100%;
-            /* ensures the image never overflows the container. It stays contained within it's width and height and expands to fill it then stops once it reaches an edge */
-            object-fit: contain;
         }
 
         #cs-navigation .cs-nav {
@@ -708,22 +696,11 @@
         }
 
         #cs-navigation .cs-logo {
-            /* 40px - 44px */
-            height: clamp(2.5rem, 4vw, 2.75rem);
-            /* margin-right auto pushes everything away from it to the right */
             margin: 0 auto 0 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 100;
-        }
-
-        #cs-navigation .cs-logo img {
-            width: auto;
-            height: 100%;
-            /* ensures the image never overflows the container. It stays contained within it's width and height and expands to fill it then stops once it reaches an edge */
-            object-fit: contain;
         }
 
         #cs-navigation .cs-ul {
@@ -817,7 +794,7 @@
         <div class="cs-logo gap-2">
             @foreach (\App\Models\Literature::LANGUAGES as $lang)
                 <a href="{{ route('locale.change', ['locale' => $lang]) }}">
-                    <img src="{{ asset("images/$lang-flag.svg") }}" alt="{{ $lang }} flag" loading="eager"
+                    <img src="{{ asset("images/$lang-flag.png") }}" alt="{{ $lang }} flag" loading="eager"
                         class="border border-gray-300 rounded shadow-sm">
                     {{-- <span
                         class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-800 text-white text-xs rounded px-2 py-1 transition-transform duration-200">
