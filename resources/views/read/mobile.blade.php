@@ -28,7 +28,7 @@
             </div>
             @if (isset($literatureItem['url']))
                 <a href="{{ route('read.getLiteratureFile', ['id' => $literatureItem['id']]) }}"
-                    class="text-white bg-green-600 border border-green-600 px-6 py-3 rounded">{{ __('Read PDF') }}</a>
+                    class="text-white bg-green-600 border border-green-600 px-6 py-3 rounded">{{ __('messages.Read') }}</a>
             @else
                 <p>{{ __('messages.no-pdf') }}
                 </p>
