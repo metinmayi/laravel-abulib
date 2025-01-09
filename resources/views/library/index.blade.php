@@ -29,7 +29,7 @@
                             <p class="text-gray-600 mb-4">{{ __(ucfirst($item->description ?? '-')) }}</p>
                             <div class="flex gap-2">
                                 @foreach ($item->availableLanguages as $lang)
-                                    <img src="{{ asset("images/$lang-flag.svg") }}"
+                                    <img src="{{ asset("images/$lang-flag.svg") }}" alt={{ $lang . ' flag' }}
                                         class="px-2 bg-gray-100 text-sm rounded-md" />
                                 @endforeach
                             </div>
