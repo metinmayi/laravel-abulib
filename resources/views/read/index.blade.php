@@ -26,10 +26,10 @@
                 </div>
             </div>
             @if (isset($literatureItem['url']))
-                @if (new \Detection\MobileDetect()->isMobile())
+                @if ((new \Detection\MobileDetect())->isMobile())
                     <a href="{{ route('read.getLiteratureFile', ['variantId' => $variant['id']]) }}"
-                            class="text-green-600 border border-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
-                            target="_blank">{{ Read }}</a>
+                        class="text-green-600 border border-green-600 px-4 py-2 rounded hover:bg-green-600 hover:text-white transition"
+                        target="_blank">{{ Read }}</a>
                 @else
                     <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
                         type="application/pdf" width="100%" class="h-screen" />
