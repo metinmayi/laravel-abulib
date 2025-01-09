@@ -24,7 +24,12 @@ class ReaderController extends Controller
             ->get();
         $variant['availableVariants'] = $variants;
         $variant['category'] = $literature['category'];
-        return view('read.index', ['literatureItem' => $variant]);
+
+        if ((new \Detection\MobileDetect())->isMobile()) {
+            return view('read.mobile', ['literatureItem' => $variant]);
+        } else {
+            return view('read.desktop', ['literatureItem' => $variant]);
+        }
     }
 
 
