@@ -43,4 +43,20 @@ class ReaderController extends Controller
             'Content-Type' => 'application/pdf',
         ]);
     }
+
+    /**
+     * Get literature file.
+     */
+    public function getLiteratureFile(int $id): ResponseFactory | Response
+    {
+        $variant = Variant::query()->find($id);
+        if (!$variant || !$variant->url) {
+            return response(null, 404);
+        }
+
+        $content = Storage::get($variant->url);
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
 }
