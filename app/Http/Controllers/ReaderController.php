@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Literature;
 use App\Models\Variant;
+use Detection\MobileDetect;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
@@ -14,7 +15,7 @@ class ReaderController extends Controller
     /**
      * Display the reader page.
      */
-    public function index(int $variantId): View
+    public function index(int $variantId, MobileDetect $mobileDetect): View
     {
         $variant = Variant::query()->findOrFail($variantId)->toArray();
         $literature = Literature::query()->findOrFail($variant['literature_id'])->toArray();
@@ -25,7 +26,7 @@ class ReaderController extends Controller
         $variant['availableVariants'] = $variants;
         $variant['category'] = $literature['category'];
 
-        if ((new \Detection\MobileDetect())->isMobile()) {
+        if ($mobileDetect->isMobile()) {
             return view('read.mobile', ['literatureItem' => $variant]);
         } else {
             return view('read.desktop', ['literatureItem' => $variant]);
@@ -64,4 +65,5 @@ class ReaderController extends Controller
             'Content-Type' => 'application/pdf',
         ]);
     }
+
 }
