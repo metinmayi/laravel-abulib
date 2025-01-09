@@ -65,5 +65,4 @@ class ReaderController extends Controller
             'Content-Type' => 'application/pdf',
         ]);
     }
-
 }
