@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetLiteratureListAction;
 use Illuminate\Contracts\View\View;
+use Symfony\Component\HttpFoundation\Request;
 
 class LibraryController extends Controller
 {
     /**
      * Display the library page.
      */
-    public function index(): View
+    public function index(Request $request, GetLiteratureListAction $action): View
     {
-        $literatureList = (new GetLiteratureListAction(app()->getLocale()))->handle();
-        return view('library.index', ['literatureList' => $literatureList]);
+        if (is_string($request->get('languages'))) {
+            $action->setRequiredLanguages(explode(',', $request->get('languages')));
+        }
+
+        return view('library.index', ['literatureList' => $action->handle()]);
     }
 }

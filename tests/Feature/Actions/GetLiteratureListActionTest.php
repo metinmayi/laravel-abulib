@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Actions;
 
+use App\Actions\GetLiteratureListAction;
 use App\Models\Literature;
 use App\Models\Variant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GetLiteratureListActionTest extends TestCase
@@ -35,10 +35,46 @@ class GetLiteratureListActionTest extends TestCase
 
         $languages = $variants->pluck('language')->push($additionalVariant->language)->toArray();
 
-        $action = new \App\Actions\GetLiteratureListAction('Test-Lang');
-        $literatureList = $action->handle();
+        $action = new \App\Actions\GetLiteratureListAction();
+        $literatureList = $action
+            ->setLanguage('Test-Lang')
+            ->handle();
 
         $this->assertCount(1, $literatureList);
         $this->assertEquals($languages, $literatureList[0]->availableLanguages);
+    }
+
+    /**
+     * Test that only literatures with the correct language are returned
+     */
+    public function testGetByFilteredLanguages(): void
+    {
+        $literature = Literature::factory()->createOne();
+        Variant::factory()
+            ->for($literature)
+            ->state(['language' => 'english'])
+            ->createOne();
+
+        Variant::factory()
+            ->for($literature)
+            ->state(['language' => 'swedish', 'url' => null])
+            ->createOne();
+
+        Variant::factory()
+            ->for($literature)
+            ->state(['language' => 'kurdish'])
+            ->createOne();
+
+        $action = new GetLiteratureListAction();
+        $action->setLanguage('english');
+        $list = $action
+            ->setRequiredLanguages(['english', 'kurdish'])
+            ->handle();
+        $this->assertCount(1, $list);
+
+        $list = $action
+            ->setRequiredLanguages(['swedish'])
+            ->handle();
+        $this->assertCount(0, $list);
     }
 }

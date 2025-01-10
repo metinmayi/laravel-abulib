@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Actions\GetLiteratureListAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
 use Tests\TestCase;
 
 class LibraryControllerTest extends TestCase
@@ -14,13 +16,26 @@ class LibraryControllerTest extends TestCase
      */
     public function testIndexPageRendersCorrectView(): void
     {
-        // Send a GET request to the index route
-        $response = $this->get('/library');
+        $this->get('/library')
+            ->assertStatus(200)
+            ->assertViewIs('library.index');
+    }
 
-        // Assert the response is OK
-        $response->assertStatus(200);
+    /**
+     * Test the index page returns the correct view.
+     */
+    public function testSetRequiredLanguagesIfLanguagesQueryStringIsPresent(): void
+    {
+        $mock = Mockery::mock(GetLiteratureListAction::class);
 
-        // Assert the correct view is returned
-        $response->assertViewIs('library.index');
+        /** @phpstan-ignore-next-line */
+        $mock->shouldReceive('setRequiredLanguages')
+            ->with(['arabic', 'swedish']);
+        $mock->shouldReceive('handle');
+
+        // Bind the mock to the service container
+        $this->app->instance(GetLiteratureListAction::class, $mock);
+        $this->get('/library?languages=arabic%2Cswedish')
+            ->assertStatus(200);
     }
 }
