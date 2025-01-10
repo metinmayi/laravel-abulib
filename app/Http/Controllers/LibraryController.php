@@ -17,6 +17,12 @@ class LibraryController extends Controller
             $action->setRequiredLanguages(explode(',', $request->get('languages')));
         }
 
+
+        if (is_string($request->get('categories'))) {
+            $action->setRequiredCategories(explode(',', $request->get('categories')));
+        }
+
+
         return view('library.index', ['literatureList' => $action->handle()]);
     }
 }

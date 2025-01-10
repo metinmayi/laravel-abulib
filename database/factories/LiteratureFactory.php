@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Variant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,5 +21,22 @@ class LiteratureFactory extends Factory
         return [
             'category' => fake()->randomElement($this->model::CATEGORIES),
         ];
+    }
+
+    /**
+     * Create a Literature instance with variants.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function withVariants(): self
+    {
+        return $this->afterCreating(function (\App\Models\Literature $literature) {
+            foreach (\App\Models\Literature::LANGUAGES as $language) {
+                Variant::factory()->create([
+                    'language' => $language,
+                    'literature_id' => $literature->id,
+                ]);
+            }
+        });
     }
 }

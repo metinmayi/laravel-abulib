@@ -66,7 +66,6 @@ class GetLiteratureListActionTest extends TestCase
             ->createOne();
 
         $action = new GetLiteratureListAction();
-        $action->setLanguage('english');
         $list = $action
             ->setRequiredLanguages(['english', 'kurdish'])
             ->handle();
@@ -76,5 +75,35 @@ class GetLiteratureListActionTest extends TestCase
             ->setRequiredLanguages(['swedish'])
             ->handle();
         $this->assertCount(0, $list);
+    }
+
+    /**
+     * Test that only literatures with the correct categories are returned
+     */
+    public function testGetByFilteredCategories(): void
+    {
+        Literature::factory()->withVariants()->createOne(['category' => 'poem']);
+        Literature::factory()->withVariants()->createOne(['category' => 'poem']);
+        Literature::factory()->withVariants()->createOne(['category' => 'article']);
+        Literature::factory()->withVariants()->createOne(['category' => 'book']);
+        Literature::factory()->withVariants()->createOne(['category' => 'book']);
+        Literature::factory()->withVariants()->createOne(['category' => 'book']);
+
+
+        $action = new GetLiteratureListAction();
+        $list = $action
+            ->setRequiredCategories(['poem'])
+            ->handle();
+        $this->assertCount(2, $list);
+
+        $list = $action
+            ->setRequiredCategories(['article'])
+            ->handle();
+        $this->assertCount(1, $list);
+
+        $list = $action
+            ->setRequiredCategories(['book'])
+            ->handle();
+        $this->assertCount(3, $list);
     }
 }

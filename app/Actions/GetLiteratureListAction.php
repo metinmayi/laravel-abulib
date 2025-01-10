@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class GetLiteratureListAction
 {
     protected string $language;
+
     /**
      * @var array<string>|null
      */
@@ -19,7 +20,7 @@ class GetLiteratureListAction
     /**
      * @var array<string>|null
      */
-    protected ?array $categories = null;
+    protected ?array $requiredCategories = null;
 
     /**
      * Constructor
@@ -35,6 +36,16 @@ class GetLiteratureListAction
     public function setLanguage(string $language): self
     {
         $this->language = $language;
+        return $this;
+    }
+
+    /**
+     * Set categories
+     * @param array<string> $categories Categories.
+     */
+    public function setRequiredCategories(array $categories): self
+    {
+        $this->requiredCategories = $categories;
         return $this;
     }
 
@@ -68,14 +79,18 @@ class GetLiteratureListAction
                   FROM variants 
                   WHERE variants.literature_id = literatures.id 
                   AND variants.url IS NOT NULL) as availableLanguages")
-            );
+            )
+            ->groupBy('literatures.id');
 
         if ($this->requiredLanguages) {
             $query->whereIn('lv.language', $this->requiredLanguages);
             $query->where('lv.url', '!=', null);
-            $query->groupBy('literatures.id');
         } else {
             $query->where('lv.language', $this->language);
+        }
+
+        if ($this->requiredCategories) {
+            $query->whereIn('literatures.category', $this->requiredCategories);
         }
 
         $result = $query->get()

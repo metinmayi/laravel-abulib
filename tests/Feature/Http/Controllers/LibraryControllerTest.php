@@ -22,7 +22,7 @@ class LibraryControllerTest extends TestCase
     }
 
     /**
-     * Test the index page returns the correct view.
+     * Test the index page correctly invokes the GetLiteratureListAction by language.
      */
     public function testSetRequiredLanguagesIfLanguagesQueryStringIsPresent(): void
     {
@@ -30,12 +30,36 @@ class LibraryControllerTest extends TestCase
 
         /** @phpstan-ignore-next-line */
         $mock->shouldReceive('setRequiredLanguages')
+            ->once()
             ->with(['arabic', 'swedish']);
-        $mock->shouldReceive('handle');
+        /** @phpstan-ignore-next-line */
+        $mock->shouldReceive('handle')
+            ->once();
 
-        // Bind the mock to the service container
         $this->app->instance(GetLiteratureListAction::class, $mock);
         $this->get('/library?languages=arabic%2Cswedish')
+            ->assertStatus(200);
+    }
+
+    /**
+     * Test the index page correctly invokes the GetLiteratureListAction by category.
+     */
+    public function testSetRequiredCategoriesIfCategoriesQueryStringIsPresent(): void
+    {
+        $mock = Mockery::mock(GetLiteratureListAction::class);
+
+
+        /** @phpstan-ignore-next-line */
+        $mock->shouldReceive('setRequiredCategories')
+            ->once()
+            ->with(['poem', 'article']);
+        /** @phpstan-ignore-next-line */
+        $mock->shouldReceive('handle')
+            ->once();
+
+
+        $this->app->instance(GetLiteratureListAction::class, $mock);
+        $this->get('/library?categories=poem%2Carticle')
             ->assertStatus(200);
     }
 }
