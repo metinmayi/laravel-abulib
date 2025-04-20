@@ -24,10 +24,10 @@
                     @error('Error')
                         <h2 class="text-red-700">{{ $message }}</h2>
                     @enderror
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" required
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="usernaem" name="username" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Enter your email" />
+                        placeholder="Enter your username" />
                 </div>
 
                 <!-- Password Field -->
