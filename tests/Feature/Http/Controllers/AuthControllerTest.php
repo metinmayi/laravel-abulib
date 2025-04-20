@@ -19,7 +19,7 @@ class AuthControllerTest extends TestCase
         $response = $this->post('/register');
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors(['email', 'password', 'name']);
+        $response->assertSessionHasErrors(['password', 'username']);
     }
 
     /**
@@ -28,34 +28,16 @@ class AuthControllerTest extends TestCase
     public function test_registering_user_creates_user(): void
     {
         $credentials = [
-            'name' => fake()->name(),
+            'username' => fake()->name(),
             'password' => fake()->password(),
-            'email' => fake()->email(),
         ];
 
         $response = $this->post('/register', $credentials);
         $response->assertStatus(302);
         $response->assertRedirect(route('library.index'));
 
-        $user = User::query()->where('email', $credentials['email'])->first();
+        $user = User::query()->where('username', $credentials['username'])->first();
         $this->assertNotNull($user);
-    }
-
-    /**
-     * Test registering a user with a duplicate email yields an error.
-     */
-    public function test_registering_user_duplicate_email_yields_error(): void
-    {
-        $user = \App\Models\User::factory()->create();
-
-        $response = $this->post('/register', [
-            'name' => fake()->name(),
-            'password' => fake()->password(),
-            'email' => $user->email,
-        ]);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors('Error', 'An error occured. Please contact your son.');
     }
 
     /**
@@ -66,7 +48,7 @@ class AuthControllerTest extends TestCase
         $response = $this->post('/login');
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors(['email', 'password']);
+        $response->assertSessionHasErrors(['username', 'password']);
     }
 
     /**
@@ -77,7 +59,7 @@ class AuthControllerTest extends TestCase
         $user = \App\Models\User::factory()->create();
 
         $response = $this->post('/login', [
-            'email' => $user->email,
+            'username' => $user->username,
             'password' => 'password',
         ]);
 
@@ -94,7 +76,7 @@ class AuthControllerTest extends TestCase
         $user = \App\Models\User::factory()->create();
 
         $response = $this->post('/login', [
-            'email' => $user->email,
+            'username' => $user->username,
             'password' => 'invalid-password',
         ]);
 

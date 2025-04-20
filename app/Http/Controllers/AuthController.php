@@ -19,8 +19,7 @@ class AuthController extends Controller
     {
         try {
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
+                'username' => $request->username,
                 'password' => $request->password,
             ]);
         } catch (\Exception $e) {
@@ -39,7 +38,7 @@ class AuthController extends Controller
      */
     public function login(LoginFormRequest $request): RedirectResponse
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('username', 'password'))) {
             return redirect()->back()->withErrors(['Error' => 'Invalid credentials.']);
         }
 
