@@ -69,18 +69,18 @@ class GetLiteratureListAction
             ->leftJoin('variants as lv', function ($join) {
                 $join->on('literatures.id', '=', 'lv.literature_id');
             })
-            ->select(
-                'literatures.id',
-                'literatures.category',
-                'lv.title',
-                'lv.description',
-                'lv.id as variantId',
-                DB::raw("(SELECT GROUP_CONCAT(language) 
-                  FROM variants 
-                  WHERE variants.literature_id = literatures.id 
-                  AND variants.url IS NOT NULL) as availableLanguages")
-            )
-            ->groupBy('literatures.id');
+        ->select(
+            'literatures.id',
+            'literatures.category',
+            DB::raw('MAX(lv.title) as title'),
+            DB::raw('MAX(lv.description) as description'),
+            DB::raw('MAX(lv.id) as variantId'),
+            DB::raw("(SELECT GROUP_CONCAT(language) 
+      FROM variants 
+      WHERE variants.literature_id = literatures.id 
+      AND variants.url IS NOT NULL) as availableLanguages")
+        )
+        ->groupBy('literatures.id');
 
         if ($this->requiredLanguages) {
             $query->whereIn('lv.language', $this->requiredLanguages);
