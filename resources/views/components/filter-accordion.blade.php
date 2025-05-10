@@ -101,7 +101,7 @@
         // Update filter count next to icon
         filterCount.textContent = selectedFilters.length ?
             `${selectedFilters.length} selected` :
-            '';
+            'Click to choose filter';
     }
 
     // Update URL with selected filters
