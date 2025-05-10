@@ -13,7 +13,6 @@
 <body>
     @component('components.header')
     @endcomponent
-    {{-- {{ dd(get_defined_vars()) }} --}}
 
     <div class="max-w-3xl mx-auto pt-36">
         <h1 class="text-2xl font-bold text-gray-900">
@@ -74,6 +73,18 @@
                 <button type="submit"
                     class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Save Changes
+                </button>
+            </form>
+
+            <form action={{ route('literature.destroy', ['literature' => $variant->literature_id]) }} class='mt-20'
+                method='POST'>
+                @method('DELETE')
+                @csrf
+                <p>This will delete the entire literature along with the language variants.
+                </p>
+                <button type="submit"
+                    class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Delete Literature
                 </button>
             </form>
         </div>
