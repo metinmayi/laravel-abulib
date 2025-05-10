@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.42
+    container_name: abdulib-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: abdulib
+      MYSQL_USER: abdulib
+      MYSQL_PASSWORD: 123123
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
