@@ -15,13 +15,13 @@
     <section class="flex justify-center align-center pt-36">
         <div class="w-3/4">
             <div>
-                <h3 class="text-orange-400 text-3xl">{{ __('messages.' . ucfirst($literatureItem['category'])) }}</h3>
+                <h3 class="text-orange-400 text-3xl">{{ __('messages.' . $literatureItem['category']) }}</h3>
                 <h1 class="cs-title">{{ $literatureItem['title'] }}</h1>
                 <p class="text-lg">{{ $literatureItem['description'] }}</p>
                 <div class="flex mt-5 flex-wrap gap-4 mb-8">
                     @foreach ($literatureItem['availableVariants'] as $variant)
                         <a href="{{ route('read.index', ['variantId' => $variant['id']]) }}"
-                            class="text-orange-600 border border-orange-600 px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition">{{ __('messages.' . ucfirst($variant['language'])) }}</a>
+                            class="text-orange-600 border border-orange-600 px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition">{{ __('messages.' . $variant['language']) }}</a>
                     @endforeach
                 </div>
             </div>

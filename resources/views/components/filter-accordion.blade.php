@@ -19,14 +19,15 @@
     <div class="accordion-content hidden">
         <!-- Languages Section -->
         <div class="px-3 py-2 border-t border-orange-100">
-            <h3 class="text-xs font-medium text-orange-600 uppercase tracking-wider mb-2">Languages</h3>
+            <h3 class="text-xs font-medium text-orange-600 uppercase tracking-wider mb-2">{{ __('messages.languages') }}
+            </h3>
             <div class="space-y-1" id="languages">
                 @foreach (\App\Models\Literature::LANGUAGES as $lang)
                     <label
                         class="flex items-center space-x-2 text-sm text-gray-600 hover:bg-orange-50 rounded py-0.5 px-1 cursor-pointer">
                         <input type="checkbox" id="{{ $lang }}" value="{{ $lang }}"
                             class="w-3.5 h-3.5 rounded border-gray-300 text-orange-500 focus:ring-1 focus:ring-orange-200">
-                        <span>{{ ucfirst($lang) }}</span>
+                        <span>{{ __('messages.' . $lang) }}</span>
                     </label>
                 @endforeach
             </div>
@@ -34,14 +35,15 @@
 
         <!-- Categories Section -->
         <div class="px-3 py-2 border-t border-orange-100">
-            <h3 class="text-xs font-medium text-orange-600 uppercase tracking-wider mb-2">Categories</h3>
+            <h3 class="text-xs font-medium text-orange-600 uppercase tracking-wider mb-2">
+                {{ __('messages.categories') }}</h3>
             <div class="space-y-1" id="categories">
                 @foreach (\App\Models\Literature::CATEGORIES as $category)
                     <label
                         class="flex items-center space-x-2 text-sm text-gray-600 hover:bg-orange-50 rounded py-0.5 px-1 cursor-pointer">
                         <input type="checkbox" id="{{ $category }}" value="{{ $category }}"
                             class="w-3.5 h-3.5 rounded border-gray-300 text-orange-500 focus:ring-1 focus:ring-orange-200">
-                        <span>{{ ucfirst($category) }}</span>
+                        <span>{{ __('messages.' . $category) }}</span>
                     </label>
                 @endforeach
             </div>
@@ -49,10 +51,10 @@
 
         <!-- Selected Filters Summary and Apply Button -->
         <div class="px-3 py-2 border-t border-orange-100">
-            <p class="text-xs text-gray-500 mb-2" id="selected-filters">No filters selected</p>
+            <p class="text-xs text-gray-500 mb-2" id="selected-filters">{{ __('messages.no-filter-selected') }}</p>
             <button id="apply-filters"
                 class="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-1.5 px-3 rounded transition-colors duration-150">
-                Apply Filters
+                {{ __('messages.apply-filters') }}
             </button>
         </div>
     </div>
@@ -64,6 +66,7 @@
     const icon = document.querySelector('.accordion-icon');
     const applyButton = document.getElementById('apply-filters');
     const filterCount = document.getElementById('filter-count');
+    const selectedText = @json(__('messages.selected'));
 
     // Set initial state from URL parameters
     function initializeFromURL() {
@@ -95,13 +98,13 @@
             .map(checkbox => checkbox.value);
 
         selectedFiltersDisplay.textContent = selectedFilters.length ?
-            `Selected: ${selectedFilters.join(', ')}` :
-            'No filters selected';
+            `${selectedText}: ${selectedFilters.join(', ')}` :
+            @json(__('messages.no-filter-selected'));
 
         // Update filter count next to icon
         filterCount.textContent = selectedFilters.length ?
-            `${selectedFilters.length} selected` :
-            'Click to choose filter';
+            `${selectedFilters.length} ${selectedText}` :
+            @json(__('messages.filter-description'));
     }
 
     // Update URL with selected filters

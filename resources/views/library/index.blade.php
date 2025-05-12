@@ -15,7 +15,7 @@
     @endcomponent
     <div class="max-w-7xl mx-auto">
 
-        <h1 class="ml-5 md:ml-0 text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('messages.Library') }}</h1>
+        <h1 class="ml-5 md:ml-0 text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('messages.library') }}</h1>
         @component('components.filter-accordion')
         @endcomponent
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-11/12 mx-auto md:w-full">
@@ -25,10 +25,11 @@
                     class="bg-white rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:bg-orange-50 ring-1 ring-black ring-opacity-5 shadow-[0_4px_12px_rgba(234,88,12,0.25)]">
                     <a href="{{ "reader/$item->variantId" }}">
                         <div class="p-6">
-                            <div class="text-sm font-semibold text-indigo-600 mb-2">{{ __(ucfirst($item->category)) }}
+                            <div class="text-sm font-semibold text-indigo-600 mb-2">
+                                {{ __('messages.' . $item->category) }}
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800 mb-2">{{ __(ucfirst($item->title)) }}</h2>
-                            <p class="text-gray-600 mb-4">{{ __(ucfirst($item->description ?? '-')) }}</p>
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">{{ ucfirst($item->title) }}</h2>
+                            <p class="text-gray-600 mb-4">{{ ucfirst($item->description ?? '-') }}</p>
                             <div class="flex gap-2">
                                 @foreach ($item->availableLanguages as $lang)
                                     <img src="{{ asset("images/$lang-flag.svg") }}" alt={{ $lang . ' flag' }}
