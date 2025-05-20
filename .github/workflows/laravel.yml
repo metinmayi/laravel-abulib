@@ -9,6 +9,13 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: laravel_test
+      DB_USERNAME: root
+      DB_PASSWORD: root
 
     services:
       mysql:
@@ -50,14 +57,5 @@ jobs:
           echo "Waiting for MySQL..."
           sleep 1
         done
-    - name: Run php artisan migration
-      run: php artisan migrate
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      env:
-        DB_CONNECTION: mysql
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_DATABASE: laravel_test
-        DB_USERNAME: root
-        DB_PASSWORD: root
       run: composer checks
