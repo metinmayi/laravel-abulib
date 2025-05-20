@@ -89,15 +89,11 @@ class GetLiteratureListActionTest extends TestCase
         Literature::factory()->withVariants()->createOne(['category' => 'book']);
         Literature::factory()->withVariants()->createOne(['category' => 'book']);
 
+        app()->setLocale('english');
         $action = new GetLiteratureListAction();
         $list = $action
             ->setRequiredCategories(['poem'])
             ->handle();
-            dump([
-                'literatures' => \App\Models\Literature::with('variants')->get()->toArray(),
-                'result' => $list,
-            ]);
-            dump(app()->getLocale());
         $this->assertCount(2, $list);
 
 
