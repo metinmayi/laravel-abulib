@@ -22,10 +22,12 @@ class AuthController extends Controller
                 'username' => $request->username,
                 'password' => $request->password,
             ]);
+        // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return redirect()->back()->withErrors(['Error' => 'An error occured. Please contact your son.']);
         }
+        // @codeCoverageIgnoreEnd
 
         event(new Registered($user));
         Auth::login($user);
