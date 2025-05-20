@@ -50,6 +50,8 @@ jobs:
           echo "Waiting for MySQL..."
           sleep 1
         done
+    - name: Run php artisan migration
+      run: php artisan migrate
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
         DB_CONNECTION: mysql
