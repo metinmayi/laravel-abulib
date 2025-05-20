@@ -93,12 +93,12 @@ class GetLiteratureListActionTest extends TestCase
         $list = $action
             ->setRequiredCategories(['poem'])
             ->handle();
+            dump([
+                'literatures' => \App\Models\Literature::with('variants')->get()->toArray(),
+                'result' => $list,
+            ]);
         $this->assertCount(2, $list);
 
-        dump([
-            'literatures' => \App\Models\Literature::with('variants')->get()->toArray(),
-            'result' => $list,
-        ]);
 
         $list = $action
             ->setRequiredCategories(['article'])
