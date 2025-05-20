@@ -97,6 +97,7 @@ class GetLiteratureListActionTest extends TestCase
                 'literatures' => \App\Models\Literature::with('variants')->get()->toArray(),
                 'result' => $list,
             ]);
+            dump(app()->getLocale());
         $this->assertCount(2, $list);
 
 
