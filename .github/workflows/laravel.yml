@@ -1,5 +1,8 @@
 name: Laravel
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -35,6 +38,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: shivammathur/setup-php@v2
       with:
