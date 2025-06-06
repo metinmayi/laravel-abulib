@@ -22,6 +22,7 @@
         <div class="cs-container">
             <div class="cs-content">
                 <span class="cs-topper">{{ __('Hello World') }}</span>
+                <h1> {{ __('Hello guys, how are you doing?') }}</h1>
                 <h1 class="cs-title">
                     {{ __('A Lifetime of Struggle and Innovation') }}</h1>
                 <p class="cs-text">
