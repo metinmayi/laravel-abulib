@@ -29,7 +29,7 @@
                 <embed src="{{ route('read.getLiteratureBinary', ['id' => $literatureItem['id']]) }}"
                     type="application/pdf" width="100%" class="h-screen" />
             @else
-                <p>{{ __('messages.no-pdf') }}
+                <p>{{ __('There is no PDF available') }}
                 </p>
             @endif
     </section>
