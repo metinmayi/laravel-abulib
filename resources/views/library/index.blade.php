@@ -26,7 +26,7 @@
                     <a href="{{ "reader/$item->variantId" }}">
                         <div class="p-6">
                             <div class="text-sm font-semibold text-indigo-600 mb-2">
-                                {{ __('messages.' . $item->category) }}
+                                {{ _($item->category) }}
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 mb-2">{{ ucfirst($item->title) }}</h2>
                             <p class="text-gray-600 mb-4">{{ ucfirst($item->description ?? '-') }}</p>
