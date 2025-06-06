@@ -81,7 +81,7 @@ jobs:
 
     - name: Commit and push localized files
       run: |
-        git add lang/*.json
+        git add resources/lang/*.json
         if git diff --cached --quiet; then
           echo "✅ No translation changes to commit."
         else
