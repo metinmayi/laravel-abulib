@@ -71,6 +71,8 @@ jobs:
 
     - name: Run translation extraction
       run: php extract_translations.php
+      env:
+        DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
 
     - name: Configure Git
       run: |
