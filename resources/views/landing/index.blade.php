@@ -22,6 +22,30 @@
         <div class="cs-container">
             <div class="cs-content">
                 <span class="cs-topper">{{ __('Hello World') }}</span>
+                <h2 class="cs-subtitle">
+                    {{ __('I am Abdulbaqi Mayi') }}</h2>
+                <p class="cs-text">
+                    {{ __('A child and adolescent psychiatrist with a passion for improving mental health care.') }}</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <h1 class="cs-title">
                     {{ __('A Lifetime of Struggle and Innovation') }}</h1>
                 <p class="cs-text">
