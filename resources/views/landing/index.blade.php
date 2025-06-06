@@ -27,6 +27,8 @@
                 <p class="cs-text">
                     {{ __('Abdulbaghi Ahmad (Mayi) has his expertise in child mental health and child and adolescent psychiatry with focus on childhood trauma and posttraumatic health and wellbeing. His open and contextual creative concept based on a bio-psycho-social model of trauma and posttraumatic growth creating new pathways for improving the immunity and child mental health. He has developed several innovations and constructions for investigation, prevention and treatment of child mental health problems after years of clinical experience, research, evaluation, teaching and administration both in hospital and education institutions to provide suitable environment for the child for building up a healthy personality and prosperous society.') }}'
                 </p>
+                <p>{{ __('Lets add some additional text here') }}
+                <p> {{ __('My name is Metin') }}
             </div>
             <!--Hero Image-->
             <picture class="cs-picture">
