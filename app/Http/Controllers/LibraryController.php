@@ -25,4 +25,9 @@ class LibraryController extends Controller
 
         return view('library.index', ['literatureList' => $action->handle()]);
     }
+
+    public function paligo(): View
+    {
+        return view('paligo.index');
+    }
 }

@@ -31,6 +31,8 @@ Route::group(['middleware' => SetUserLocale::class], function () {
     // Library Page
     Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 
+    Route::get('/paligo', [LibraryController::class, 'paligo'])->name('library.paligo');
+
     // Reader Page
     Route::get('/reader/{variantId}', [ReaderController::class, 'index'])->name('read.index');
     Route::get('/reader/variant/{id}', [ReaderController::class, 'getLiteratureBinary'])->name('read.getLiteratureBinary');
