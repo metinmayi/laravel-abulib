@@ -15,7 +15,7 @@
     @endcomponent
     <div class="max-w-7xl mx-auto">
 
-        <h1 class="ml-5 md:ml-0 text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('messages.library') }}</h1>
+        <h1 class="ml-5 md:ml-0 text-3xl font-bold text-orange-600 pt-36 mb-8">{{ __('Library') }}</h1>
         @component('components.filter-accordion')
         @endcomponent
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-11/12 mx-auto md:w-full">
