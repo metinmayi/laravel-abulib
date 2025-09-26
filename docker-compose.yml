@@ -7,10 +7,10 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: 123123
+      # MYSQL_PASSWORD: 123123
     volumes:
-      - mysql-data:/var/lib/mysql
+      # - mysql-data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d  # Mounting the init-scripts directory
 
-volumes:
-  mysql-data:
+# volumes:
+#   mysql-data:
