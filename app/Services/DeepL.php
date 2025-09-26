@@ -11,7 +11,12 @@ class DeepL
 
     public function __construct(?DeepLClient $client = null)
     {
-        $this->client = $client ?? new DeepLClient(config('services.deepl.key'));
+        $key = config('services.deepl.key');
+        if (is_string($key) === false || empty($key)) {
+            throw new \InvalidArgumentException('DeepL API key is not configured.');
+        }
+
+        $this->client = $client ?? new DeepLClient($key);
     }
 
     /**
@@ -21,7 +26,7 @@ class DeepL
     public function translate(string $text, string $sourceLang, string $targetLang): string
     {
         $result = $this->client->translateText($text, $sourceLang, $targetLang);
-        return is_array($result) ? $result[0]->text : $result->text;
+        return $result->text;
     }
 
 }
