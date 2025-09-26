@@ -5,9 +5,9 @@ namespace Tests\Unit;
 use App\Services\DeepL;
 use DeepL\DeepLClient;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Tests\TestCase;
 
-class DeepLTest extends PHPUnitTestCase
+class DeepLTest extends TestCase
 {
     #[Group('metin')]
     public function testTranslateIsCalled(): void
