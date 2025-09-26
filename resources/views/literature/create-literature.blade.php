@@ -53,10 +53,48 @@
                 });
             });
 
-            // Activate first tab by default
-            if (tabButtons.length) {
+            // Activate first tab with server-side errors else first tab
+            const formEl = document.getElementById('literatureForm');
+            const errorLangsAttr = formEl?.getAttribute('data-error-langs') || '';
+            const errorLangs = errorLangsAttr.split(',').filter(Boolean);
+            if (errorLangs.length && tabButtons.length) {
+                activate(errorLangs[0]);
+            } else if (tabButtons.length) {
                 activate(tabButtons[0].dataset.langTab);
             }
+
+            // Enforce: at least ONE title (any language) must be provided
+            const form = document.getElementById('literatureForm');
+            const titleInputs = () => Array.from(form.querySelectorAll('input[data-title-input]'));
+            const errorBox = document.getElementById('atLeastOneTitleError');
+
+            function validateAtLeastOneTitle() {
+                const hasAny = titleInputs().some(i => i.value.trim() !== '');
+                if (!hasAny) {
+                    errorBox.classList.remove('hidden');
+                    errorBox.innerText = 'Please enter a title in at least one language.';
+                } else {
+                    errorBox.classList.add('hidden');
+                    errorBox.innerText = '';
+                }
+                return hasAny;
+            }
+
+            // Real-time feedback
+            titleInputs().forEach(inp => inp.addEventListener('input', validateAtLeastOneTitle));
+
+            form?.addEventListener('submit', (e) => {
+                if (!validateAtLeastOneTitle()) {
+                    e.preventDefault();
+                    // Focus first tab + input
+                    const first = titleInputs()[0];
+                    if (first) {
+                        const lang = first.id.split('-')[0];
+                        activate(lang);
+                        first.focus();
+                    }
+                }
+            });
         });
     </script>
 </head>
@@ -67,7 +105,21 @@
     <div class="max-w-4xl mx-auto pt-36">
         <h1 class="text-3xl font-bold text-gray-900 mb-8">Upload <span class="text-orange-600">New Literature</span></h1>
 
-        <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data">
+        @if ($errors->any())
+            <div class="mb-6 border-l-4 border-red-500 bg-red-50 p-4 rounded" role="alert" aria-labelledby="error-summary-title">
+                <p id="error-summary-title" class="font-semibold text-red-700 mb-2">There were problems with your submission:</p>
+                <ul class="list-disc ml-5 text-sm text-red-600 space-y-1">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @php
+            $errorLangs = collect(\App\Models\Literature::LANGUAGES)
+                ->filter(fn($l) => $errors->has('literatures.' . $l . '.title') || $errors->has('literatures.' . $l . '.description') || $errors->has('literatures.' . $l . '.file'));
+        @endphp
+        <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data" data-error-langs="{{ $errorLangs->implode(',') }}">
             @csrf
             <!-- Unified Container -->
             <div class="mt-4 rounded-xl border border-orange-300 bg-orange-50/70 backdrop-blur-sm shadow-sm">
@@ -76,12 +128,13 @@
                     <select id="category" name="category" required
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
                         @foreach (\App\Models\Literature::CATEGORIES as $val)
-                            <option value="{{ $val }}">{{ ucfirst($val) }}</option>
+                            <option value="{{ $val }}" @selected(old('category') === $val)>{{ ucfirst($val) }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <!-- Language Tabs -->
+                <div id="atLeastOneTitleError" class="px-6 pt-4 text-sm text-red-600 hidden" role="alert" aria-live="assertive"></div>
                 <div class="px-4">
                     <div role="tablist" aria-label="Languages" class="flex flex-wrap gap-1 -mb-px">
                         @foreach (\App\Models\Literature::LANGUAGES as $val)
@@ -100,15 +153,27 @@
                             <div class="p-6 space-y-4">
                                 <div>
                                     <label for="{{ $val . '-title' }}" class="block text-sm font-medium text-gray-700">Title</label>
-                                    <input id="{{ $val . '-title' }}" name="literatures[{{ $val }}][title]" type="text" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+                                    @php $titleError = $errors->first('literatures.' . $val . '.title'); @endphp
+                                    <input id="{{ $val . '-title' }}" data-title-input name="literatures[{{ $val }}][title]" type="text" value="{{ old('literatures.' . $val . '.title') }}" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $titleError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" placeholder="Enter title (optional unless no other language)" aria-describedby="{{ $val }}-title-error" aria-invalid="{{ $titleError ? 'true' : 'false' }}">
+                                    @if($titleError)
+                                        <p id="{{ $val }}-title-error" class="mt-1 text-sm text-red-600">{{ $titleError }}</p>
+                                    @endif
                                 </div>
                                 <div>
                                     <label for="{{ $val . '-description' }}" class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea id="{{ $val . '-description' }}" name="literatures[{{ $val }}][description]" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"></textarea>
+                                    @php $descError = $errors->first('literatures.' . $val . '.description'); @endphp
+                                    <textarea id="{{ $val . '-description' }}" name="literatures[{{ $val }}][description]" rows="3" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $descError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" aria-describedby="{{ $val }}-description-error" aria-invalid="{{ $descError ? 'true' : 'false' }}">{{ old('literatures.' . $val . '.description') }}</textarea>
+                                    @if($descError)
+                                        <p id="{{ $val }}-description-error" class="mt-1 text-sm text-red-600">{{ $descError }}</p>
+                                    @endif
                                 </div>
                                 <div>
                                     <label for="{{ $val . '-file' }}" class="block text-sm font-medium text-gray-700">File (PDF)</label>
-                                    <input id="{{ $val . '-file' }}" name="literatures[{{ $val }}][file]" accept="application/pdf" type="file" accept=".pdf" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 focus:outline-none">
+                                    @php $fileError = $errors->first('literatures.' . $val . '.file'); @endphp
+                                    <input id="{{ $val . '-file' }}" name="literatures[{{ $val }}][file]" accept="application/pdf" type="file" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 focus:outline-none {{ $fileError ? 'border border-red-500 ring-1 ring-red-300' : '' }}" aria-describedby="{{ $val }}-file-error" aria-invalid="{{ $fileError ? 'true' : 'false' }}">
+                                    @if($fileError)
+                                        <p id="{{ $val }}-file-error" class="mt-1 text-sm text-red-600">{{ $fileError }}</p>
+                                    @endif
                                 </div>
                                 <input type="hidden" name="literatures[{{ $val }}][language]" value="{{ $val }}">
                             </div>
