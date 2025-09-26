@@ -11,7 +11,7 @@ class DeepL
 
     public function __construct(?DeepLClient $client = null)
     {
-        $this->client = $client ?? new DeepLClient(env('DEEPL_API_KEY'));
+        $this->client = $client ?? new DeepLClient(config('services.deepl.key'));
     }
 
     /**
