@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class DeepLTest extends TestCase
 {
-    #[Group('metin')]
     public function testTranslateIsCalled(): void
     {
         $mockResponse = (object)['text' => 'Hello world'];
@@ -22,5 +21,14 @@ class DeepLTest extends TestCase
 
         $service = new DeepL($client);
         $service->translate('Hej världen', 'SV', 'EN');
+    }
+
+    public function testStrictFactoryThrowsWhenApiKeyMissing(): void
+    {
+        config()->set('services.deepl.key', null);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('DeepL API key is not configured.');
+        
+        new DeepL();
     }
 }
