@@ -9,9 +9,9 @@ class DeepL
 {
     protected DeepLClient $client;
 
-    public function __construct()
+    public function __construct(?DeepLClient $client = null)
     {
-        $this->client = new DeepLClient(env('DEEPL_API_KEY'));
+        $this->client = $client ?? new DeepLClient(env('DEEPL_API_KEY'));
     }
 
     /**

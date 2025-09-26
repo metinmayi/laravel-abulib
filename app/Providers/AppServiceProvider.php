@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Services\DeepL;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
