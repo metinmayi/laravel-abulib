@@ -6,6 +6,7 @@ use App\Actions\DeleteLiteratureAction;
 use App\Actions\UploadLiteratureAction;
 use App\Actions\UploadVariantAction;
 use App\Data\UploadLiteratureData;
+use App\Services\LiteraturePreparationService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -24,7 +25,13 @@ class LiteratureController extends Controller
      */
     public function store(UploadLiteratureData $data): RedirectResponse
     {
-        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadVariantAction());
+        try {
+            $prepared = (new LiteraturePreparationService())->prepare($data);
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->with('Error', $e->getMessage());
+        }
+
+        $uploadLiteratureAction = new UploadLiteratureAction($data->category, array_values($prepared), new UploadVariantAction());
         $uploadLiteratureAction->handle();
         return redirect()->route('library.index');
     }

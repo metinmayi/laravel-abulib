@@ -792,7 +792,7 @@
 <header id="cs-navigation">
     <div class="cs-container">
         <div class="cs-logo gap-2">
-            @foreach (\App\Models\Literature::LANGUAGES as $lang)
+            @foreach (\App\Models\Variant::LANGUAGES as $lang)
                 <a href="{{ route('locale.change', ['locale' => $lang]) }}">
                     <img src="{{ asset("images/$lang-flag.svg") }}" alt="{{ $lang }} flag" loading="eager"
                         class="border border-gray-300 rounded shadow-sm">

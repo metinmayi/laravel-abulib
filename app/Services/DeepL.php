@@ -9,6 +9,16 @@ class DeepL
 {
     protected DeepLClient $client;
 
+    /**
+     * @var array<string, string> Language code map
+     */
+    protected static array $map = [
+        'arabic' => 'AR',
+        'english' => 'EN-GB',
+        'kurdish' => 'KU',
+        'swedish' => 'SV',
+    ];
+
     public function __construct(?DeepLClient $client = null)
     {
         $key = config('services.deepl.key');
@@ -23,9 +33,19 @@ class DeepL
      * Translate a single text string.
      * @throws DeepLException
      */
-    public function translate(string $text, string $sourceLang, string $targetLang): string
+    public function translate(string $text, string $targetLang): string
     {
-        $result = $this->client->translateText($text, $sourceLang, $targetLang);
+        $targetLang = isset(self::$map[strtolower($targetLang)]) ? self::$map[strtolower($targetLang)] : null;
+        if (!$targetLang) {
+            throw new \InvalidArgumentException('Unsupported target language for DeepL translation.');
+        }
+
+        if ($targetLang === 'KU') {
+            // DeepL does not support Kurdish translation
+            return $text;
+        }
+
+        $result = $this->client->translateText($text, null, $targetLang);
         return $result->text;
     }
 

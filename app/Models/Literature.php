@@ -12,7 +12,6 @@ class Literature extends Model
     use HasFactory;
 
     public const CATEGORIES = ['poem', 'research', 'book', 'article', 'report'];
-    public const LANGUAGES = ['english', 'kurdish', 'arabic', 'swedish'];
 
     protected $fillable = ['category'];
 

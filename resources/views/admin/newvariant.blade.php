@@ -36,7 +36,7 @@
             <label for="language" class="block text-sm font-medium mb-2">Language:</label>
             <select id="language" name="language" placeholder="Enter the language of the literature" required
                 class="block w-full p-2 border rounded mb-4">
-                @foreach (\App\Models\Literature::LANGUAGES as $val)
+                @foreach (\App\Models\Variant::LANGUAGES as $val)
                     <option value="{{ $val }}">{{ ucfirst($val) }}</option>
                 @endforeach
             </select>

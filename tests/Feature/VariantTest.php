@@ -327,7 +327,7 @@ class VariantTest extends TestCase
         $literatureId = $literatureId ?? Literature::factory()->createOne()->id;
         $file = $file ?? UploadedFile::fake()->create('test.pdf', 100);
         /** @var string */
-        $language = $lang ?? fake()->randomElement(Literature::LANGUAGES);
+        $language = $lang ?? fake()->randomElement(Variant::LANGUAGES);
         $title = fake()->title();
         $description = fake()->sentence();
 
@@ -359,7 +359,7 @@ class VariantTest extends TestCase
         $this->actingAs(User::factory()->createOne());
         $this->storage = Storage::fake();
 
-        $language = $lang ?? fake()->randomElement(Literature::LANGUAGES);
+        $language = $lang ?? fake()->randomElement(Variant::LANGUAGES);
         $response = $this->post(route('variant.store'), [
             'title' => $title ?? fake()->title(),
             'description' => $description ?? fake()->sentence(),

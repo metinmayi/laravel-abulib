@@ -7,12 +7,12 @@ use Spatie\LaravelData\Data;
 
 class UploadVariantData extends Data
 {
-  /**
-   * Constructor.
-   */
+/**
+ * Constructor.
+ */
     public function __construct(
-        public string $title,
         public string $language,
+        public string $title,
         public ?string $description,
         public ?string $url,
         public ?int $literature_id,

@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Data\UploadLiteratureData;
+use App\Data\UploadVariantData;
 use App\Models\Literature;
 use Illuminate\Support\Facades\DB;
 
@@ -13,10 +13,12 @@ class UploadLiteratureAction
 {
   /**
    * Constructor.
+   * @param array<UploadVariantData> $preparedVariants Prepared and validated variants.
    */
     public function __construct(
-        protected UploadLiteratureData $data,
-        protected UploadVariantAction $uploadVariantAction
+        protected string $category,
+        protected array $preparedVariants,
+        protected UploadVariantAction $uploadVariantAction,
     ) {
     }
 
@@ -26,11 +28,11 @@ class UploadLiteratureAction
     public function handle(): void
     {
         DB::transaction(function () {
-            $literature = new Literature(['category' => $this->data->category]);
+            $literature = new Literature(['category' => $this->category]);
             $literature->save();
 
-            foreach (Literature::LANGUAGES as $language) {
-                $this->uploadVariantAction->handle($literature->id, $this->data->literatures[$language]);
+            foreach ($this->preparedVariants as $strict) {
+                $this->uploadVariantAction->handle($literature->id, $strict);
             }
         });
     }
