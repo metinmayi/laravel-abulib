@@ -116,8 +116,8 @@
             </div>
         @endif
         @php
-            $errorLangs = collect(\App\Models\Literature::LANGUAGES)
-                ->filter(fn($l) => $errors->has('literatures.' . $l . '.title') || $errors->has('literatures.' . $l . '.description') || $errors->has('literatures.' . $l . '.file'));
+            $errorLangs = collect(\App\Models\Variant::LANGUAGES)
+                ->filter(fn($l) => $errors->has('variants.' . $l . '.title') || $errors->has('variants.' . $l . '.description') || $errors->has('variants.' . $l . '.file'));
         @endphp
         <form id="literatureForm" action="/literature" method="POST" enctype="multipart/form-data" data-error-langs="{{ $errorLangs->implode(',') }}">
             @csrf
@@ -137,7 +137,7 @@
                 <div id="atLeastOneTitleError" class="px-6 pt-4 text-sm text-red-600 hidden" role="alert" aria-live="assertive"></div>
                 <div class="px-4">
                     <div role="tablist" aria-label="Languages" class="flex flex-wrap gap-1 -mb-px">
-                        @foreach (\App\Models\Literature::LANGUAGES as $val)
+                        @foreach (\App\Models\Variant::LANGUAGES as $val)
                             <button type="button" role="tab" aria-selected="false"
                                 data-lang-tab="{{ $val }}"
                                 class="px-4 py-2 text-sm font-medium rounded-t-md border border-transparent border-b-2 border-b-orange-300/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-0 transition-colors">
@@ -148,34 +148,34 @@
                 </div>
 
                 <div class="border-t border-orange-200 mt-0 rounded-b-xl bg-white/60">
-                    @foreach (\App\Models\Literature::LANGUAGES as $val)
+                    @foreach (\App\Models\Variant::LANGUAGES as $val)
                         <div data-lang-panel="{{ $val }}" role="tabpanel" tabindex="0" aria-labelledby="lang-tab-{{ $val }}" class="hidden">
                             <div class="p-6 space-y-4">
                                 <div>
                                     <label for="{{ $val . '-title' }}" class="block text-sm font-medium text-gray-700">Title</label>
-                                    @php $titleError = $errors->first('literatures.' . $val . '.title'); @endphp
-                                    <input id="{{ $val . '-title' }}" data-title-input name="literatures[{{ $val }}][title]" type="text" value="{{ old('literatures.' . $val . '.title') }}" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $titleError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" placeholder="Enter title (optional unless no other language)" aria-describedby="{{ $val }}-title-error" aria-invalid="{{ $titleError ? 'true' : 'false' }}">
+                                    @php $titleError = $errors->first('variants.' . $val . '.title'); @endphp
+                                    <input id="{{ $val . '-title' }}" data-title-input name="variants[{{ $val }}][title]" type="text" value="{{ old('variants.' . $val . '.title') }}" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $titleError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" placeholder="Enter title (optional unless no other language)" aria-describedby="{{ $val }}-title-error" aria-invalid="{{ $titleError ? 'true' : 'false' }}">
                                     @if($titleError)
                                         <p id="{{ $val }}-title-error" class="mt-1 text-sm text-red-600">{{ $titleError }}</p>
                                     @endif
                                 </div>
                                 <div>
                                     <label for="{{ $val . '-description' }}" class="block text-sm font-medium text-gray-700">Description</label>
-                                    @php $descError = $errors->first('literatures.' . $val . '.description'); @endphp
-                                    <textarea id="{{ $val . '-description' }}" name="literatures[{{ $val }}][description]" rows="3" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $descError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" aria-describedby="{{ $val }}-description-error" aria-invalid="{{ $descError ? 'true' : 'false' }}">{{ old('literatures.' . $val . '.description') }}</textarea>
+                                    @php $descError = $errors->first('variants.' . $val . '.description'); @endphp
+                                    <textarea id="{{ $val . '-description' }}" name="variants[{{ $val }}][description]" rows="3" class="mt-1 block w-full px-3 py-2 border bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 {{ $descError ? 'border-red-500 ring-1 ring-red-300 focus:ring-red-400 focus:border-red-400' : 'border-gray-300' }}" aria-describedby="{{ $val }}-description-error" aria-invalid="{{ $descError ? 'true' : 'false' }}">{{ old('variants.' . $val . '.description') }}</textarea>
                                     @if($descError)
                                         <p id="{{ $val }}-description-error" class="mt-1 text-sm text-red-600">{{ $descError }}</p>
                                     @endif
                                 </div>
                                 <div>
                                     <label for="{{ $val . '-file' }}" class="block text-sm font-medium text-gray-700">File (PDF)</label>
-                                    @php $fileError = $errors->first('literatures.' . $val . '.file'); @endphp
-                                    <input id="{{ $val . '-file' }}" name="literatures[{{ $val }}][file]" accept="application/pdf" type="file" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 focus:outline-none {{ $fileError ? 'border border-red-500 ring-1 ring-red-300' : '' }}" aria-describedby="{{ $val }}-file-error" aria-invalid="{{ $fileError ? 'true' : 'false' }}">
+                                    @php $fileError = $errors->first('variants.' . $val . '.file'); @endphp
+                                    <input id="{{ $val . '-file' }}" name="variants[{{ $val }}][file]" accept="application/pdf" type="file" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 focus:outline-none {{ $fileError ? 'border border-red-500 ring-1 ring-red-300' : '' }}" aria-describedby="{{ $val }}-file-error" aria-invalid="{{ $fileError ? 'true' : 'false' }}">
                                     @if($fileError)
                                         <p id="{{ $val }}-file-error" class="mt-1 text-sm text-red-600">{{ $fileError }}</p>
                                     @endif
                                 </div>
-                                <input type="hidden" name="literatures[{{ $val }}][language]" value="{{ $val }}">
+                                <input type="hidden" name="variants[{{ $val }}][language]" value="{{ $val }}">
                             </div>
                         </div>
                     @endforeach

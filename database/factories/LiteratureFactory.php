@@ -31,7 +31,7 @@ class LiteratureFactory extends Factory
     public function withVariants(): self
     {
         return $this->afterCreating(function (\App\Models\Literature $literature) {
-            foreach (\App\Models\Literature::LANGUAGES as $language) {
+            foreach (\App\Models\Variant::LANGUAGES as $language) {
                 Variant::factory()->create([
                     'language' => $language,
                     'literature_id' => $literature->id,

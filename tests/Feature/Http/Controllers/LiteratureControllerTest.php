@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
 class LiteratureControllerTest extends TestCase
@@ -96,7 +97,7 @@ class LiteratureControllerTest extends TestCase
         ->post(route('literature.store'), [
             'category' => 'research',
             'file' => $file,
-            'literatures' => [
+            'variants' => [
                 'english' => [
                     'title' => 'English Title',
                     'description' => 'English Description',
@@ -169,5 +170,47 @@ class LiteratureControllerTest extends TestCase
         ]);
 
         return $literature;
+    }
+
+    /**
+     * Test storing literature fails when all variant titles are empty.
+     */
+    #[Group('metin')]
+    public function test_store_requires_at_least_one_variant_title(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $response = $this->post(route('literature.store'), [
+            'category' => 'research',
+            'variants' => [
+                'english' => [
+                    'title' => '',
+                    'description' => 'Desc',
+                    'file' => UploadedFile::fake()->create('en.pdf', 10),
+                    'language' => 'english',
+                ],
+                'kurdish' => [
+                    'title' => '',
+                    'description' => 'Desc',
+                    'file' => UploadedFile::fake()->create('ku.pdf', 10),
+                    'language' => 'kurdish',
+                ],
+                'swedish' => [
+                    'title' => '',
+                    'description' => 'Desc',
+                    'file' => UploadedFile::fake()->create('sv.pdf', 10),
+                    'language' => 'swedish',
+                ],
+                'arabic' => [
+                    'title' => '',
+                    'description' => 'Desc',
+                    'file' => UploadedFile::fake()->create('ar.pdf', 10),
+                    'language' => 'arabic',
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('Error', 'At least one literature variant must have a title.');
     }
 }

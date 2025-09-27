@@ -11,7 +11,10 @@ class Variant extends Model
     /** @use HasFactory<\Database\Factories\VariantFactory> */
     use HasFactory;
 
+    public const LANGUAGES = ['english', 'kurdish', 'arabic', 'swedish'];
+
     protected $fillable = ['title', 'description', 'language', 'url', 'literature_id'];
+
 
     /**
      * Get the literature that owns the Variant

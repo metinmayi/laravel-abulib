@@ -24,7 +24,12 @@ class LiteratureController extends Controller
      */
     public function store(UploadLiteratureData $data): RedirectResponse
     {
-        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadVariantAction());
+        $variantWithTitle = array_find($data->variants, fn($variant) => !empty($variant->title));
+        if (!$variantWithTitle || empty($variantWithTitle->title)) {
+            return redirect()->back()->with('Error', 'At least one literature variant must have a title.');
+        }
+
+        $uploadLiteratureAction = new UploadLiteratureAction($data, new UploadVariantAction(), $variantWithTitle->title);
         $uploadLiteratureAction->handle();
         return redirect()->route('library.index');
     }

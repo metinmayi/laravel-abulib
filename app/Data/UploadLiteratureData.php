@@ -8,12 +8,12 @@ class UploadLiteratureData extends Data
 {
   /**
    * Constructor.
-   * @param string                           $category    Category.
-   * @param array<string, UploadVariantData> $literatures Array.
+   * @param string                      $category    Category.
+   * @param array<UploadVariantDataLax> $variants    Array.
    */
     public function __construct(
         public string $category,
-        public array $literatures
+        public array $variants
     ) {
     }
 }

@@ -22,7 +22,7 @@
             <h3 class="text-xs font-medium text-orange-600 uppercase tracking-wider mb-2">{{ __('messages.languages') }}
             </h3>
             <div class="space-y-1" id="languages">
-                @foreach (\App\Models\Literature::LANGUAGES as $lang)
+                @foreach (\App\Models\Variant::LANGUAGES as $lang)
                     <label
                         class="flex items-center space-x-2 text-sm text-gray-600 hover:bg-orange-50 rounded py-0.5 px-1 cursor-pointer">
                         <input type="checkbox" id="{{ $lang }}" value="{{ $lang }}"
