@@ -124,6 +124,7 @@ class LiteratureControllerTest extends TestCase
                 ],
             ]
         ])
+        ->assertSessionHasNoErrors()
         ->assertRedirect(route('library.index'))
         ->assertStatus(302);
 
@@ -175,7 +176,6 @@ class LiteratureControllerTest extends TestCase
     /**
      * Test storing literature fails when all variant titles are empty.
      */
-    #[Group('metin')]
     public function test_store_requires_at_least_one_variant_title(): void
     {
         $this->actingAs(User::factory()->create());

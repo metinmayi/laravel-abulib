@@ -9,7 +9,10 @@ class DeepL
 {
     protected DeepLClient $client;
 
-    protected static $map = [
+    /**
+     * @var array<string, string> Language code map
+     */
+    protected static array $map = [
         'arabic' => 'AR',
         'english' => 'EN-GB',
         'kurdish' => 'KU',
@@ -32,7 +35,7 @@ class DeepL
      */
     public function translate(string $text, string $targetLang): string
     {
-        $targetLang = self::$map[strtolower($targetLang)];
+        $targetLang = isset(self::$map[strtolower($targetLang)]) ? self::$map[strtolower($targetLang)] : null;
         if (!$targetLang) {
             throw new \InvalidArgumentException('Unsupported target language for DeepL translation.');
         }

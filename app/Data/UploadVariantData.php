@@ -5,11 +5,11 @@ namespace App\Data;
 use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
-class UploadVariantDataStrict extends Data
+class UploadVariantData extends Data
 {
-  /**
-   * Constructor.
-   */
+/**
+ * Constructor.
+ */
     public function __construct(
         public string $language,
         public string $title,

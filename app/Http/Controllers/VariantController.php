@@ -6,7 +6,6 @@ use App\Actions\DeleteVariantAction;
 use App\Actions\UpdateVariantAction;
 use App\Actions\UploadVariantAction;
 use App\Data\UploadVariantData;
-use App\Data\UploadVariantDataStrict;
 use App\Http\Requests\VariantUpdateRequest;
 use App\Models\Variant;
 use Illuminate\Contracts\View\View;
@@ -17,7 +16,7 @@ class VariantController extends Controller
     /**
      * Upload a literature variant
      */
-    public function store(UploadVariantDataStrict $data): RedirectResponse
+    public function store(UploadVariantData $data): RedirectResponse
     {
         $action = new UploadVariantAction();
 

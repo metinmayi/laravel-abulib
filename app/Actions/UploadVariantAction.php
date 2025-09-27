@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Data\UploadVariantDataStrict;
+use App\Data\UploadVariantData;
 use App\Models\Literature;
 use App\Models\Variant;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +24,7 @@ class UploadVariantAction
    * Main method
    * @return array{bool, int}
    */
-    public function handle(int $literatureId, UploadVariantDataStrict $data): array
+    public function handle(int $literatureId, UploadVariantData $data): array
     {
         if (! Literature::find($literatureId)) {
             Log::error('Tried to upload a literature variant without an existing literature', ['literature_id' => $literatureId, 'data' => $data]);

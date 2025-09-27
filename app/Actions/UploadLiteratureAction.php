@@ -2,10 +2,8 @@
 
 namespace App\Actions;
 
-use App\Data\UploadLiteratureData;
+use App\Data\UploadVariantData;
 use App\Models\Literature;
-use App\Models\Variant;
-use App\Services\DeepL;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -15,12 +13,12 @@ class UploadLiteratureAction
 {
   /**
    * Constructor.
+   * @param array<UploadVariantData> $preparedVariants Prepared and validated variants.
    */
     public function __construct(
-        protected UploadLiteratureData $data,
+        protected string $category,
+        protected array $preparedVariants,
         protected UploadVariantAction $uploadVariantAction,
-        protected string $submittedTitle,
-        protected DeepL $deepL = new DeepL()
     ) {
     }
 
@@ -30,15 +28,11 @@ class UploadLiteratureAction
     public function handle(): void
     {
         DB::transaction(function () {
-            $literature = new Literature(['category' => $this->data->category]);
+            $literature = new Literature(['category' => $this->category]);
             $literature->save();
 
-            foreach (Variant::LANGUAGES as $language) {
-                $variant = $this->data->variants[$language];
-                if (!$variant->title) {
-                    $variant->title = $this->deepL->translate($this->submittedTitle, $language);
-                }
-                $this->uploadVariantAction->handle($literature->id, $variant->toStrict());
+            foreach ($this->preparedVariants as $strict) {
+                $this->uploadVariantAction->handle($literature->id, $strict);
             }
         });
     }

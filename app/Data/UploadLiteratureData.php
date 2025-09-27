@@ -9,7 +9,7 @@ class UploadLiteratureData extends Data
   /**
    * Constructor.
    * @param string                      $category    Category.
-   * @param array<UploadVariantDataLax> $variants    Array.
+   * @param array<UploadVariantDataPartial> $variants    Array.
    */
     public function __construct(
         public string $category,
