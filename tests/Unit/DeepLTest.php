@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Services\DeepL;
 use DeepL\DeepLClient;
-use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
 class DeepLTest extends TestCase
@@ -16,11 +15,11 @@ class DeepLTest extends TestCase
         $client = $this->createMock(DeepLClient::class);
         $client->expects($this->once())
             ->method('translateText')
-            ->with('Hej världen', 'SV', 'EN')
+            ->with('Hej världen', null, 'EN')
             ->willReturn($mockResponse);
 
         $service = new DeepL($client);
-        $service->translate('Hej världen', 'SV', 'EN');
+        $service->translate('Hej världen', 'EN');
     }
 
     public function testStrictFactoryThrowsWhenApiKeyMissing(): void

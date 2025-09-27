@@ -23,9 +23,9 @@ class DeepL
      * Translate a single text string.
      * @throws DeepLException
      */
-    public function translate(string $text, string $sourceLang, string $targetLang): string
+    public function translate(string $text, string $targetLang): string
     {
-        $result = $this->client->translateText($text, $sourceLang, $targetLang);
+        $result = $this->client->translateText($text, null, $targetLang);
         return $result->text;
     }
 
